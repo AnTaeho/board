@@ -1,9 +1,10 @@
 package hello.board.controller;
 
 import hello.board.controller.dto.CommentDto;
-import hello.board.entity.Comment;
+import hello.board.entity.comment.Comment;
 import hello.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -48,5 +49,11 @@ public class CommentApiController {
     public String deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
         return "delete success";
+    }
+
+    @PatchMapping("/{commentId}/{memberId}")
+    public ResponseEntity likeComment(@PathVariable Long commentId, @PathVariable Long memberId) {
+        commentService.likeComment(commentId, memberId);
+        return ResponseEntity.noContent().build();
     }
 }

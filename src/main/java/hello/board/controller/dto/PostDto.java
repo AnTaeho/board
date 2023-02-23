@@ -1,6 +1,6 @@
 package hello.board.controller.dto;
 
-import hello.board.entity.Post;
+import hello.board.entity.post.Post;
 import lombok.Data;
 
 import javax.persistence.Lob;

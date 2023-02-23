@@ -1,7 +1,7 @@
 package hello.board.controller;
 
 import hello.board.controller.dto.PostDto;
-import hello.board.entity.Post;
+import hello.board.entity.post.Post;
 import hello.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

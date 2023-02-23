@@ -1,6 +1,6 @@
 package hello.board.controller.dto;
 
-import hello.board.entity.Comment;
+import hello.board.entity.comment.Comment;
 import lombok.Data;
 
 import javax.persistence.Lob;

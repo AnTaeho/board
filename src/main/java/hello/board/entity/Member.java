@@ -1,6 +1,7 @@
 package hello.board.entity;
 
 import hello.board.entity.base.BaseTimeEntity;
+import hello.board.entity.post.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

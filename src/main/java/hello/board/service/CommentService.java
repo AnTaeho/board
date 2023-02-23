@@ -1,8 +1,10 @@
 package hello.board.service;
 
-import hello.board.entity.Comment;
+import hello.board.entity.comment.Comment;
 import hello.board.entity.Member;
-import hello.board.entity.Post;
+import hello.board.entity.comment.CommentLike;
+import hello.board.entity.post.Post;
+import hello.board.repository.CommentLikeRepository;
 import hello.board.repository.CommentRepository;
 import hello.board.repository.MemberRepository;
 import hello.board.repository.PostRepository;
@@ -20,6 +22,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     public List<Comment> findAllComments() {
         return commentRepository.findAll();
@@ -49,4 +52,26 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
+    @Transactional
+    public void likeComment(Long commentId, Long memberId) {
+        Member findMember = findMember(memberId);
+        Comment findComment = findComment(commentId);
+
+        commentLikeRepository.save(new CommentLike(findMember, findComment));
+        //이후에 다시 likeComment 를 호출했을 때 자동으로 삭제되게끔 하는 로직 추가 해보실?
+    }
+
+    private Comment findComment(Long commentId) {
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException("댓글이 이상해");
+                });
+    }
+
+    private Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException("회원이 없어");
+                });
+    }
 }

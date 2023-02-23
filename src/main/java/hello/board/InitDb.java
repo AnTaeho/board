@@ -1,8 +1,8 @@
 //package hello.board;
 //
-//import hello.board.entity.Comment;
+//import hello.board.entity.comment.Comment;
 //import hello.board.entity.Member;
-//import hello.board.entity.Post;
+//import hello.board.entity.post.Post;
 //import hello.board.repository.MemberRepository;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.stereotype.Component;
