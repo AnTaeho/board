@@ -32,9 +32,9 @@ public class CommentApiController {
                 .collect(Collectors.toList());
     }
 
-    @PostMapping("/post/{postId}")
-    public CommentDto writeComment(@PathVariable Long postId, String content) {
-        Comment writtenComment = commentService.writeComment(postId, content);
+    @PostMapping("/post/{postId}/{memberId}")
+    public CommentDto writeComment(@PathVariable Long postId, @PathVariable Long memberId, String content) {
+        Comment writtenComment = commentService.writeComment(postId, memberId, content);
         return new CommentDto(writtenComment);
     }
 

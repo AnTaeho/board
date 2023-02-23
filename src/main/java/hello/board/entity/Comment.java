@@ -1,5 +1,6 @@
 package hello.board.entity;
 
+import hello.board.entity.base.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -10,11 +11,13 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Comment extends BaseTimeEntity{
+public class Comment extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "comment_id")
     private Long id;
+
+    private String writer;
 
     @Lob
     private String content;
@@ -23,7 +26,8 @@ public class Comment extends BaseTimeEntity{
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public Comment(String content) {
+    public Comment(String writer, String content) {
+        this.writer = writer;
         this.content = content;
     }
 

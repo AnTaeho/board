@@ -10,11 +10,14 @@ public class CommentDto {
 
     private Long id;
 
+    private String writer;
+
     @Lob
     private String Content;
 
     public CommentDto(Comment comment) {
         this.id = comment.getId();
-        Content = comment.getContent();
+        this.writer = comment.getWriter();
+        this.Content = comment.getContent();
     }
 }

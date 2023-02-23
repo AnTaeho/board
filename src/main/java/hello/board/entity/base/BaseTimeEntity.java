@@ -1,4 +1,4 @@
-package hello.board.entity;
+package hello.board.entity.base;
 
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;

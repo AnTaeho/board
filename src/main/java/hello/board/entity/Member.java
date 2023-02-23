@@ -1,5 +1,6 @@
 package hello.board.entity;
 
+import hello.board.entity.base.BaseTimeEntity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,7 +13,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Member extends BaseTimeEntity{
+public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue
     @Column(name = "member_id")

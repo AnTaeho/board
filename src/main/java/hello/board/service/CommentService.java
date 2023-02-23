@@ -1,6 +1,7 @@
 package hello.board.service;
 
 import hello.board.entity.Comment;
+import hello.board.entity.Member;
 import hello.board.entity.Post;
 import hello.board.repository.CommentRepository;
 import hello.board.repository.MemberRepository;
@@ -18,6 +19,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
 
     public List<Comment> findAllComments() {
         return commentRepository.findAll();
@@ -29,8 +31,9 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment writeComment(Long postId, String content) {
-        Comment writtenComment = new Comment(content);
+    public Comment writeComment(Long postId, Long memberId, String content) {
+        Member findMember = memberRepository.findById(memberId).get();
+        Comment writtenComment = new Comment(findMember.getName(), content);
         writtenComment.setPost(postRepository.findById(postId).get());
         return writtenComment;
     }
