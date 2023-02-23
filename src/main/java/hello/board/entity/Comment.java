@@ -21,7 +21,8 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     //== 연관관계 메서드 ==//
