@@ -23,8 +23,16 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
+
     public Member(String name, int age) {
         this.name = name;
         this.age = age;
+    }
+
+    public void setComment(Comment comment) {
+        this.comment = comment;
     }
 }
