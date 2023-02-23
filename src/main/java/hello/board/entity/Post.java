@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Post {
+public class Post extends BaseTimeEntity{
 
     @Id @GeneratedValue
     @Column(name = "post_id")
