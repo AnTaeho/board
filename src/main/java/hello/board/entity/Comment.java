@@ -25,6 +25,10 @@ public class Comment {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    public Comment(String content) {
+        this.content = content;
+    }
+
     //== 연관관계 메서드 ==//
     public void setPost(Post post) {
         //*중요*//
