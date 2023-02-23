@@ -2,6 +2,7 @@ package hello.board.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 public class Member {
 
@@ -23,7 +25,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "member",fetch = FetchType.LAZY)
     private Comment comment;
 
     public Member(String name, int age) {
