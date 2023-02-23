@@ -23,10 +23,6 @@ public class Comment {
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "member_id")
-    private Member member;
-
     public Comment(String content) {
         this.content = content;
     }
@@ -38,8 +34,4 @@ public class Comment {
         post.getComments().add(this);
     }
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.setComment(this);
-    }
 }

@@ -32,21 +32,6 @@ public class CommentApiController {
                 .collect(Collectors.toList());
     }
 
-    //회원의 전체 댓글을 조회 해야하는데
-    //Service 단에서의 로직이 엉성해서 구현이 완전하지 못하다.
-    @GetMapping("/member/{memberId}")
-    public CommentDto findCommentsByMember(@PathVariable Long memberId) {
-        return new CommentDto(commentService.findCommentsByMember(memberId));
-
-    }
-
-//    단일 회원 단일 게시물 댓글 조회	GET	/comments/posts/{post_id}/members/{member_id}
-//    @GetMapping("/post/{postId}/member/{memberId}")
-//    public CommentDto findCommentByPostAndMember(@PathVariable Long postId,
-//                                                 @PathVariable Long memberId) {
-//
-//    }
-
     @PostMapping("/post/{postId}")
     public CommentDto writeComment(@PathVariable Long postId, String content) {
         Comment writtenComment = commentService.writeComment(postId, content);

@@ -25,15 +25,9 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
-    @OneToOne(mappedBy = "member",fetch = FetchType.LAZY)
-    private Comment comment;
-
     public Member(String name, int age) {
         this.name = name;
         this.age = age;
     }
 
-    public void setComment(Comment comment) {
-        this.comment = comment;
-    }
 }
