@@ -1,12 +1,11 @@
 package hello.board.entity;
 
+import hello.board.controller.dto.req.MemberReqDto;
 import hello.board.entity.base.BaseTimeEntity;
 import hello.board.entity.post.Post;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,14 +18,11 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
-    @NotEmpty
     private String name;
 
     private int age;
 
-    @NotEmpty
     private String loginId;
-    @NotEmpty
     private String password;
 
     @OneToMany(mappedBy = "member")
@@ -37,6 +33,13 @@ public class Member extends BaseTimeEntity {
         this.age = age;
         this.loginId = loginId;
         this.password = password;
+    }
+
+    public Member(MemberReqDto memberDto) {
+        this.name = memberDto.getName();
+        this.age = memberDto.getAge();
+        this.loginId = memberDto.getLoginId();
+        this.password = memberDto.getPassword();
     }
 
     //== 업데이트 로직 ==//

@@ -1,6 +1,7 @@
 package hello.board.controller;
 
-import hello.board.controller.dto.PostDto;
+import hello.board.controller.dto.req.PostReqDto;
+import hello.board.controller.dto.res.PostResDto;
 import hello.board.entity.post.Post;
 import hello.board.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -17,37 +18,37 @@ public class PostApiController {
     private final PostService postService;
 
     @GetMapping("/{postId}")
-    public PostDto findSinglePost(@PathVariable Long postId) {
+    public PostResDto findSinglePost(@PathVariable Long postId) {
         Post findPost = postService.findSinglePost(postId);
-        return new PostDto(findPost);
+        return new PostResDto(findPost);
     }
 
     @GetMapping("/member/{memberId}")
-    public List<PostDto> findAllByMember(@PathVariable Long memberId) {
+    public List<PostResDto> findAllByMember(@PathVariable Long memberId) {
         return postService.findMemberPost(memberId)
                 .stream()
-                .map(PostDto::new)
+                .map(PostResDto::new)
                 .collect(Collectors.toList());
     }
 
     @GetMapping
-    public List<PostDto> findAllPost() {
+    public List<PostResDto> findAllPost() {
         return postService.findAllPost()
                 .stream()
-                .map(PostDto::new)
+                .map(PostResDto::new)
                 .collect(Collectors.toList());
     }
 
     @PostMapping("/member/{memberId}")
-    public PostDto writePost(@PathVariable Long memberId, Post post) {
-        Post writtenPost = postService.writePost(memberId, post);
-        return new PostDto(writtenPost);
+    public PostResDto writePost(@PathVariable Long memberId, @ModelAttribute PostReqDto postReqDto) {
+        Post writtenPost = postService.writePost(memberId, new Post(postReqDto));
+        return new PostResDto(writtenPost);
     }
 
     @PostMapping("/{id}")
-    public String updatePost(@PathVariable Long id, Post updatePost) {
-        postService.updatePost(id, updatePost);
-        return "update success";
+    public PostResDto updatePost(@PathVariable Long id, @ModelAttribute PostReqDto updatePost) {
+        Post updatedPost = postService.updatePost(id, new Post(updatePost));
+        return new PostResDto(updatedPost);
     }
 
     @DeleteMapping("{id}")

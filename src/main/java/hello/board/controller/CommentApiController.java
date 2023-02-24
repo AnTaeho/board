@@ -1,6 +1,6 @@
 package hello.board.controller;
 
-import hello.board.controller.dto.CommentDto;
+import hello.board.controller.dto.res.CommentResDto;
 import hello.board.entity.comment.Comment;
 import hello.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -19,25 +19,25 @@ public class CommentApiController {
     private final CommentService commentService;
 
     @GetMapping
-    public List<CommentDto> findAllComment() {
+    public List<CommentResDto> findAllComment() {
         return commentService.findAllComments()
                 .stream()
-                .map(CommentDto::new)
+                .map(CommentResDto::new)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/post/{postId}")
-    public List<CommentDto> findCommentsByPost(@PathVariable Long postId) {
+    public List<CommentResDto> findCommentsByPost(@PathVariable Long postId) {
         return commentService.findCommentsByPost(postId)
                 .stream()
-                .map(CommentDto::new)
+                .map(CommentResDto::new)
                 .collect(Collectors.toList());
     }
 
     @PostMapping("/post/{postId}/{memberId}")
-    public CommentDto writeComment(@PathVariable Long postId, @PathVariable Long memberId, String content) {
+    public CommentResDto writeComment(@PathVariable Long postId, @PathVariable Long memberId, String content) {
         Comment writtenComment = commentService.writeComment(postId, memberId, content);
-        return new CommentDto(writtenComment);
+        return new CommentResDto(writtenComment);
     }
 
     @PostMapping("/{commentId}}")

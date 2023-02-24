@@ -39,9 +39,10 @@ public class PostService {
     }
 
     @Transactional
-    public void updatePost(Long id, Post updatePost) {
+    public Post updatePost(Long id, Post updatePost) {
         Post findPost = findPost(id);
         findPost.updateInfo(updatePost.getTitle(), updatePost.getContent());
+        return findPost;
     }
 
     @Transactional

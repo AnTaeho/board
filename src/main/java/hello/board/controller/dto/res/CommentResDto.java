@@ -1,4 +1,4 @@
-package hello.board.controller.dto;
+package hello.board.controller.dto.res;
 
 import hello.board.entity.comment.Comment;
 import lombok.Data;
@@ -6,7 +6,7 @@ import lombok.Data;
 import javax.persistence.Lob;
 
 @Data
-public class CommentDto {
+public class CommentResDto {
 
     private Long id;
 
@@ -15,7 +15,7 @@ public class CommentDto {
     @Lob
     private String Content;
 
-    public CommentDto(Comment comment) {
+    public CommentResDto(Comment comment) {
         this.id = comment.getId();
         this.writer = comment.getWriter();
         this.Content = comment.getContent();

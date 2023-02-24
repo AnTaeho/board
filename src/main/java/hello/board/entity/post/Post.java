@@ -1,5 +1,6 @@
 package hello.board.entity.post;
 
+import hello.board.controller.dto.req.PostReqDto;
 import hello.board.entity.Member;
 import hello.board.entity.base.BaseTimeEntity;
 import hello.board.entity.comment.Comment;
@@ -31,6 +32,11 @@ public class Post extends BaseTimeEntity {
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public Post(PostReqDto postReqDto) {
+        this.title = postReqDto.getTitle();
+        this.content = postReqDto.getContent();
     }
 
     @Lob
