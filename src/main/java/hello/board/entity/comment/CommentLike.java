@@ -3,14 +3,12 @@ package hello.board.entity.comment;
 import hello.board.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class CommentLike {
 
     @Id

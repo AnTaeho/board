@@ -29,21 +29,21 @@ public class CommentService {
     }
 
     public List<Comment> findCommentsByPost(Long postId) {
-        Post findPost = postRepository.findById(postId).get();
+        Post findPost = findPost(postId);
         return findPost.getComments();
     }
 
     @Transactional
     public Comment writeComment(Long postId, Long memberId, String content) {
-        Member findMember = memberRepository.findById(memberId).get();
+        Member findMember = findMember(memberId);
         Comment newComment = new Comment(findMember.getName(), content);
-        newComment.setPost(postRepository.findById(postId).get());
+        newComment.setPost(findPost(postId));
         return newComment;
     }
 
     @Transactional
     public void updateComment(Long commentId, String content) {
-        Comment findComment = commentRepository.findById(commentId).get();
+        Comment findComment = findComment(commentId);
         findComment.setContent(content);
     }
 
@@ -65,6 +65,13 @@ public class CommentService {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
                     throw new IllegalArgumentException("댓글이 이상해");
+                });
+    }
+
+    private Post findPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException("게시글이 없어");
                 });
     }
 

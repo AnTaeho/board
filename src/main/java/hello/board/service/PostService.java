@@ -19,11 +19,11 @@ public class PostService {
     private final MemberRepository memberRepository;
 
     public Post findSinglePost(Long id) {
-        return postRepository.findById(id).get();
+        return findPost(id);
     }
 
     public List<Post> findMemberPost(Long memberId) {
-        Member findMember = memberRepository.findById(memberId).get();
+        Member findMember = findMember(memberId);
         return findMember.getPosts();
     }
 
@@ -34,13 +34,13 @@ public class PostService {
     @Transactional
     public Post writePost(Long memberId, Post post) {
         Post writtenPost = postRepository.save(post);
-        writtenPost.setMember(memberRepository.findById(memberId).get());
+        writtenPost.setMember(findMember(memberId));
         return writtenPost;
     }
 
     @Transactional
     public void updatePost(Long id, Post updatePost) {
-        Post findPost = postRepository.findById(id).get();
+        Post findPost = findPost(id);
         findPost.setTitle(updatePost.getTitle());
         findPost.setContent(updatePost.getContent());
     }
@@ -50,5 +50,17 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
+    private Post findPost(Long postId) {
+        return postRepository.findById(postId)
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException("게시글이 없어");
+                });
+    }
 
+    private Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException("회원이 없어");
+                });
+    }
 }
