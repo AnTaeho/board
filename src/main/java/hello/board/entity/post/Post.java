@@ -5,7 +5,6 @@ import hello.board.entity.base.BaseTimeEntity;
 import hello.board.entity.comment.Comment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Post extends BaseTimeEntity {
 
@@ -42,5 +40,11 @@ public class Post extends BaseTimeEntity {
     public void setMember(Member member) {
         this.member = member;
         member.getPosts().add(this);
+    }
+
+    //== 업데이트 로직 ==//
+    public void updateInfo(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 }

@@ -44,7 +44,7 @@ public class CommentService {
     @Transactional
     public void updateComment(Long commentId, String content) {
         Comment findComment = findComment(commentId);
-        findComment.setContent(content);
+        findComment.updateInfo(content);
     }
 
     @Transactional

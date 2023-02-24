@@ -41,8 +41,7 @@ public class PostService {
     @Transactional
     public void updatePost(Long id, Post updatePost) {
         Post findPost = findPost(id);
-        findPost.setTitle(updatePost.getTitle());
-        findPost.setContent(updatePost.getContent());
+        findPost.updateInfo(updatePost.getTitle(), updatePost.getContent());
     }
 
     @Transactional
