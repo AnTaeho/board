@@ -4,8 +4,8 @@ import hello.board.entity.comment.Comment;
 import hello.board.entity.Member;
 import hello.board.entity.comment.CommentLike;
 import hello.board.entity.post.Post;
-import hello.board.repository.CommentLikeRepository;
-import hello.board.repository.CommentRepository;
+import hello.board.repository.comment.CommentLikeRepository;
+import hello.board.repository.comment.CommentRepository;
 import hello.board.repository.MemberRepository;
 import hello.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,12 +53,17 @@ public class CommentService {
     }
 
     @Transactional
-    public void likeComment(Long commentId, Long memberId) {
+    public String likeComment(Long commentId, Long memberId) {
         Member findMember = findMember(memberId);
         Comment findComment = findComment(commentId);
 
-        commentLikeRepository.save(new CommentLike(findMember, findComment));
-        //이후에 다시 likeComment 를 호출했을 때 자동으로 삭제되게끔 하는 로직 추가 해보실?
+        if (commentLikeRepository.hasNoLike(commentId, memberId)) {
+            commentLikeRepository.save(new CommentLike(findMember, findComment));
+            return "Like success";
+        } else {
+            commentLikeRepository.deleteByCommentIdAndMemberId(commentId, memberId);
+            return "Like deleted";
+        }
     }
 
     private Comment findComment(Long commentId) {

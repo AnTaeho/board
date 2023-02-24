@@ -1,4 +1,4 @@
-package hello.board.repository;
+package hello.board.repository.comment;
 
 import hello.board.entity.comment.Comment;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -30,6 +30,11 @@ public class Post extends BaseTimeEntity {
 
     private String title;
 
+    public Post(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
+
     @Lob
     private String content;
 

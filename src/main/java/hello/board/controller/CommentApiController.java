@@ -4,6 +4,7 @@ import hello.board.controller.dto.CommentDto;
 import hello.board.entity.comment.Comment;
 import hello.board.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,7 +54,7 @@ public class CommentApiController {
 
     @PatchMapping("/{commentId}/{memberId}")
     public ResponseEntity likeComment(@PathVariable Long commentId, @PathVariable Long memberId) {
-        commentService.likeComment(commentId, memberId);
-        return ResponseEntity.noContent().build();
+        String result = commentService.likeComment(commentId, memberId);
+        return new ResponseEntity(result, HttpStatus.OK);
     }
 }
