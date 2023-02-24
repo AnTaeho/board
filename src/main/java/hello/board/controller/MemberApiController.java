@@ -16,6 +16,7 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    //ResponseEntity 알아보기
     @GetMapping
     public List<MemberDto> findAll() {
         List<Member> members = memberService.findAll();

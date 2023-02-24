@@ -36,9 +36,9 @@ public class CommentService {
     @Transactional
     public Comment writeComment(Long postId, Long memberId, String content) {
         Member findMember = memberRepository.findById(memberId).get();
-        Comment writtenComment = new Comment(findMember.getName(), content);
-        writtenComment.setPost(postRepository.findById(postId).get());
-        return writtenComment;
+        Comment newComment = new Comment(findMember.getName(), content);
+        newComment.setPost(postRepository.findById(postId).get());
+        return newComment;
     }
 
     @Transactional
