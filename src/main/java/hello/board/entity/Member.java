@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,16 +21,23 @@ public class Member extends BaseTimeEntity {
     @Column(name = "member_id")
     private Long id;
 
+    @NotEmpty
     private String name;
 
     private int age;
 
+    @NotEmpty
+    private String loginId;
+    @NotEmpty
+    private String password;
+
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
-    public Member(String name, int age) {
+    public Member(String name, int age, String loginId, String password) {
         this.name = name;
         this.age = age;
+        this.loginId = loginId;
+        this.password = password;
     }
-
 }

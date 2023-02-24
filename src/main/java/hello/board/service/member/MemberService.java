@@ -1,4 +1,4 @@
-package hello.board.service;
+package hello.board.service.member;
 
 import hello.board.entity.Member;
 import hello.board.repository.MemberRepository;
@@ -16,8 +16,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Member joinMember(String name, int age) {
-        return memberRepository.save(new Member(name, age));
+    public Member joinMember(Member member) {
+        return memberRepository.save(member);
     }
 
     public Member findById(Long id) {
@@ -45,6 +45,13 @@ public class MemberService {
                 .orElseThrow(() -> {
                     throw new IllegalArgumentException("회원이 없어");
                 });
+    }
+
+    @Transactional
+    public Member login(String loginId, String password) {
+        return memberRepository.findByLoginId(loginId)
+                .filter(m -> m.getPassword().equals(password))
+                .orElse(null);
     }
 
 }

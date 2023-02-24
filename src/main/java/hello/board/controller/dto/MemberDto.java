@@ -10,9 +10,14 @@ public class MemberDto {
     private String name;
     private int age;
 
+    private String loginId;
+    private String password;
+
     public MemberDto(Member member) {
         this.id = member.getId();
         this.name = member.getName();
         this.age = member.getAge();
+        this.loginId = member.getLoginId();
+        this.password = member.getPassword();
     }
 }

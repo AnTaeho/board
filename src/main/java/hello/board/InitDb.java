@@ -4,7 +4,7 @@ import hello.board.entity.comment.Comment;
 import hello.board.entity.Member;
 import hello.board.entity.post.Post;
 import hello.board.service.CommentService;
-import hello.board.service.MemberService;
+import hello.board.service.member.MemberService;
 import hello.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -37,7 +37,7 @@ public class InitDb {
         private final CommentService commentService;
 
         public void dbInit1() {
-            Member userA = memberService.joinMember("안태호", 20);
+            Member userA = memberService.joinMember(new Member("안태호", 20, "AnID", "AnPW"));
             reflect();
             Post post1 = new Post("\"안산은 이게 일상이야\"", "대충 안산 이야기");
             Post writePost1 = postService.writePost(userA.getId(), post1);
@@ -50,7 +50,7 @@ public class InitDb {
         }
 
         public void dbInit2() {
-            Member userB = memberService.joinMember("장대영", 30);
+            Member userB = memberService.joinMember(new Member("장대영", 30, "JangID", "JangPW"));
             reflect();
             Post post2 = new Post("\"55도발 왜 하냐구\"", "대충 55도발 이야기");
             Post writePost2 = postService.writePost(userB.getId(), post2);
