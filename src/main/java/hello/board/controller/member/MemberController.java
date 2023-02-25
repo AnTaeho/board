@@ -10,8 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -32,10 +32,24 @@ public class MemberController {
     }
 
     @GetMapping("/members")
-    public String findAll(Model model) throws IOException {
+    public String findAll(Model model) {
         List<Member> members = memberService.findAll();
         model.addAttribute("members", members);
         return "members/members";
+    }
+
+    @GetMapping("/member")
+    public String findById(@RequestParam Long id, Model model) {
+        Member findMember = memberService.findById(id);
+        model.addAttribute("member", new MemberResDto(findMember));
+        return "members/member";
+    }
+
+    @GetMapping("/member/edit")
+    public String updateMember(@RequestParam Long id, Model model) {
+        Member findMember = memberService.findById(id);
+        model.addAttribute("member", new MemberResDto(findMember));
+        return "members/editMember";
     }
 
 }

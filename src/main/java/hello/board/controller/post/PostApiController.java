@@ -12,8 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,14 +19,6 @@ import java.util.stream.Collectors;
 public class PostApiController {
 
     private final PostService postService;
-//
-//    @GetMapping("/member/{memberId}")
-//    public List<PostResDto> findAllByMember(@PathVariable Long memberId) {
-//        return postService.findMemberPost(memberId)
-//                .stream()
-//                .map(PostResDto::new)
-//                .collect(Collectors.toList());
-//    }
 
     @PostMapping("/post")
     public PostResDto writePost(HttpServletRequest request, HttpServletResponse response, @ModelAttribute PostReqDto postReqDto) throws IOException {

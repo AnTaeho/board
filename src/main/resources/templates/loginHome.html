@@ -7,7 +7,7 @@
 </head>
 <body>
 
-<div class="container" style="max-width: 600px">
+<div class="container" style="max-width: 1000px">
     <div class="py-5 text-center">
         <h2>홈 화면</h2>
     </div>
@@ -17,6 +17,12 @@
     <hr class="my-4">
 
     <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg" type="button"
+                    th:onclick="|location.href='@{/member(id=${member.id})}'|">
+                회원 정보 조회
+            </button>
+        </div>
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg" type="button"
                     th:onclick="|location.href='@{/posts}'|">

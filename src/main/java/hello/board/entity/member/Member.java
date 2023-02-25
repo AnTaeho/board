@@ -39,7 +39,6 @@ public class Member extends BaseTimeEntity {
         this.name = memberDto.getName();
         this.age = memberDto.getAge();
         this.loginId = memberDto.getLoginId();
-        this.password = memberDto.getPassword();
     }
 
     //== 업데이트 로직 ==//

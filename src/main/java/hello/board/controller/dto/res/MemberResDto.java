@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public class MemberResDto {
 
+    private Long id;
     private String name;
     private int age;
 
@@ -13,6 +14,7 @@ public class MemberResDto {
     private String password;
 
     public MemberResDto(Member member) {
+        this.id = member.getId();
         this.name = member.getName();
         this.age = member.getAge();
         this.loginId = member.getLoginId();

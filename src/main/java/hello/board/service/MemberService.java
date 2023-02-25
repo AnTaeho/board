@@ -29,9 +29,10 @@ public class MemberService {
     }
 
     @Transactional
-    public void updateMember(Long id, Member updateMember) {
+    public Member updateMember(Long id, Member updateMember) {
         Member findMember = findMember(id);
         findMember.updateInfo(updateMember.getName(), updateMember.getAge());
+        return findMember;
     }
 
     @Transactional

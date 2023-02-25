@@ -1,42 +1,34 @@
 package hello.board.controller.member;
 
+import hello.board.controller.dto.req.MemberReqDto;
 import hello.board.controller.dto.res.MemberResDto;
 import hello.board.entity.member.Member;
 import hello.board.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/members")
+@RequestMapping
 public class MemberApiController {
 
     private final MemberService memberService;
 
-//    @GetMapping
-//    public List<MemberResDto> findAll() {
-//        List<Member> members = memberService.findAll();
-//        return members.stream()
-//                .map(MemberResDto::new)
-//                .collect(Collectors.toList());
-//    }
+    @PostMapping("/member/edit")
+    public MemberResDto updateMember(@RequestParam Long id, @ModelAttribute MemberReqDto updateMember, HttpServletResponse response) throws IOException {
 
-    @GetMapping("/{id}")
-    public MemberResDto findById(@PathVariable("id") Long id) {
-        Member findMember = memberService.findById(id);
-        return new MemberResDto(findMember);
+        Member updatedMember = memberService.updateMember(id, new Member(updateMember));
+
+        String redirect_uri="/member?id=" + id;
+        response.sendRedirect(redirect_uri);
+
+        return new MemberResDto(updatedMember);
     }
 
-    @PostMapping("/{id}")
-    public String updateMember(@PathVariable("id") Long id, Member updateMember) {
-        memberService.updateMember(id, updateMember);
-        return "update success";
-    }
-
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/members/{id}")
     public String deleteMember(@PathVariable("id") Long id) {
         memberService.deleteMember(id);
         return "delete success";
