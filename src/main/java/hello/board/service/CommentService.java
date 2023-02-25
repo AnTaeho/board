@@ -34,9 +34,8 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment writeComment(Long postId, Long memberId, String content) {
-        Member findMember = findMember(memberId);
-        Comment newComment = new Comment(findMember.getName(), content);
+    public Comment writeComment(Long postId, String commentMember, String content) {
+        Comment newComment = new Comment(commentMember, content);
         newComment.setPost(findPost(postId));
         return newComment;
     }
@@ -66,7 +65,7 @@ public class CommentService {
         }
     }
 
-    private Comment findComment(Long commentId) {
+    public Comment findComment(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
                     throw new IllegalArgumentException("댓글이 이상해");

@@ -6,7 +6,7 @@
           href="../css/bootstrap.min.css" rel="stylesheet">
     <style>
         .container {
-            max-width: 560px;
+            max-width: 800px;
         }
     </style>
 </head>
@@ -41,7 +41,13 @@
             <button class="w-100 btn btn-primary btn-lg"
                     onclick="location.href='editPost.html'"
                     th:onclick="|location.href='@{/posts/{postId}/edit(postId=${post.id})}'|"
-                    type="button" th:text="#{page.updateItem}">상품 수정</button>
+                    type="button" th:text="#{page.updatePost}">게시글 수정</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    onclick="location.href='postComment.html'"
+                    th:onclick="|location.href='@{/comment/post/{postId}(postId=${post.id})}'|"
+                    type="button" th:text="#{page.comment}">댓글 목록</button>
         </div>
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg"

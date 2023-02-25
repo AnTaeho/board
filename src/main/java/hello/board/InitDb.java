@@ -42,7 +42,7 @@ public class InitDb {
             Post post1 = new Post("\"안산은 이게 일상이야\"", "대충 안산 이야기");
             Post writePost1 = postService.writePost(userA.getId(), post1);
             reflect();
-            Comment comment1 = commentService.writeComment(writePost1.getId(), userA.getId(), "안산식 ㄷㄷ 역시 안산의 이병건");
+            Comment comment1 = commentService.writeComment(writePost1.getId(), userA.getName(), "안산식 ㄷㄷ 역시 안산의 이병건");
             reflect();
             String status = commentService.likeComment(comment1.getId(), userA.getId());
             System.out.println("status = " + status);
@@ -55,7 +55,7 @@ public class InitDb {
             Post post2 = new Post("\"55도발 왜 하냐구\"", "대충 55도발 이야기");
             Post writePost2 = postService.writePost(userB.getId(), post2);
             reflect();
-            Comment comment2 = commentService.writeComment(writePost2.getId(), userB.getId(), "역시 개청자들 대가리를 한땀한땀 깨놔야 하는데");
+            Comment comment2 = commentService.writeComment(writePost2.getId(), userB.getName(), "역시 개청자들 대가리를 한땀한땀 깨놔야 하는데");
             reflect();
             String status = commentService.likeComment(comment2.getId(), userB.getId());
             System.out.println("status = " + status);
