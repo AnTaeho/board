@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class HomeController {
 
+    //홈 화면 메서드
     @GetMapping("/home")
     public String homeLoginV3ArgumentResolver(@Login Member loginMember, Model model) {
 

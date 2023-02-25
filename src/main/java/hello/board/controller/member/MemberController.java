@@ -21,16 +21,20 @@ public class MemberController {
 
     private final MemberService memberService;
 
+    //회원가입 화면 메서드
     @GetMapping("/login/join")
     public String joinForm(@ModelAttribute("member") Member member) {
         return "members/addMemberForm";
     }
 
+    //로그인 화면 메서드
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
         return "login/loginForm";
     }
 
+    //멤버 전체 조회 화면 메서드
+    //현재 멤버 전체 조회하는 화면 미구현.
     @GetMapping("/members")
     public String findAll(Model model) {
         List<Member> members = memberService.findAll();
@@ -38,6 +42,7 @@ public class MemberController {
         return "members/members";
     }
 
+    //멤버 상세정보 메서드
     @GetMapping("/member")
     public String findById(@RequestParam Long id, Model model) {
         Member findMember = memberService.findById(id);
@@ -45,6 +50,7 @@ public class MemberController {
         return "members/member";
     }
 
+    //멤버 수정 화면 메서드
     @GetMapping("/member/edit")
     public String updateMember(@RequestParam Long id, Model model) {
         Member findMember = memberService.findById(id);

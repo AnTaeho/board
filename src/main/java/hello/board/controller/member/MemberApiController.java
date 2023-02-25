@@ -17,6 +17,8 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    //멤버 정보 수정 메서드
+    //수정후 멤버 상세정보 화면으로 리다이렉팅
     @PostMapping("/member/edit")
     public MemberResDto updateMember(@RequestParam Long id, @ModelAttribute MemberReqDto updateMember, HttpServletResponse response) throws IOException {
 
@@ -28,10 +30,10 @@ public class MemberApiController {
         return new MemberResDto(updatedMember);
     }
 
+    //멤버 삭제 메서드
     @DeleteMapping("/members/{id}")
-    public String deleteMember(@PathVariable("id") Long id) {
+    public void deleteMember(@PathVariable("id") Long id) {
         memberService.deleteMember(id);
-        return "delete success";
     }
 
 }

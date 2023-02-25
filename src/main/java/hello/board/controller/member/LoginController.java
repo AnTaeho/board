@@ -15,6 +15,8 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 
+import static hello.board.controller.member.session.SessionConst.*;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping
@@ -22,11 +24,15 @@ public class LoginController {
 
     private final MemberService memberService;
 
+    //회원 가입 메서드
     @PostMapping("/login/join")
     public Member joinMember(@Valid @ModelAttribute MemberReqDto memberReqDto) {
         return memberService.joinMember(new Member(memberReqDto));
     }
 
+    //로그인 메서드
+    //세션에 로그인 정보를 저장한다.
+    //로그인 실패 화면 아직 미구현.
     @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
                         HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -42,11 +48,9 @@ public class LoginController {
             return "Login Fail";
         }
 
-        //로그인 성공 처리
-        //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
+        //세션에 저장
         HttpSession session = request.getSession();
-        //세션에 로그인 회원 정보 보관
-        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
+        session.setAttribute(LOGIN_MEMBER, loginMember);
 
         String redirect_uri="/home";
         response.sendRedirect(redirect_uri);
@@ -54,12 +58,14 @@ public class LoginController {
         return "Login Success";
     }
 
+    //로그아웃 메서드
     @PostMapping("/logout")
     public String logoutV3(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         } else {
+            //현재 필터때문에 로그인을 하지 않으면 로그아웃 URL 로 접근도 불가능하다.
             return "현재 로그인 되어 있지 않습니다.";
         }
 

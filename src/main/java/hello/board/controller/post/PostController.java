@@ -13,49 +13,64 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping
+@RequestMapping("/posts")
 public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/posts/{postId}")
+    //게시글 상세 화면 메서드
+    @GetMapping("/{postId}")
     public String findSinglePost(@PathVariable Long postId, Model model) {
         Post findPost = postService.findSinglePost(postId);
-        PostResDto postResDto = new PostResDto(findPost);
-        model.addAttribute("post", postResDto);
+        model.addAttribute("post", new PostResDto(findPost));
         return "posts/post";
     }
 
-    @GetMapping("/posts/member")
+    //회원은 모든 게시글 화면 메서드
+    @GetMapping("/member")
     public String findAllByMember(@RequestParam Long memberId, Model model) {
-        List<PostResDto> posts = postService.findMemberPost(memberId)
-                .stream()
-                .map(PostResDto::new)
-                .collect(Collectors.toList());
+
+        //회원은 모든 게시글을 찾아온다.
+        List<PostResDto> posts = findAllPostOfMember(memberId);
         model.addAttribute("posts", posts);
         return "posts/posts";
     }
 
-    @GetMapping("/posts/{postId}/edit")
+    //게시글 수정 화면 메서드
+    @GetMapping("/edit/{postId}")
     public String updatePost(@PathVariable Long postId, Model model) {
         Post findPost = postService.findSinglePost(postId);
-        PostResDto postResDto = new PostResDto(findPost);
-        model.addAttribute("post", postResDto);
+        model.addAttribute("post", new PostResDto(findPost));
         return "posts/editPost";
     }
 
-    @GetMapping("/posts")
+    //모든 게시글 화면 메서드
+    @GetMapping
     public String findAllPost(Model model) {
-        List<PostResDto> posts = postService.findAllPost()
-                .stream()
-                .map(PostResDto::new)
-                .collect(Collectors.toList());
+
+        //모든 게시글을 찾아온다.
+        List<PostResDto> posts = findAllPost();
         model.addAttribute("posts", posts);
         return "posts/posts";
     }
 
-    @GetMapping("/posts/post")
+    //게시글 작성 화면 메서드
+    @GetMapping("/post")
     public String addPost(@ModelAttribute("post") Post post) {
         return "posts/addPost";
+    }
+
+    private List<PostResDto> findAllPost() {
+        return postService.findAllPost()
+                .stream()
+                .map(PostResDto::new)
+                .collect(Collectors.toList());
+    }
+
+    private List<PostResDto> findAllPostOfMember(Long memberId) {
+        return postService.findMemberPost(memberId)
+                .stream()
+                .map(PostResDto::new)
+                .collect(Collectors.toList());
     }
 }
