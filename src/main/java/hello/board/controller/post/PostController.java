@@ -1,16 +1,12 @@
 package hello.board.controller.post;
 
 import hello.board.controller.dto.res.PostResDto;
-import hello.board.entity.member.Member;
 import hello.board.entity.post.Post;
 import hello.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,6 +24,16 @@ public class PostController {
         PostResDto postResDto = new PostResDto(findPost);
         model.addAttribute("post", postResDto);
         return "posts/post";
+    }
+
+    @GetMapping("/posts/member")
+    public String findAllByMember(@RequestParam Long memberId, Model model) {
+        List<PostResDto> posts = postService.findMemberPost(memberId)
+                .stream()
+                .map(PostResDto::new)
+                .collect(Collectors.toList());
+        model.addAttribute("posts", posts);
+        return "posts/posts";
     }
 
     @GetMapping("/posts/{postId}/edit")

@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 public class PostApiController {
 
     private final PostService postService;
-
-    @GetMapping("/member/{memberId}")
-    public List<PostResDto> findAllByMember(@PathVariable Long memberId) {
-        return postService.findMemberPost(memberId)
-                .stream()
-                .map(PostResDto::new)
-                .collect(Collectors.toList());
-    }
+//
+//    @GetMapping("/member/{memberId}")
+//    public List<PostResDto> findAllByMember(@PathVariable Long memberId) {
+//        return postService.findMemberPost(memberId)
+//                .stream()
+//                .map(PostResDto::new)
+//                .collect(Collectors.toList());
+//    }
 
     @PostMapping("/post")
     public PostResDto writePost(HttpServletRequest request, HttpServletResponse response, @ModelAttribute PostReqDto postReqDto) throws IOException {

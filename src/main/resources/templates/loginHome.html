@@ -20,7 +20,13 @@
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg" type="button"
                     th:onclick="|location.href='@{/posts}'|">
-                게시물 보기
+                전체 게시물 보기
+            </button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg" type="button"
+                    th:onclick="|location.href='@{/posts/member(memberId=${member.id})}'|">
+                내 게시물 보기
             </button>
         </div>
         <div class="col">
