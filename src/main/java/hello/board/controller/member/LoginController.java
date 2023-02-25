@@ -25,11 +25,6 @@ public class LoginController {
         return memberService.joinMember(new Member(memberReqDto));
     }
 
-    @GetMapping
-    public String login() {
-        return "로그인이 필요합니다.";
-    }
-
     @PostMapping
     public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
                         HttpServletRequest request) {
