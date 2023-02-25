@@ -2,9 +2,9 @@ package hello.board.controller.member;
 
 import hello.board.controller.dto.req.MemberReqDto;
 import hello.board.controller.member.session.SessionConst;
-import hello.board.entity.Member;
-import hello.board.service.member.MemberService;
-import hello.board.service.member.login.LoginForm;
+import hello.board.entity.member.Member;
+import hello.board.service.MemberService;
+import hello.board.entity.member.login.LoginForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;

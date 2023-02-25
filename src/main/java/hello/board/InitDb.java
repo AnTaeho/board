@@ -1,10 +1,10 @@
 package hello.board;
 
 import hello.board.entity.comment.Comment;
-import hello.board.entity.Member;
+import hello.board.entity.member.Member;
 import hello.board.entity.post.Post;
 import hello.board.service.CommentService;
-import hello.board.service.member.MemberService;
+import hello.board.service.MemberService;
 import hello.board.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
-package hello.board.service.member.login;
+package hello.board.entity.member.login;
 
 import lombok.Data;
 

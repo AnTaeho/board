@@ -1,6 +1,6 @@
-package hello.board.service.member;
+package hello.board.service;
 
-import hello.board.entity.Member;
+import hello.board.entity.member.Member;
 import hello.board.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

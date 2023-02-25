@@ -1,6 +1,6 @@
 package hello.board.service;
 
-import hello.board.entity.Member;
+import hello.board.entity.member.Member;
 import hello.board.entity.post.Post;
 import hello.board.repository.MemberRepository;
 import hello.board.repository.PostRepository;

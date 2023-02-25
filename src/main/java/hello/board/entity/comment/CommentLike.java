@@ -1,6 +1,6 @@
 package hello.board.entity.comment;
 
-import hello.board.entity.Member;
+import hello.board.entity.member.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

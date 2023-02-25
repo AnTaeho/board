@@ -1,4 +1,4 @@
-package hello.board.entity;
+package hello.board.entity.member;
 
 import hello.board.controller.dto.req.MemberReqDto;
 import hello.board.entity.base.BaseTimeEntity;
