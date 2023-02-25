@@ -14,6 +14,11 @@ spring:
         format_sql: true
         default_batch_fetch_size: 1000 #최적화 옵션
 
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+
 logging:
   level:
     org.hibernate.SQL: debug
