@@ -10,24 +10,26 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/login")
+@RequestMapping
 public class LoginController {
 
     private final MemberService memberService;
 
-    @PostMapping("/join")
+    @PostMapping("/login/join")
     public Member joinMember(@Valid @ModelAttribute MemberReqDto memberReqDto) {
         return memberService.joinMember(new Member(memberReqDto));
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
-                        HttpServletRequest request) {
+                        HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         if (bindingResult.hasErrors()) {
             return "Login Fail";
@@ -46,17 +48,24 @@ public class LoginController {
         //세션에 로그인 회원 정보 보관
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
 
+        String redirect_uri="/home";
+        response.sendRedirect(redirect_uri);
+
         return "Login Success";
     }
 
     @PostMapping("/logout")
-    public String logoutV3(HttpServletRequest request) {
+    public String logoutV3(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
         } else {
             return "현재 로그인 되어 있지 않습니다.";
         }
+
+        String redirect_uri="/home";
+        response.sendRedirect(redirect_uri);
+
         return "Logout Success";
     }
 }

@@ -16,13 +16,13 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-    @GetMapping
-    public List<MemberResDto> findAll() {
-        List<Member> members = memberService.findAll();
-        return members.stream()
-                .map(MemberResDto::new)
-                .collect(Collectors.toList());
-    }
+//    @GetMapping
+//    public List<MemberResDto> findAll() {
+//        List<Member> members = memberService.findAll();
+//        return members.stream()
+//                .map(MemberResDto::new)
+//                .collect(Collectors.toList());
+//    }
 
     @GetMapping("/{id}")
     public MemberResDto findById(@PathVariable("id") Long id) {
