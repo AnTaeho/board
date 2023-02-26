@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
-
 @Controller
 @RequiredArgsConstructor
 @RequestMapping
@@ -34,15 +32,6 @@ public class MemberController {
     @GetMapping("/login")
     public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
         return "login/loginForm";
-    }
-
-    //멤버 전체 조회 화면 메서드
-    //현재 멤버 전체 조회하는 화면 미구현.
-    @GetMapping("/members")
-    public String findAll(Model model) {
-        List<Member> members = memberService.findAll();
-        model.addAttribute("members", members);
-        return "members/members";
     }
 
     //멤버 상세정보 메서드

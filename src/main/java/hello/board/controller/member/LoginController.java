@@ -1,8 +1,8 @@
 package hello.board.controller.member;
 
 import hello.board.controller.dto.req.MemberReqDto;
-import hello.board.controller.member.session.SessionConst;
 import hello.board.entity.member.Member;
+import hello.board.entity.member.MemberRole;
 import hello.board.service.MemberService;
 import hello.board.entity.member.login.LoginForm;
 import lombok.RequiredArgsConstructor;
@@ -51,6 +51,10 @@ public class LoginController {
         //세션에 저장
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_MEMBER, loginMember);
+
+        if (loginMember.getRole() == MemberRole.ADMIN) {
+            session.setAttribute(MemberRole.ADMIN.getDescription(), loginMember);
+        }
 
         String redirect_uri="/home";
         response.sendRedirect(redirect_uri);

@@ -1,4 +1,4 @@
-package hello.board.controller;
+package hello.board.controller.home;
 
 import hello.board.argumentresolver.Login;
 import hello.board.entity.member.Member;
@@ -15,11 +15,11 @@ public class HomeController {
 
         //세션에 회원 데이터가 없으면 home
         if (loginMember == null) {
-            return "home";
+            return "home/home";
         }
 
         //세션이 유지되면 로그인으로 이동
         model.addAttribute("member", loginMember);
-        return "loginHome";
+        return "home/loginHome";
     }
 }

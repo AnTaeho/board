@@ -44,27 +44,10 @@ public class PostController {
         return "posts/editPost";
     }
 
-    //모든 게시글 화면 메서드
-    @GetMapping
-    public String findAllPost(Model model) {
-
-        //모든 게시글을 찾아온다.
-        List<PostResDto> posts = findAllPost();
-        model.addAttribute("posts", posts);
-        return "posts/posts";
-    }
-
     //게시글 작성 화면 메서드
     @GetMapping("/post")
     public String addPost(@ModelAttribute("post") Post post) {
         return "posts/addPost";
-    }
-
-    private List<PostResDto> findAllPost() {
-        return postService.findAllPost()
-                .stream()
-                .map(PostResDto::new)
-                .collect(Collectors.toList());
     }
 
     private List<PostResDto> findAllPostOfMember(Long memberId) {

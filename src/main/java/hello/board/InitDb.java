@@ -51,7 +51,14 @@ public class InitDb {
         }
 
         public void dbInit2() {
-            Member userB = memberService.joinMember(new Member("장대영", 30, "JangID", "JangPW", MemberRole.USER));
+            for (int i = 0; i < 100; i++) {
+                makeNormalMember(i);
+            }
+
+        }
+
+        private void makeNormalMember(int i) {
+            Member userB = memberService.joinMember(new Member("장대영" + (i+1), 30, "JangID" + (i+1), "JangPW" + (i+1), MemberRole.USER));
             reflect();
             Post post2 = new Post("\"55도발 왜 하냐구\"", "대충 55도발 이야기");
             Post writePost2 = postService.writePost(userB.getId(), post2);
