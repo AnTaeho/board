@@ -17,13 +17,13 @@
     <div class="row">
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg" type="button"
-                    th:onclick="|location.href='@{/admin/members}'|">
+                    th:onclick="|location.href='@{/admin/members?page=0}'|">
                 전체 회원 조회
             </button>
         </div>
         <div class="col">
             <button class="w-100 btn btn-secondary btn-lg" type="button"
-                    th:onclick="|location.href='@{/admin/posts}'|">
+                    th:onclick="|location.href='@{/admin/posts?page=0}'|">
                 전체 게시물 조회
             </button>
         </div>

@@ -5,10 +5,14 @@ import hello.board.entity.member.Member;
 import hello.board.service.MemberService;
 import hello.board.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,24 +33,25 @@ public class AdminHomeController {
     //멤버 전체 조회 화면 메서드
     //현재 멤버 전체 조회하는 화면 미구현.
     @GetMapping("/members")
-    public String findAll(Model model) {
-        List<Member> members = memberService.findAll();
+    public String findAll(Model model, @RequestParam("page") int page) {
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        Page<Member> members = memberService.findAll(pageRequest);
         model.addAttribute("members", members);
         return "members/members";
     }
 
     //모든 게시글 화면 메서드
     @GetMapping("/posts")
-    public String findAllPost(Model model) {
-
+    public String findAllPost(Model model, @RequestParam("page") int page) {
+        PageRequest pageRequest = PageRequest.of(page, 10);
         //모든 게시글을 찾아온다.
-        List<PostResDto> posts = findAllPost();
+        List<PostResDto> posts = findAllPost(pageRequest);
         model.addAttribute("posts", posts);
         return "posts/posts";
     }
 
-    private List<PostResDto> findAllPost() {
-        return postService.findAllPost()
+    private List<PostResDto> findAllPost(Pageable pageable) {
+        return postService.findAllPost(pageable)
                 .stream()
                 .map(PostResDto::new)
                 .collect(Collectors.toList());

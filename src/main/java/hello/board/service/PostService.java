@@ -5,6 +5,8 @@ import hello.board.entity.post.Post;
 import hello.board.repository.MemberRepository;
 import hello.board.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,8 +29,8 @@ public class PostService {
         return findMember.getPosts();
     }
 
-    public List<Post> findAllPost() {
-        return postRepository.findAll();
+    public Page<Post> findAllPost(Pageable pageable) {
+        return postRepository.findAll(pageable);
     }
 
     @Transactional

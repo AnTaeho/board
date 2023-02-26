@@ -3,10 +3,10 @@ package hello.board.service;
 import hello.board.entity.member.Member;
 import hello.board.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,8 +24,8 @@ public class MemberService {
         return findMember(id);
     }
 
-    public List<Member> findAll() {
-        return memberRepository.findAll();
+    public Page<Member> findAll(Pageable pageable) {
+        return memberRepository.findAll(pageable);
     }
 
     @Transactional
