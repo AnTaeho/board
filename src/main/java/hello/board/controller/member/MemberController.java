@@ -2,6 +2,7 @@ package hello.board.controller.member;
 
 import hello.board.controller.dto.res.MemberResDto;
 import hello.board.entity.member.Member;
+import hello.board.entity.member.MemberRole;
 import hello.board.entity.member.login.LoginForm;
 import hello.board.service.MemberService;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,10 @@ public class MemberController {
 
     //회원가입 화면 메서드
     @GetMapping("/login/join")
-    public String joinForm(@ModelAttribute("member") Member member) {
-        return "members/addMemberForm";
+    public String joinForm(@ModelAttribute("member") Member member, Model model) {
+        MemberRole[] memberRoles = MemberRole.values();
+        model.addAttribute("memberRoles", memberRoles);
+        return "members/addMember";
     }
 
     //로그인 화면 메서드

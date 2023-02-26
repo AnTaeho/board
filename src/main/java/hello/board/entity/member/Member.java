@@ -25,20 +25,26 @@ public class Member extends BaseTimeEntity {
     private String loginId;
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private MemberRole role;
+
     @OneToMany(mappedBy = "member")
     private List<Post> posts = new ArrayList<>();
 
-    public Member(String name, int age, String loginId, String password) {
+    public Member(String name, int age, String loginId, String password, MemberRole role) {
         this.name = name;
         this.age = age;
         this.loginId = loginId;
         this.password = password;
+        this.role = role;
     }
 
     public Member(MemberReqDto memberDto) {
         this.name = memberDto.getName();
         this.age = memberDto.getAge();
         this.loginId = memberDto.getLoginId();
+        this.password = memberDto.getPassword();
+        this.role = memberDto.getRole();
     }
 
     //== 업데이트 로직 ==//

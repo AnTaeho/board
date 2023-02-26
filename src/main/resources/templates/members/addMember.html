@@ -55,6 +55,16 @@
             <div class="field-error" th:errors="*{age}" />
         </div>
 
+        <div>
+            <div>회원 권한</div>
+            <div th:each="role : ${memberRoles}" class="form-check form-check-inline">
+                <input type="radio" th:field="*{role}" th:value="${role.name()}" class="form-check-input">
+                <label th:for="${#ids.prev('role')}" th:text="${role.description}" class="form-check-label">
+                    BOOK
+                </label>
+            </div>
+        </div>
+
 
         <hr class="my-4">
 
