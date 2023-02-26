@@ -16,3 +16,9 @@
 - 기본적으로 백엔드 프로젝트지만 아주 기초적인 화면도 구현되어 있음
 - 현재 상태는 이상하더라도 점점 발전하는 것을 목표
 
+## 사용 기술
+
+- Spring, SpringBoot, Spring Data JPA
+- Lombok, thymeleaf, QueryDsl
+- MySql
+
