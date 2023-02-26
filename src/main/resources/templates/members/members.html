@@ -34,14 +34,22 @@
             </thead>
             <tbody>
             <tr th:each="member : ${members}">
-                <td><a href="item.html" th:href="@{/members/{memberId}(memberId=${member.id})}" th:text="${member.id}">회원 id</a></td>
-                <td><a href="item.html" th:href="@{|/members/${member.id}|}" th:text="${member.name}">상품명</a></td>
+                <td><a href="post.html" th:href="@{/members/{memberId}(memberId=${member.id})}" th:text="${member.id}">회원 id</a></td>
+                <td><a href="post.html" th:href="@{|/members/${member.id}|}" th:text="${member.name}">상품명</a></td>
                 <td th:text="${member.age}">10000</td>
                 <td th:text="${member.role}">10000</td>
 
             </tr>
             </tbody>
         </table>
+
+        <div class="col">
+            <form th:action="@{/home}" method="get">
+                <button class="w-100 btn btn-dark btn-lg" onclick="location.href='members.html'" type="submit">
+                    뒤로 가기
+                </button>
+            </form>
+        </div>
     </div>
 
 </div> <!-- /container -->
