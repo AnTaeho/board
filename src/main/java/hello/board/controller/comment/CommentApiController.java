@@ -1,10 +1,10 @@
 package hello.board.controller.comment;
 
-import hello.board.controller.dto.req.CommentReqDto;
-import hello.board.controller.dto.res.CommentResDto;
-import hello.board.entity.comment.Comment;
-import hello.board.entity.member.Member;
-import hello.board.service.CommentService;
+import hello.board.controller.comment.dto.req.CommentReqDto;
+import hello.board.controller.comment.dto.res.CommentResDto;
+import hello.board.domain.comment.entity.Comment;
+import hello.board.domain.member.entity.Member;
+import hello.board.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

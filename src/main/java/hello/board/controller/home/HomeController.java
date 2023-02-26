@@ -1,7 +1,7 @@
 package hello.board.controller.home;
 
 import hello.board.argumentresolver.Login;
-import hello.board.entity.member.Member;
+import hello.board.domain.member.entity.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

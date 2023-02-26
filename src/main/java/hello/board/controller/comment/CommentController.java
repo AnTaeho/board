@@ -1,8 +1,8 @@
 package hello.board.controller.comment;
 
-import hello.board.controller.dto.res.CommentResDto;
-import hello.board.entity.comment.Comment;
-import hello.board.service.CommentService;
+import hello.board.controller.comment.dto.res.CommentResDto;
+import hello.board.domain.comment.entity.Comment;
+import hello.board.domain.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

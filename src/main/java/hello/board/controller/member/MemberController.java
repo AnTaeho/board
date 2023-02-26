@@ -1,10 +1,10 @@
 package hello.board.controller.member;
 
-import hello.board.controller.dto.res.MemberResDto;
-import hello.board.entity.member.Member;
-import hello.board.entity.member.MemberRole;
-import hello.board.entity.member.login.LoginForm;
-import hello.board.service.MemberService;
+import hello.board.controller.member.dto.res.MemberResDto;
+import hello.board.domain.member.entity.Member;
+import hello.board.domain.member.entity.MemberRole;
+import hello.board.controller.member.dto.req.LoginFormReqDto;
+import hello.board.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,7 +30,7 @@ public class MemberController {
 
     //로그인 화면 메서드
     @GetMapping("/login")
-    public String loginForm(@ModelAttribute("loginForm") LoginForm form) {
+    public String loginForm(@ModelAttribute("loginForm") LoginFormReqDto form) {
         return "login/loginForm";
     }
 

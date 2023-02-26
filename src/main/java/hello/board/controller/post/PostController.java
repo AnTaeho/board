@@ -1,8 +1,8 @@
 package hello.board.controller.post;
 
-import hello.board.controller.dto.res.PostResDto;
-import hello.board.entity.post.Post;
-import hello.board.service.PostService;
+import hello.board.controller.post.dto.res.PostResDto;
+import hello.board.domain.post.entity.Post;
+import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

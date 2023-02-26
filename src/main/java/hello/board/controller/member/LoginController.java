@@ -1,10 +1,10 @@
 package hello.board.controller.member;
 
-import hello.board.controller.dto.req.MemberReqDto;
-import hello.board.entity.member.Member;
-import hello.board.entity.member.MemberRole;
-import hello.board.service.MemberService;
-import hello.board.entity.member.login.LoginForm;
+import hello.board.controller.member.dto.req.MemberReqDto;
+import hello.board.domain.member.entity.Member;
+import hello.board.domain.member.entity.MemberRole;
+import hello.board.domain.member.service.MemberService;
+import hello.board.controller.member.dto.req.LoginFormReqDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +34,7 @@ public class LoginController {
     //세션에 로그인 정보를 저장한다.
     //로그인 실패 화면 아직 미구현.
     @PostMapping("/login")
-    public String login(@Valid @ModelAttribute LoginForm form, BindingResult bindingResult,
+    public String login(@Valid @ModelAttribute LoginFormReqDto form, BindingResult bindingResult,
                         HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         if (bindingResult.hasErrors()) {

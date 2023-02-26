@@ -1,11 +1,10 @@
 package hello.board.controller.post;
 
-import hello.board.controller.dto.req.PostReqDto;
-import hello.board.controller.dto.res.PostResDto;
-import hello.board.controller.member.session.SessionConst;
-import hello.board.entity.member.Member;
-import hello.board.entity.post.Post;
-import hello.board.service.PostService;
+import hello.board.controller.post.dto.req.PostReqDto;
+import hello.board.controller.post.dto.res.PostResDto;
+import hello.board.domain.member.entity.Member;
+import hello.board.domain.post.entity.Post;
+import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

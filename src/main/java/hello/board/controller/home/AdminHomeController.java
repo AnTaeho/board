@@ -1,9 +1,9 @@
 package hello.board.controller.home;
 
-import hello.board.controller.dto.res.PostResDto;
-import hello.board.entity.member.Member;
-import hello.board.service.MemberService;
-import hello.board.service.PostService;
+import hello.board.controller.post.dto.res.PostResDto;
+import hello.board.domain.member.entity.Member;
+import hello.board.domain.member.service.MemberService;
+import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

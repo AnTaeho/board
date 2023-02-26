@@ -1,12 +1,12 @@
 package hello.board;
 
-import hello.board.entity.comment.Comment;
-import hello.board.entity.member.Member;
-import hello.board.entity.member.MemberRole;
-import hello.board.entity.post.Post;
-import hello.board.service.CommentService;
-import hello.board.service.MemberService;
-import hello.board.service.PostService;
+import hello.board.domain.comment.entity.Comment;
+import hello.board.domain.member.entity.Member;
+import hello.board.domain.member.entity.MemberRole;
+import hello.board.domain.post.entity.Post;
+import hello.board.domain.comment.service.CommentService;
+import hello.board.domain.member.service.MemberService;
+import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

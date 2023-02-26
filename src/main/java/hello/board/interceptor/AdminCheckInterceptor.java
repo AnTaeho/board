@@ -1,6 +1,6 @@
 package hello.board.interceptor;
 
-import hello.board.entity.member.MemberRole;
+import hello.board.domain.member.entity.MemberRole;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;

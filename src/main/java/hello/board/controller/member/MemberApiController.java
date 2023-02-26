@@ -1,9 +1,9 @@
 package hello.board.controller.member;
 
-import hello.board.controller.dto.req.MemberReqDto;
-import hello.board.controller.dto.res.MemberResDto;
-import hello.board.entity.member.Member;
-import hello.board.service.MemberService;
+import hello.board.controller.member.dto.req.MemberReqDto;
+import hello.board.controller.member.dto.res.MemberResDto;
+import hello.board.domain.member.entity.Member;
+import hello.board.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
