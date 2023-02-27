@@ -1,7 +1,7 @@
 package hello.board.domain.comment.entity;
 
-import hello.board.domain.post.entity.Post;
 import hello.board.domain.base.BaseTimeEntity;
+import hello.board.domain.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,12 +1,12 @@
 package hello.board.domain.comment.service;
 
 import hello.board.domain.comment.entity.Comment;
-import hello.board.domain.member.entity.Member;
 import hello.board.domain.comment.entity.CommentLike;
-import hello.board.domain.post.entity.Post;
 import hello.board.domain.comment.repository.CommentLikeRepository;
 import hello.board.domain.comment.repository.CommentRepository;
+import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.MemberRepository;
+import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,8 +34,8 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment writeComment(Long postId, String commentMember, String content) {
-        Comment newComment = new Comment(commentMember, content);
+    public Comment writeComment(Long postId, Member commentMember, String content) {
+        Comment newComment = new Comment(commentMember.getName(), content);
         newComment.setPost(findPost(postId));
         return newComment;
     }

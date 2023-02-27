@@ -31,7 +31,6 @@ public class AdminHomeController {
     }
 
     //멤버 전체 조회 화면 메서드
-    //현재 멤버 전체 조회하는 화면 미구현.
     @GetMapping("/members")
     public String findAll(Model model, @RequestParam("page") int page) {
         PageRequest pageRequest = PageRequest.of(page, 10);
@@ -44,7 +43,6 @@ public class AdminHomeController {
     @GetMapping("/posts")
     public String findAllPost(Model model, @RequestParam("page") int page) {
         PageRequest pageRequest = PageRequest.of(page, 10);
-        //모든 게시글을 찾아온다.
         List<PostResDto> posts = findAllPost(pageRequest);
         model.addAttribute("posts", posts);
         return "posts/posts";

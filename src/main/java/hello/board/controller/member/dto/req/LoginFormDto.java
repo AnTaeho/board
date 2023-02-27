@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.validation.constraints.NotEmpty;
 
 @Data
-public class LoginFormReqDto {
+public class LoginFormDto {
 
     @NotEmpty
     private String loginId;
@@ -13,7 +13,7 @@ public class LoginFormReqDto {
     @NotEmpty
     private String password;
 
-    public LoginFormReqDto(String loginId, String password) {
+    public LoginFormDto(String loginId, String password) {
         this.loginId = loginId;
         this.password = password;
     }

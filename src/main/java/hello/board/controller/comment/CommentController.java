@@ -26,12 +26,10 @@ public class CommentController {
 
     //게시글에 달린 모든 댓글 메서드
     @GetMapping("/post/{postId}")
-    public String findCommentsByPost(@PathVariable Long postId, Model model) {
+    public String findCommentsByPost(@PathVariable @ModelAttribute Long postId, Model model) {
 
         //게시글의 모든 댓글을 찾는다.
         List<CommentResDto> comments = findAllCommentOfPost(postId);
-
-        model.addAttribute("id", postId);
         model.addAttribute("comments", comments);
         return "comment/postComments";
     }

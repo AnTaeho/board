@@ -31,7 +31,7 @@ public class MemberService {
     @Transactional
     public Member updateMember(Long id, Member updateMember) {
         Member findMember = findMember(id);
-        findMember.updateInfo(updateMember.getName(), updateMember.getAge());
+        findMember.updateInfo(updateMember);
         return findMember;
     }
 
@@ -40,18 +40,18 @@ public class MemberService {
         memberRepository.deleteById(id);
     }
 
-    private Member findMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> {
-                    throw new IllegalArgumentException("회원이 없어");
-                });
-    }
-
     @Transactional
     public Member login(String loginId, String password) {
         return memberRepository.findByLoginId(loginId)
                 .filter(m -> m.getPassword().equals(password))
                 .orElse(null);
+    }
+
+    private Member findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException("회원이 없어");
+                });
     }
 
 }

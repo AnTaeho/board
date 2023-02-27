@@ -3,7 +3,8 @@ package hello.board.domain.member.entity;
 import hello.board.controller.member.dto.req.MemberReqDto;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.post.entity.Post;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,17 +40,18 @@ public class Member extends BaseTimeEntity {
         this.role = role;
     }
 
-    public Member(MemberReqDto memberDto) {
-        this.name = memberDto.getName();
-        this.age = memberDto.getAge();
-        this.loginId = memberDto.getLoginId();
-        this.password = memberDto.getPassword();
-        this.role = memberDto.getRole();
+    public static Member from(MemberReqDto memberDto) {
+        return new Member(memberDto.getName(),
+                memberDto.getAge(),
+                memberDto.getLoginId(),
+                memberDto.getPassword(),
+                memberDto.getRole());
     }
 
     //== 업데이트 로직 ==//
-    public void updateInfo(String name, int age) {
-        this.name = name;
-        this.age = age;
+    public void updateInfo(Member updateMember) {
+        this.name = updateMember.getName();
+        this.age = updateMember.getAge();
+        this.loginId = updateMember.getLoginId();
     }
 }

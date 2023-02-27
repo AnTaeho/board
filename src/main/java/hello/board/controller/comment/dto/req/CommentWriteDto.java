@@ -5,7 +5,7 @@ import lombok.Data;
 import javax.persistence.Lob;
 
 @Data
-public class CommentReqDto {
+public class CommentWriteDto {
 
     @Lob
     private String Content;

@@ -1,10 +1,10 @@
 package hello.board.controller.comment;
 
-import hello.board.controller.comment.dto.req.CommentReqDto;
+import hello.board.controller.comment.dto.req.CommentWriteDto;
 import hello.board.controller.comment.dto.res.CommentResDto;
 import hello.board.domain.comment.entity.Comment;
-import hello.board.domain.member.entity.Member;
 import hello.board.domain.comment.service.CommentService;
+import hello.board.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static hello.board.controller.member.session.SessionConst.*;
+import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,14 +39,13 @@ public class CommentApiController {
     //댓글 목록으로 리다이렉팅
     //리쿼스트 리스폰스 삭제하는 방법이 있는 것으로 기억한다.
     @PostMapping("/{postId}")
-    public CommentResDto writeComment(@PathVariable Long postId, @ModelAttribute CommentReqDto comment, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public CommentResDto writeComment(@PathVariable Long postId, @ModelAttribute CommentWriteDto writeDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
         //세션에 저장되어 있는 로그인된 멤버를 가져온다
         Member loginMember = findLoginMember(request);
-        Comment writtenComment = commentService.writeComment(postId, loginMember.getName(), comment.getContent());
+        Comment writtenComment = commentService.writeComment(postId, loginMember, writeDto.getContent());
 
-        String redirect_uri="/comment/post/" + postId;
-        response.sendRedirect(redirect_uri);
+        response.sendRedirect("/comment/post/" + postId);
 
         return new CommentResDto(writtenComment);
     }
@@ -57,16 +56,14 @@ public class CommentApiController {
     @PostMapping("/edit")
     public void updateComment(@RequestParam Long commentId, String content, HttpServletResponse response) throws IOException {
         commentService.updateComment(commentId, content);
-        String redirect_uri="/comment/info/" + commentId;
-        response.sendRedirect(redirect_uri);
+        response.sendRedirect("/comment/info/" + commentId);
     }
 
     //댓글 삭제 메서드
     //삭제 기능 화면은 아직 미구현.
     @DeleteMapping("/{commentId}}")
-    public String deleteComment(@PathVariable Long commentId) {
+    public void deleteComment(@PathVariable Long commentId) {
         commentService.deleteComment(commentId);
-        return "delete success";
     }
 
     //댓글 좋아요 메서드

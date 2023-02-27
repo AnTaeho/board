@@ -1,9 +1,9 @@
 package hello.board.domain.post.entity;
 
 import hello.board.controller.post.dto.req.PostReqDto;
-import hello.board.domain.member.entity.Member;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.comment.entity.Comment;
+import hello.board.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -20,6 +20,11 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long id;
 
+    private String title;
+
+    @Lob
+    private String content;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
@@ -27,20 +32,14 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
 
-    private String title;
-
     public Post(String title, String content) {
         this.title = title;
         this.content = content;
     }
 
-    public Post(PostReqDto postReqDto) {
-        this.title = postReqDto.getTitle();
-        this.content = postReqDto.getContent();
+    public static Post from(PostReqDto postReqDto) {
+        return new Post(postReqDto.getTitle(), postReqDto.getContent());
     }
-
-    @Lob
-    private String content;
 
     //== 연관관계 메서드 ==//
     public void setMember(Member member) {
@@ -49,8 +48,8 @@ public class Post extends BaseTimeEntity {
     }
 
     //== 업데이트 로직 ==//
-    public void updateInfo(String title, String content) {
-        this.title = title;
-        this.content = content;
+    public void updateInfo(Post updatePost) {
+        this.title = updatePost.getTitle();
+        this.content = updatePost.getContent();
     }
 }

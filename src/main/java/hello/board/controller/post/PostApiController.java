@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
-import static hello.board.controller.member.session.SessionConst.*;
+import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class PostApiController {
 
         //로그인 멤버를 찾아온다.
         Member loginMember = findLoginMember(request);
-        Post writtenPost = postService.writePost(loginMember.getId(), new Post(postReqDto));
+        Post writtenPost = postService.writePost(loginMember.getId(), Post.from(postReqDto));
 
         response.sendRedirect("/posts");
 
@@ -40,8 +40,8 @@ public class PostApiController {
     //게시글 수정 메서드
     //수정후 게시글 목록으로 리다이렉팅
     @PostMapping("/edit/{postId}")
-    public PostResDto updatePost(@PathVariable Long postId, @ModelAttribute PostReqDto updatePost, HttpServletResponse response) throws IOException {
-        Post updatedPost = postService.updatePost(postId, new Post(updatePost));
+    public PostResDto updatePost(@PathVariable Long postId, @ModelAttribute PostReqDto postReqDto, HttpServletResponse response) throws IOException {
+        Post updatedPost = postService.updatePost(postId, Post.from(postReqDto));
 
         response.sendRedirect("/posts/" + postId);
 

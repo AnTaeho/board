@@ -1,9 +1,9 @@
 package hello.board.controller.member;
 
+import hello.board.controller.member.dto.req.LoginFormDto;
 import hello.board.controller.member.dto.res.MemberResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
-import hello.board.controller.member.dto.req.LoginFormReqDto;
 import hello.board.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -23,14 +23,13 @@ public class MemberController {
     //회원가입 화면 메서드
     @GetMapping("/login/join")
     public String joinForm(@ModelAttribute("member") Member member, Model model) {
-        MemberRole[] memberRoles = MemberRole.values();
-        model.addAttribute("memberRoles", memberRoles);
+        model.addAttribute("memberRoles", MemberRole.values());
         return "members/addMember";
     }
 
     //로그인 화면 메서드
     @GetMapping("/login")
-    public String loginForm(@ModelAttribute("loginForm") LoginFormReqDto form) {
+    public String loginForm(@ModelAttribute("loginForm") LoginFormDto form) {
         return "login/loginForm";
     }
 

@@ -1,8 +1,8 @@
 package hello.board.domain.post.service;
 
 import hello.board.domain.member.entity.Member;
-import hello.board.domain.post.entity.Post;
 import hello.board.domain.member.repository.MemberRepository;
+import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -43,7 +43,7 @@ public class PostService {
     @Transactional
     public Post updatePost(Long id, Post updatePost) {
         Post findPost = findPost(id);
-        findPost.updateInfo(updatePost.getTitle(), updatePost.getContent());
+        findPost.updateInfo(updatePost);
         return findPost;
     }
 
