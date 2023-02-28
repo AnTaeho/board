@@ -1,11 +1,14 @@
 package hello.board.controller.comment.dto.res;
 
 import hello.board.domain.comment.entity.Comment;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.Lob;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CommentResDto {
 
     private Long id;

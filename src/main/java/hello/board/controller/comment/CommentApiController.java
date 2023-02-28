@@ -1,8 +1,8 @@
 package hello.board.controller.comment;
 
+import hello.board.controller.comment.dto.req.CommentUpdateDto;
 import hello.board.controller.comment.dto.req.CommentWriteDto;
 import hello.board.controller.comment.dto.res.CommentResDto;
-import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.service.CommentService;
 import hello.board.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 
@@ -26,37 +23,61 @@ public class CommentApiController {
 
     private final CommentService commentService;
 
+    //게시글에 달린 모든 댓글 메서드
+    @GetMapping("/post/{postId}")
+    public ResponseEntity<List<CommentResDto>> findCommentsByPost(@PathVariable @ModelAttribute Long postId) {
+
+        //게시글의 모든 댓글을 찾는다.
+        List<CommentResDto> comments = commentService.findCommentsByPost(postId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(comments);
+    }
+
+    //댓글 상세정보 화면 메서드
+    @GetMapping("/info/{commentId}")
+    public ResponseEntity<CommentResDto> commentInfo(@PathVariable Long commentId) {
+        CommentResDto comment = commentService.findCommentDetail(commentId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(comment);
+    }
+
     //현재 댓글만 전체 조회하는 화면 없음
     @GetMapping
-    public List<CommentResDto> findAllComment() {
-        return commentService.findAllComments()
-                .stream()
-                .map(CommentResDto::new)
-                .collect(Collectors.toList());
+    public ResponseEntity<List<CommentResDto>> findAllComment() {
+        List<CommentResDto> comments = commentService.findAllComments();
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(comments);
     }
 
     //댓글 작성하는 메서드
     //댓글 목록으로 리다이렉팅
     //리쿼스트 리스폰스 삭제하는 방법이 있는 것으로 기억한다.
-    @PostMapping("/{postId}")
-    public CommentResDto writeComment(@PathVariable Long postId, @ModelAttribute CommentWriteDto writeDto, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    @PostMapping("/post/{postId}")
+    public ResponseEntity<CommentResDto> writeComment(@PathVariable Long postId, @RequestBody CommentWriteDto writeDto, HttpServletRequest request) {
 
         //세션에 저장되어 있는 로그인된 멤버를 가져온다
         Member loginMember = findLoginMember(request);
-        Comment writtenComment = commentService.writeComment(postId, loginMember, writeDto.getContent());
+        CommentResDto writtenComment = commentService.writeComment(postId, loginMember.getId(), writeDto);
 
-        response.sendRedirect("/comment/post/" + postId);
-
-        return new CommentResDto(writtenComment);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(writtenComment);
     }
 
     //댓글 수정 메서드
     //댓글 상세정보로 리다이렉팅
     //리쿼스트 리스폰스 삭제하는 방법이 있는 것으로 기억한다.
-    @PostMapping("/edit")
-    public void updateComment(@RequestParam Long commentId, String content, HttpServletResponse response) throws IOException {
-        commentService.updateComment(commentId, content);
-        response.sendRedirect("/comment/info/" + commentId);
+    @PatchMapping("/edit")
+    public ResponseEntity<CommentResDto> updateComment(@RequestParam Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
+
+        CommentResDto updateComment = commentService.updateComment(commentId, commentUpdateDto);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(updateComment);
     }
 
     //댓글 삭제 메서드
@@ -68,10 +89,15 @@ public class CommentApiController {
 
     //댓글 좋아요 메서드
     //댓글 좋아요 화면은 아직 미구현.
-    @PatchMapping("/{commentId}/{memberId}")
-    public ResponseEntity likeComment(@PathVariable Long commentId, @PathVariable Long memberId) {
-        String result = commentService.likeComment(commentId, memberId);
-        return new ResponseEntity(result, HttpStatus.OK);
+    @PatchMapping("/{commentId}/like")
+    public ResponseEntity<String> likeComment(@PathVariable Long commentId, HttpServletRequest request) {
+
+        Member loginMember = findLoginMember(request);
+        String result = commentService.likeComment(commentId, loginMember.getId());
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(result);
     }
 
     private Member findLoginMember(HttpServletRequest request) {

@@ -67,7 +67,7 @@ public class PostApiController {
 
     //게시글 수정 메서드
     //수정후 게시글 목록으로 리다이렉팅
-    @PostMapping("/edit/{postId}")
+    @PatchMapping("/edit/{postId}")
     public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable Long postId, @RequestBody PostUpdateReqDto postUpdateReqDto) {
         PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);
 

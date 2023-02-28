@@ -26,7 +26,7 @@ public class MemberApiController {
 
     //멤버 정보 수정 메서드
     //수정후 멤버 상세정보 화면으로 리다이렉팅
-    @PostMapping("/edit")
+    @PatchMapping("/edit")
     public ResponseEntity<MemberUpdateResDto> updateMember(@RequestParam Long memberId, @RequestBody MemberUpdateReqDto memberUpdateReqDto) {
 
         MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);

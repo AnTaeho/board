@@ -1,15 +1,14 @@
 package hello.board;
 
+import hello.board.controller.comment.dto.req.CommentWriteDto;
+import hello.board.controller.comment.dto.res.CommentResDto;
 import hello.board.controller.member.dto.req.MemberRegisterReqDto;
 import hello.board.controller.member.dto.res.MemberRegisterResDto;
 import hello.board.controller.post.dto.req.PostWriteReqDto;
 import hello.board.controller.post.dto.res.PostWriteResDto;
-import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.service.CommentService;
-import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
 import hello.board.domain.member.service.MemberService;
-import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -46,11 +45,10 @@ public class InitDb {
             reflect();
             PostWriteResDto writePost1 = postService.writePost(userA.getId(), new PostWriteReqDto("\"안산은 이게 일상이야\"", "대충 안산 이야기"));
             reflect();
-//            Comment comment1 = commentService.writeComment(writePost1.getId(), userA, "안산식 ㄷㄷ 역시 안산의 이병건");
-//            reflect();
-//            String status = commentService.likeComment(comment1.getId(), userA.getId());
-//            System.out.println("status = " + status);
-//            reflect();
+            CommentResDto comment1 = commentService.writeComment(writePost1.getId(), userA.getId(), new CommentWriteDto("안산식 ㄷㄷ 역시 안산의 이병건"));
+            reflect();
+            commentService.likeComment(comment1.getId(), userA.getId());
+            reflect();
         }
 
         public void dbInit2() {
@@ -65,11 +63,10 @@ public class InitDb {
             reflect();
             PostWriteResDto writePost2 = postService.writePost(userB.getId(), new PostWriteReqDto("\"55도발 왜 하냐구\"", "대충 55도발 이야기"));
             reflect();
-//            Comment comment2 = commentService.writeComment(writePost2.getId(), userB, "역시 개청자들 대가리를 한땀한땀 깨놔야 하는데");
-//            reflect();
-//            String status = commentService.likeComment(comment2.getId(), userB.getId());
-//            System.out.println("status = " + status);
-//            reflect();
+            CommentResDto comment2 = commentService.writeComment(writePost2.getId(), userB.getId(), new CommentWriteDto("역시 개청자들 대가리를 한땀한땀 깨놔야 하는데"));
+            reflect();
+            commentService.likeComment(comment2.getId(), userB.getId());
+            reflect();
         }
 
         private void reflect() {

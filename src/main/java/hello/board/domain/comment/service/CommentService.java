@@ -1,5 +1,8 @@
 package hello.board.domain.comment.service;
 
+import hello.board.controller.comment.dto.req.CommentUpdateDto;
+import hello.board.controller.comment.dto.req.CommentWriteDto;
+import hello.board.controller.comment.dto.res.CommentResDto;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.entity.CommentLike;
 import hello.board.domain.comment.repository.CommentLikeRepository;
@@ -13,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -24,26 +28,35 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final CommentLikeRepository commentLikeRepository;
 
-    public List<Comment> findAllComments() {
-        return commentRepository.findAll();
+    public List<CommentResDto> findAllComments() {
+        return commentRepository.findAll()
+                .stream()
+                .map(CommentResDto::new)
+                .collect(Collectors.toList());
     }
 
-    public List<Comment> findCommentsByPost(Long postId) {
+    public List<CommentResDto> findCommentsByPost(Long postId) {
         Post findPost = findPost(postId);
-        return findPost.getComments();
+        return findPost.getComments()
+                .stream()
+                .map(CommentResDto::new)
+                .collect(Collectors.toList());
     }
 
     @Transactional
-    public Comment writeComment(Long postId, Member commentMember, String content) {
-        Comment newComment = new Comment(commentMember.getName(), content);
+    public CommentResDto writeComment(Long postId, Long memberId, CommentWriteDto commentWriteDto) {
+        Member commentMember = findMember(memberId);
+        Comment newComment = new Comment(commentMember.getName(), commentWriteDto.getContent());
+        System.out.println("newComment.id = " + newComment.getId());
         newComment.setPost(findPost(postId));
-        return newComment;
+        return new CommentResDto(commentRepository.save(newComment));
     }
 
     @Transactional
-    public void updateComment(Long commentId, String content) {
+    public CommentResDto updateComment(Long commentId, CommentUpdateDto commentUpdateDto) {
         Comment findComment = findComment(commentId);
-        findComment.updateInfo(content);
+        findComment.updateInfo(commentUpdateDto.getContent());
+        return new CommentResDto(findComment);
     }
 
     @Transactional
@@ -53,11 +66,10 @@ public class CommentService {
 
     @Transactional
     public String likeComment(Long commentId, Long memberId) {
-        Member findMember = findMember(memberId);
         Comment findComment = findComment(commentId);
 
         if (commentLikeRepository.hasNoLike(commentId, memberId)) {
-            commentLikeRepository.save(new CommentLike(findMember, findComment));
+            commentLikeRepository.save(new CommentLike(findMember(memberId), findComment));
             return "Like success";
         } else {
             commentLikeRepository.deleteByCommentIdAndMemberId(commentId, memberId);
@@ -65,7 +77,11 @@ public class CommentService {
         }
     }
 
-    public Comment findComment(Long commentId) {
+    public CommentResDto findCommentDetail(Long commentId) {
+        return new CommentResDto(findComment(commentId));
+    }
+
+    private Comment findComment(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
                     throw new IllegalArgumentException("댓글이 이상해");
