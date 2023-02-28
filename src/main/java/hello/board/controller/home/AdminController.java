@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/admin")
 @RequiredArgsConstructor
-public class AdminHomeController {
+public class AdminController {
 
     private final MemberService memberService;
     private final PostService postService;

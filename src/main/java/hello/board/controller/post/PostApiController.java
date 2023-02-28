@@ -1,17 +1,21 @@
 package hello.board.controller.post;
 
-import hello.board.controller.post.dto.req.PostReqDto;
+import hello.board.controller.post.dto.req.PostUpdateReqDto;
+import hello.board.controller.post.dto.req.PostWriteReqDto;
 import hello.board.controller.post.dto.res.PostResDto;
+import hello.board.controller.post.dto.res.PostUpdateResDto;
+import hello.board.controller.post.dto.res.PostWriteResDto;
 import hello.board.domain.member.entity.Member;
-import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
+
+import java.util.List;
 
 import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 
@@ -22,30 +26,54 @@ public class PostApiController {
 
     private final PostService postService;
 
+    //게시글 상세 화면 메서드
+    @GetMapping("/{postId}")
+    public ResponseEntity<PostResDto> findSinglePost(@PathVariable Long postId) {
+        PostResDto findPost = postService.findSinglePost(postId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(findPost);
+    }
+
+    //회원의 모든 게시글 화면 메서드
+    @GetMapping("/member")
+    public ResponseEntity<List<PostResDto>> findAllByMember(@RequestParam Long memberId) {
+
+        //회원은 모든 게시글을 찾아온다.
+        List<PostResDto> posts = findAllPostOfMember(memberId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(posts);
+    }
+
+    private List<PostResDto> findAllPostOfMember(Long memberId) {
+        return postService.findMemberPost(memberId);
+    }
+
     //게시글 작성 메서드
     //세션에서 저장된 로그인 멤버를 가져온다.
     //작성후 게시글 목록으로 리다이렉팅
     @PostMapping("/post")
-    public PostResDto writePost(HttpServletRequest request, HttpServletResponse response, @ModelAttribute PostReqDto postReqDto) throws IOException {
+    public ResponseEntity<PostWriteResDto> writePost(HttpServletRequest request, @RequestBody PostWriteReqDto postWriteReqDto) {
 
         //로그인 멤버를 찾아온다.
         Member loginMember = findLoginMember(request);
-        Post writtenPost = postService.writePost(loginMember.getId(), Post.from(postReqDto));
+        PostWriteResDto writtenPost = postService.writePost(loginMember.getId(), postWriteReqDto);
 
-        response.sendRedirect("/posts");
-
-        return new PostResDto(writtenPost);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(writtenPost);
     }
 
     //게시글 수정 메서드
     //수정후 게시글 목록으로 리다이렉팅
     @PostMapping("/edit/{postId}")
-    public PostResDto updatePost(@PathVariable Long postId, @ModelAttribute PostReqDto postReqDto, HttpServletResponse response) throws IOException {
-        Post updatedPost = postService.updatePost(postId, Post.from(postReqDto));
+    public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable Long postId, @RequestBody PostUpdateReqDto postUpdateReqDto) {
+        PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);
 
-        response.sendRedirect("/posts/" + postId);
-
-        return new PostResDto(updatedPost);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(updatedPost);
     }
 
     //게시글 삭제 메서드

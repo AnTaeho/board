@@ -6,7 +6,8 @@ import lombok.Data;
 import javax.persistence.Lob;
 
 @Data
-public class PostResDto {
+public class PostWriteResDto {
+
     private Long id;
     private String title;
 
@@ -15,7 +16,7 @@ public class PostResDto {
 
     private String memberName;
 
-    public PostResDto(Post post) {
+    public PostWriteResDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();

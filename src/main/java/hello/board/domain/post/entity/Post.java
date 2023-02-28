@@ -1,9 +1,11 @@
 package hello.board.domain.post.entity;
 
-import hello.board.controller.post.dto.req.PostReqDto;
+import hello.board.controller.post.dto.req.PostUpdateReqDto;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.member.entity.Member;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +16,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Post extends BaseTimeEntity {
 
     @Id @GeneratedValue
@@ -37,10 +41,6 @@ public class Post extends BaseTimeEntity {
         this.content = content;
     }
 
-    public static Post from(PostReqDto postReqDto) {
-        return new Post(postReqDto.getTitle(), postReqDto.getContent());
-    }
-
     //== 연관관계 메서드 ==//
     public void setMember(Member member) {
         this.member = member;
@@ -48,7 +48,7 @@ public class Post extends BaseTimeEntity {
     }
 
     //== 업데이트 로직 ==//
-    public void updateInfo(Post updatePost) {
+    public void updateInfo(PostUpdateReqDto updatePost) {
         this.title = updatePost.getTitle();
         this.content = updatePost.getContent();
     }
