@@ -3,6 +3,7 @@ package hello.board.domain.member.service;
 import hello.board.controller.member.dto.req.MemberRegisterReqDto;
 import hello.board.controller.member.dto.req.MemberUpdateReqDto;
 import hello.board.controller.member.dto.res.MemberRegisterResDto;
+import hello.board.controller.member.dto.res.MemberResDto;
 import hello.board.controller.member.dto.res.MemberUpdateResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.MemberRepository;
@@ -39,12 +40,13 @@ public class MemberService {
                 .build();
     }
 
-    public Member findById(Long id) {
-        return findMember(id);
+    public MemberResDto findById(Long id) {
+        return new MemberResDto(findMember(id));
     }
 
-    public Page<Member> findAll(Pageable pageable) {
-        return memberRepository.findAll(pageable);
+    public Page<MemberResDto> findAll(Pageable pageable) {
+        return memberRepository.findAll(pageable)
+                .map(MemberResDto::new);
     }
 
     @Transactional

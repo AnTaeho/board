@@ -38,8 +38,9 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public Page<Post> findAllPost(Pageable pageable) {
-        return postRepository.findAll(pageable);
+    public Page<PostResDto> findAllPost(Pageable pageable) {
+        return postRepository.findAll(pageable)
+                .map(PostResDto::new);
     }
 
     @Transactional
