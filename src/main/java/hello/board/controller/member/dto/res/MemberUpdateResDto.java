@@ -9,17 +9,17 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MemberResDto {
+public class MemberUpdateResDto {
 
-    private Long id;
     private String name;
     private int age;
+    private String loginId;
     private MemberRole role;
 
-    public MemberResDto(Member member) {
-        this.id = member.getId();
+    public MemberUpdateResDto(Member member) {
         this.name = member.getName();
         this.age = member.getAge();
+        this.loginId = member.getLoginId();
         this.role = member.getRole();
     }
 }

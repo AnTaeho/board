@@ -1,10 +1,12 @@
 package hello.board.controller.member;
 
-import hello.board.controller.member.dto.req.MemberReqDto;
+import hello.board.controller.member.dto.req.MemberUpdateReqDto;
 import hello.board.controller.member.dto.res.MemberResDto;
-import hello.board.domain.member.entity.Member;
+import hello.board.controller.member.dto.res.MemberUpdateResDto;
 import hello.board.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -17,16 +19,26 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    //멤버 상세정보 메서드
+    @GetMapping("/member")
+    public ResponseEntity<MemberResDto> findById(@RequestParam Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new MemberResDto(memberService.findById(id)));
+    }
+
     //멤버 정보 수정 메서드
     //수정후 멤버 상세정보 화면으로 리다이렉팅
     @PostMapping("/edit")
-    public MemberResDto updateMember(@RequestParam Long memberId, @ModelAttribute MemberReqDto memberReqDto, HttpServletResponse response) throws IOException {
+    public ResponseEntity<MemberUpdateResDto> updateMember(@RequestParam Long memberId, @ModelAttribute MemberUpdateReqDto memberUpdateReqDto, HttpServletResponse response) throws IOException {
 
-        Member updatedMember = memberService.updateMember(memberId, Member.from(memberReqDto));
+        MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
 
         response.sendRedirect("/member?id=" + memberId);
 
-        return new MemberResDto(updatedMember);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(memberUpdateResDto);
     }
 
     //멤버 삭제 메서드

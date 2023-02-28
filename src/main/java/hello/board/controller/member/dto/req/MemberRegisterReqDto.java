@@ -1,10 +1,12 @@
 package hello.board.controller.member.dto.req;
 
 import hello.board.domain.member.entity.MemberRole;
-import lombok.Data;
+import lombok.*;
 
-@Data
-public class MemberReqDto {
+@NoArgsConstructor
+@Getter
+@Setter
+public class MemberRegisterReqDto {
 
     private String name;
     private int age;

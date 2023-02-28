@@ -1,10 +1,9 @@
 package hello.board.domain.member.entity;
 
-import hello.board.controller.member.dto.req.MemberReqDto;
+import hello.board.controller.member.dto.req.MemberUpdateReqDto;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.post.entity.Post;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Member extends BaseTimeEntity {
 
     @Id @GeneratedValue
@@ -40,18 +41,10 @@ public class Member extends BaseTimeEntity {
         this.role = role;
     }
 
-    public static Member from(MemberReqDto memberDto) {
-        return new Member(memberDto.getName(),
-                memberDto.getAge(),
-                memberDto.getLoginId(),
-                memberDto.getPassword(),
-                memberDto.getRole());
-    }
-
     //== 업데이트 로직 ==//
-    public void updateInfo(Member updateMember) {
-        this.name = updateMember.getName();
-        this.age = updateMember.getAge();
-        this.loginId = updateMember.getLoginId();
+    public void updateInfo(MemberUpdateReqDto memberUpdateReqDto) {
+        this.name = memberUpdateReqDto.getName();
+        this.age = memberUpdateReqDto.getAge();
+        this.loginId = memberUpdateReqDto.getLoginId();
     }
 }

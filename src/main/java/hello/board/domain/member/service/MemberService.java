@@ -1,5 +1,9 @@
 package hello.board.domain.member.service;
 
+import hello.board.controller.member.dto.req.MemberRegisterReqDto;
+import hello.board.controller.member.dto.req.MemberUpdateReqDto;
+import hello.board.controller.member.dto.res.MemberRegisterResDto;
+import hello.board.controller.member.dto.res.MemberUpdateResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,8 +20,22 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     @Transactional
-    public Member joinMember(Member member) {
-        return memberRepository.save(member);
+    public MemberRegisterResDto joinMember(MemberRegisterReqDto memberRegisterReqDto) {
+        return new MemberRegisterResDto(saveMember(memberRegisterReqDto));
+    }
+
+    private Member saveMember(MemberRegisterReqDto memberRegisterReqDto) {
+        return memberRepository.save(createMember(memberRegisterReqDto));
+    }
+
+    private Member createMember(MemberRegisterReqDto memberRegisterReqDto) {
+        return Member.builder()
+                .name(memberRegisterReqDto.getName())
+                .age(memberRegisterReqDto.getAge())
+                .loginId(memberRegisterReqDto.getLoginId())
+                .password(memberRegisterReqDto.getPassword())
+                .role(memberRegisterReqDto.getRole())
+                .build();
     }
 
     public Member findById(Long id) {
@@ -29,10 +47,10 @@ public class MemberService {
     }
 
     @Transactional
-    public Member updateMember(Long id, Member updateMember) {
+    public MemberUpdateResDto updateMember(Long id, MemberUpdateReqDto MemberUpdateReqDto) {
         Member findMember = findMember(id);
-        findMember.updateInfo(updateMember);
-        return findMember;
+        findMember.updateInfo(MemberUpdateReqDto);
+        return new MemberUpdateResDto(findMember);
     }
 
     @Transactional
