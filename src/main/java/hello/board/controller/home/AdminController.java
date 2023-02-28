@@ -25,6 +25,7 @@ public class AdminController {
     //멤버 전체 조회 화면 메서드
     @GetMapping("/members")
     public ResponseEntity<Page<MemberResDto>> findAll(@RequestParam("page") int page) {
+
         PageRequest pageRequest = PageRequest.of(page, 10);
         Page<MemberResDto> members = memberService.findAll(pageRequest);
         return ResponseEntity
@@ -35,6 +36,7 @@ public class AdminController {
     //모든 게시글 화면 메서드
     @GetMapping("/posts")
     public ResponseEntity<Page<PostResDto>> findAllPost(@RequestParam("page") int page) {
+
         PageRequest pageRequest = PageRequest.of(page, 10);
         Page<PostResDto> posts = postService.findAllPost(pageRequest);
         return ResponseEntity

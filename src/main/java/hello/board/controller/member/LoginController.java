@@ -40,6 +40,12 @@ public class LoginController {
     public ResponseEntity<MemberRegisterResDto> login(@Valid @RequestBody LoginFormDto form, BindingResult bindingResult,
                         HttpServletRequest request) {
 
+        if (!(request.getSession(false) == null)) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
@@ -60,9 +66,9 @@ public class LoginController {
         session.setAttribute(LOGIN_MEMBER, loginMember);
 
         if (loginMember.getRole() == MemberRole.ADMIN) {
-            session.setAttribute(MemberRole.ADMIN.getDescription(), loginMember);
+            session.setAttribute("admin", "admin");
         } else {
-            session.setAttribute(MemberRole.USER.getDescription(), loginMember);
+            session.setAttribute("user", "user");
         }
 
         return ResponseEntity
@@ -72,7 +78,7 @@ public class LoginController {
 
     //로그아웃 메서드
     @PostMapping("/logout")
-    public ResponseEntity logout(HttpServletRequest request) {
+    public ResponseEntity<String> logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
@@ -80,12 +86,12 @@ public class LoginController {
             //현재 필터때문에 로그인을 하지 않으면 로그아웃 URL 로 접근도 불가능하다.
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .build();
+                    .body("로그인 되어 있지 않습니다.");
         }
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .build();
+                .body("로그아웃 성공");
     }
 }
 
