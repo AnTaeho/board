@@ -12,4 +12,8 @@ public class PostWriteReqDto {
     @Lob
     private String content;
 
+    public PostWriteReqDto(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

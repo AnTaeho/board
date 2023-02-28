@@ -21,7 +21,7 @@ public class MemberApiController {
     public ResponseEntity<MemberResDto> findById(@RequestParam Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(new MemberResDto(memberService.findById(id)));
+                .body(memberService.findById(id));
     }
 
     //멤버 정보 수정 메서드
