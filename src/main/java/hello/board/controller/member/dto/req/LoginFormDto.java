@@ -13,8 +13,4 @@ public class LoginFormDto {
     @NotEmpty
     private String password;
 
-    public LoginFormDto(String loginId, String password) {
-        this.loginId = loginId;
-        this.password = password;
-    }
 }

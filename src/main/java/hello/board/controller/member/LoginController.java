@@ -10,15 +10,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.IOException;
 
 import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 
@@ -30,7 +26,7 @@ public class LoginController {
 
     //회원 가입 메서드
     @PostMapping("/login/join")
-    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @ModelAttribute MemberRegisterReqDto memberRegisterReqDto) {
+    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @RequestBody MemberRegisterReqDto memberRegisterReqDto) {
         MemberRegisterResDto memberRegisterResDto = memberService.joinMember(memberRegisterReqDto);
 
         return ResponseEntity
@@ -41,8 +37,8 @@ public class LoginController {
     //로그인 메서드
     //세션에 로그인 정보를 저장한다.
     @PostMapping("/login")
-    public ResponseEntity<MemberRegisterResDto> login(@Valid @ModelAttribute LoginFormDto form, BindingResult bindingResult,
-                        HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity<MemberRegisterResDto> login(@Valid @RequestBody LoginFormDto form, BindingResult bindingResult,
+                        HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
             return ResponseEntity
@@ -65,9 +61,9 @@ public class LoginController {
 
         if (loginMember.getRole() == MemberRole.ADMIN) {
             session.setAttribute(MemberRole.ADMIN.getDescription(), loginMember);
+        } else {
+            session.setAttribute(MemberRole.USER.getDescription(), loginMember);
         }
-
-        response.sendRedirect("/home");
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -76,7 +72,7 @@ public class LoginController {
 
     //로그아웃 메서드
     @PostMapping("/logout")
-    public ResponseEntity logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseEntity logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
             session.invalidate();
@@ -86,8 +82,6 @@ public class LoginController {
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
-
-        response.sendRedirect("/home");
 
         return ResponseEntity
                 .status(HttpStatus.OK)

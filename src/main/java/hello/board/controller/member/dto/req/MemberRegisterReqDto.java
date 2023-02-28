@@ -3,9 +3,7 @@ package hello.board.controller.member.dto.req;
 import hello.board.domain.member.entity.MemberRole;
 import lombok.*;
 
-@NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class MemberRegisterReqDto {
 
     private String name;

@@ -29,6 +29,7 @@ public class MemberService {
     }
 
     private Member createMember(MemberRegisterReqDto memberRegisterReqDto) {
+
         return Member.builder()
                 .name(memberRegisterReqDto.getName())
                 .age(memberRegisterReqDto.getAge())

@@ -9,9 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/member")
@@ -20,7 +17,7 @@ public class MemberApiController {
     private final MemberService memberService;
 
     //멤버 상세정보 메서드
-    @GetMapping("/member")
+    @GetMapping
     public ResponseEntity<MemberResDto> findById(@RequestParam Long id) {
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -30,11 +27,9 @@ public class MemberApiController {
     //멤버 정보 수정 메서드
     //수정후 멤버 상세정보 화면으로 리다이렉팅
     @PostMapping("/edit")
-    public ResponseEntity<MemberUpdateResDto> updateMember(@RequestParam Long memberId, @ModelAttribute MemberUpdateReqDto memberUpdateReqDto, HttpServletResponse response) throws IOException {
+    public ResponseEntity<MemberUpdateResDto> updateMember(@RequestParam Long memberId, @RequestBody MemberUpdateReqDto memberUpdateReqDto) {
 
         MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
-
-        response.sendRedirect("/member?id=" + memberId);
 
         return ResponseEntity
                 .status(HttpStatus.OK)

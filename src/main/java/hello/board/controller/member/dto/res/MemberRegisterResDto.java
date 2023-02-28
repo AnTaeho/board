@@ -9,6 +9,7 @@ import lombok.*;
 @Setter
 public class MemberRegisterResDto {
 
+    private Long id;
     private String name;
     private int age;
     private String loginId;
@@ -16,6 +17,7 @@ public class MemberRegisterResDto {
     private MemberRole role;
 
     public MemberRegisterResDto(Member member) {
+        this.id = member.getId();
         this.name = member.getName();
         this.age = member.getAge();
         this.loginId = member.getLoginId();
