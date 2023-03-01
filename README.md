@@ -22,3 +22,8 @@
 - Lombok, thymeleaf, QueryDsl
 - MySql
 
+---
+2023/3/1 - cascade, orphanRemoval 적용
+
+2023/2/22 ~ 2023/2/28 - 기초 구현 완료
+
