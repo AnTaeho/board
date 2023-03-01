@@ -28,22 +28,35 @@ public class PostApiController {
 
     //게시글 상세 화면 메서드
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResDto> findSinglePost(@PathVariable Long postId) {
-        PostResDto findPost = postService.findSinglePost(postId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(findPost);
+    public ResponseEntity findSinglePost(@PathVariable Long postId) {
+        try {
+            PostResDto findPost = postService.findSinglePost(postId);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(findPost);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+
     }
 
     //회원의 모든 게시글 화면 메서드
     @GetMapping("/member")
-    public ResponseEntity<List<PostResDto>> findAllByMember(@RequestParam Long memberId) {
+    public ResponseEntity findAllByMember(@RequestParam Long memberId) {
+        try {
+            //회원은 모든 게시글을 찾아온다.
+            List<PostResDto> posts = findAllPostOfMember(memberId);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(posts);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
 
-        //회원은 모든 게시글을 찾아온다.
-        List<PostResDto> posts = findAllPostOfMember(memberId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(posts);
     }
 
     private List<PostResDto> findAllPostOfMember(Long memberId) {
@@ -68,12 +81,18 @@ public class PostApiController {
     //게시글 수정 메서드
     //수정후 게시글 목록으로 리다이렉팅
     @PatchMapping("/edit/{postId}")
-    public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable Long postId, @RequestBody PostUpdateReqDto postUpdateReqDto) {
-        PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);
+    public ResponseEntity updatePost(@PathVariable Long postId, @RequestBody PostUpdateReqDto postUpdateReqDto) {
+        try {
+            PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(updatedPost);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(updatedPost);
     }
 
     //게시글 삭제 메서드

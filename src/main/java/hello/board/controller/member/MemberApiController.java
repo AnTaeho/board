@@ -18,22 +18,35 @@ public class MemberApiController {
 
     //멤버 상세정보 메서드
     @GetMapping
-    public ResponseEntity<MemberResDto> findById(@RequestParam Long id) {
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(memberService.findById(id));
+    public ResponseEntity findById(@RequestParam Long id) {
+        try {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(memberService.findById(id));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
 
     //멤버 정보 수정 메서드
     //수정후 멤버 상세정보 화면으로 리다이렉팅
     @PatchMapping("/edit")
-    public ResponseEntity<MemberUpdateResDto> updateMember(@RequestParam Long memberId, @RequestBody MemberUpdateReqDto memberUpdateReqDto) {
+    public ResponseEntity updateMember(@RequestParam Long memberId, @RequestBody MemberUpdateReqDto memberUpdateReqDto) {
 
-        MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
+        try {
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(memberUpdateResDto);
+            MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(memberUpdateResDto);
+        } catch (IllegalArgumentException e) {
+
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
 
     //멤버 삭제 메서드

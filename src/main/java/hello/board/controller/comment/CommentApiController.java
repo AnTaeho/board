@@ -25,22 +25,35 @@ public class CommentApiController {
 
     //게시글에 달린 모든 댓글 메서드
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<CommentResDto>> findCommentsByPost(@PathVariable @ModelAttribute Long postId) {
+    public ResponseEntity findCommentsByPost(@PathVariable @ModelAttribute Long postId) {
+        try {
+            //게시글의 모든 댓글을 찾는다.
+            List<CommentResDto> comments = commentService.findCommentsByPost(postId);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(comments);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
 
-        //게시글의 모든 댓글을 찾는다.
-        List<CommentResDto> comments = commentService.findCommentsByPost(postId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(comments);
     }
 
     //댓글 상세정보 화면 메서드
     @GetMapping("/info/{commentId}")
-    public ResponseEntity<CommentResDto> commentInfo(@PathVariable Long commentId) {
-        CommentResDto comment = commentService.findCommentDetail(commentId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(comment);
+    public ResponseEntity commentInfo(@PathVariable Long commentId) {
+        try {
+            CommentResDto comment = commentService.findCommentDetail(commentId);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(comment);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+
     }
 
     //현재 댓글만 전체 조회하는 화면 없음
@@ -56,28 +69,42 @@ public class CommentApiController {
     //댓글 목록으로 리다이렉팅
     //리쿼스트 리스폰스 삭제하는 방법이 있는 것으로 기억한다.
     @PostMapping("/post/{postId}")
-    public ResponseEntity<CommentResDto> writeComment(@PathVariable Long postId, @RequestBody CommentWriteDto writeDto, HttpServletRequest request) {
+    public ResponseEntity writeComment(@PathVariable Long postId, @RequestBody CommentWriteDto writeDto, HttpServletRequest request) {
 
         //세션에 저장되어 있는 로그인된 멤버를 가져온다
         Member loginMember = findLoginMember(request);
-        CommentResDto writtenComment = commentService.writeComment(postId, loginMember.getId(), writeDto);
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(writtenComment);
+        try {
+            CommentResDto writtenComment = commentService.writeComment(postId, loginMember.getId(), writeDto);
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(writtenComment);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+
     }
 
     //댓글 수정 메서드
     //댓글 상세정보로 리다이렉팅
     //리쿼스트 리스폰스 삭제하는 방법이 있는 것으로 기억한다.
     @PatchMapping("/edit")
-    public ResponseEntity<CommentResDto> updateComment(@RequestParam Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
+    public ResponseEntity updateComment(@RequestParam Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
+        try {
+            CommentResDto updateComment = commentService.updateComment(commentId, commentUpdateDto);
 
-        CommentResDto updateComment = commentService.updateComment(commentId, commentUpdateDto);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(updateComment);
+        }catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(updateComment);
     }
 
     //댓글 삭제 메서드
@@ -96,11 +123,18 @@ public class CommentApiController {
     public ResponseEntity<String> likeComment(@PathVariable Long commentId, HttpServletRequest request) {
 
         Member loginMember = findLoginMember(request);
-        String result = commentService.likeComment(commentId, loginMember.getId());
 
-        return ResponseEntity
-                .status(HttpStatus.CREATED)
-                .body(result);
+        try {
+            String result = commentService.likeComment(commentId, loginMember.getId());
+            return ResponseEntity
+                    .status(HttpStatus.CREATED)
+                    .body(result);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+
     }
 
     private Member findLoginMember(HttpServletRequest request) {
