@@ -82,9 +82,9 @@ public class CommentApiController {
 
     //댓글 삭제 메서드
     //삭제 기능 화면은 아직 미구현.
-    @DeleteMapping("/{commentId}}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
-        commentService.deleteComment(commentId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long id) {
+        commentService.deleteComment(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("comment delete");
