@@ -78,9 +78,12 @@ public class PostApiController {
 
     //게시글 삭제 메서드
     //게시글 삭제 화면은 아직 미구현.
-    @DeleteMapping("{commentId}")
-    public void deletePost(@PathVariable Long commentId) {
-        postService.deletePost(commentId);
+    @DeleteMapping("{postId}")
+    public ResponseEntity<String> deletePost(@PathVariable Long postId) {
+        postService.deletePost(postId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("post delete");
     }
 
     private Member findLoginMember(HttpServletRequest request) {

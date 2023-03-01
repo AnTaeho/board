@@ -47,7 +47,6 @@ public class CommentService {
     public CommentResDto writeComment(Long postId, Long memberId, CommentWriteDto commentWriteDto) {
         Member commentMember = findMember(memberId);
         Comment newComment = new Comment(commentMember.getName(), commentWriteDto.getContent());
-        System.out.println("newComment.id = " + newComment.getId());
         newComment.setPost(findPost(postId));
         return new CommentResDto(commentRepository.save(newComment));
     }

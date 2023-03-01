@@ -71,6 +71,8 @@ public class LoginController {
             session.setAttribute("user", "user");
         }
 
+        session.setMaxInactiveInterval(1800);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(new MemberRegisterResDto(loginMember));

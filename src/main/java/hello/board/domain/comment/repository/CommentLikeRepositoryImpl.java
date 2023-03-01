@@ -24,4 +24,12 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepositoryCustom {
         return commentLike == null;
     }
 
+    @Override
+    public void deleteByCommentIdAndMemberId(Long commentId, Long memberId) {
+        queryFactory
+                .delete(QCommentLike.commentLike)
+                .where(QCommentLike.commentLike.comment.id.eq(commentId), QCommentLike.commentLike.member.id.eq(memberId))
+                .execute();
+    }
+
 }
