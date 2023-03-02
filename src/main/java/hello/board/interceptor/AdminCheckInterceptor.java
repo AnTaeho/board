@@ -5,6 +5,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 
 public class AdminCheckInterceptor implements HandlerInterceptor {
 
@@ -12,7 +13,11 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
 
         HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("admin") == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return false;
+        }
 
-        return session != null && session.getAttribute("admin") != null;
+        return true;
     }
 }
