@@ -11,6 +11,7 @@ import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.MemberRepository;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
+import hello.board.exception.CustomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,21 +84,21 @@ public class CommentService {
     private Comment findComment(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
-                    throw new IllegalArgumentException("댓글이 이상해");
+                    throw new CustomNotFoundException(String.format("id=%s not found",commentId));
                 });
     }
 
     private Post findPost(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> {
-                    throw new IllegalArgumentException("게시글이 없어");
+                    throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
     private Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
-                    throw new IllegalArgumentException("회원이 없어");
+                    throw new CustomNotFoundException(String.format("id=%s not found",memberId));
                 });
     }
 }

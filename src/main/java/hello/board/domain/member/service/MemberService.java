@@ -7,6 +7,7 @@ import hello.board.controller.member.dto.res.MemberResDto;
 import hello.board.controller.member.dto.res.MemberUpdateResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.MemberRepository;
+import hello.board.exception.CustomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -71,7 +72,7 @@ public class MemberService {
     private Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
-                    throw new IllegalArgumentException("회원이 없어");
+                    throw new CustomNotFoundException(String.format("id=%s not found",memberId));
                 });
     }
 
