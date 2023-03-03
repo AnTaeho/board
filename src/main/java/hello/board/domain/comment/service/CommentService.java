@@ -9,6 +9,8 @@ import hello.board.domain.comment.repository.CommentLikeRepository;
 import hello.board.domain.comment.repository.CommentRepository;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.MemberRepository;
+import hello.board.domain.notification.entity.Notification;
+import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
 import hello.board.exception.CustomNotFoundException;
@@ -28,6 +30,7 @@ public class CommentService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final CommentLikeRepository commentLikeRepository;
+    private final NotificationRepository notificationRepository;
 
     public List<CommentResDto> findAllComments() {
         return commentRepository.findAll()
@@ -47,8 +50,12 @@ public class CommentService {
     @Transactional
     public CommentResDto writeComment(Long postId, Long memberId, CommentWriteDto commentWriteDto) {
         Member commentMember = findMember(memberId);
+        Post findPost = findPost(postId);
         Comment newComment = new Comment(commentMember.getName(), commentWriteDto.getContent());
-        newComment.setPost(findPost(postId));
+        newComment.setPost(findPost);
+        if (findPost.getMember() != commentMember) {
+            notificationRepository.save(new Notification(commentWriteDto.getContent(), commentMember.getName(), findPost.getMember()));
+        }
         return new CommentResDto(commentRepository.save(newComment));
     }
 

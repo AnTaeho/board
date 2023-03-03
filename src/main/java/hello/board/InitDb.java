@@ -52,7 +52,7 @@ public class InitDb {
         }
 
         public void dbInit2() {
-            for (int i = 0; i < 50; i++) {
+            for (int i = 0; i < 2; i++) {
                 makeNormalMember(i);
             }
 

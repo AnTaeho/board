@@ -2,6 +2,7 @@ package hello.board.domain.member.entity;
 
 import hello.board.controller.member.dto.req.MemberUpdateReqDto;
 import hello.board.domain.base.BaseTimeEntity;
+import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.post.entity.Post;
 import lombok.*;
 
@@ -32,6 +33,9 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "notifiedMember")
+    private List<Notification> notifications = new ArrayList<>();
 
     public Member(String name, int age, String loginId, String password, MemberRole role) {
         this.name = name;
