@@ -23,6 +23,9 @@
 - MySql
 
 ---
+2023/3/3
+- #6 Notification 기본 구현 및 의존관계 매핑
+
 2023/3/2 
 - #4 ADMIN 권한 실패시 HTTPStatus 조정
 - #5 #3 문제를 exceptionHandler를 통해서 해결
