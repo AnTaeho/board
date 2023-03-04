@@ -54,7 +54,7 @@ public class CommentService {
         Comment newComment = new Comment(commentMember.getName(), commentWriteDto.getContent());
         newComment.setPost(findPost);
         if (findPost.getMember() != commentMember) {
-            notificationRepository.save(new Notification(commentWriteDto.getContent(), commentMember.getName(), findPost.getMember()));
+            notificationRepository.save(new Notification(commentWriteDto.getContent(), commentMember.getName(), findPost.getMember(), newComment));
         }
         return new CommentResDto(commentRepository.save(newComment));
     }

@@ -1,6 +1,7 @@
 package hello.board.domain.notification.entity;
 
 import hello.board.controller.notification.dto.req.NotificationUpdateReqDto;
+import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.member.entity.Member;
 import lombok.*;
 
@@ -23,11 +24,17 @@ public class Notification {
     @JoinColumn(name = "member_id")
     private Member notifiedMember;
 
-    public Notification(String content,String writer, Member member) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "comment_id")
+    private Comment ownerComment;
+
+    public Notification(String content,String writer, Member member, Comment comment) {
         this.content = content;
         this.writer = writer;
         this.notifiedMember = member;
+        this.ownerComment = comment;
         member.getNotifications().add(this);
+        comment.getNotifications().add(this);
     }
 
     public void updateInfo(NotificationUpdateReqDto updateReqDto) {

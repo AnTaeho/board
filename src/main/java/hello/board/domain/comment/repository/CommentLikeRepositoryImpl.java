@@ -2,7 +2,7 @@ package hello.board.domain.comment.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.domain.comment.entity.CommentLike;
-import hello.board.entity.comment.QCommentLike;
+import hello.board.domain.comment.entity.QCommentLike;
 
 import javax.persistence.EntityManager;
 
