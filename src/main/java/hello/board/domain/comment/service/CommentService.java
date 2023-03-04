@@ -54,7 +54,7 @@ public class CommentService {
         Comment newComment = new Comment(commentMember.getName(), commentWriteDto.getContent());
         newComment.setPost(findPost);
         if (findPost.getMember() != commentMember) {
-            notificationRepository.save(new Notification(commentWriteDto.getContent(), commentMember.getName(), findPost.getMember(), newComment));
+            notificationRepository.save(makeCommentNotification(commentWriteDto, commentMember, findPost, newComment));
         }
         return new CommentResDto(commentRepository.save(newComment));
     }
@@ -76,7 +76,7 @@ public class CommentService {
         Comment findComment = findComment(commentId);
 
         if (commentLikeRepository.hasNoLike(commentId, memberId)) {
-            commentLikeRepository.save(new CommentLike(findMember(memberId), findComment));
+            commentLikeRepository.save(pressCommentLike(memberId, findComment));
             return "Like success";
         } else {
             commentLikeRepository.deleteByCommentIdAndMemberId(commentId, memberId);
@@ -107,5 +107,17 @@ public class CommentService {
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",memberId));
                 });
+    }
+
+    private Notification makeCommentNotification(CommentWriteDto commentWriteDto, Member commentMember, Post findPost, Comment newComment) {
+        return new Notification(commentWriteDto.getContent(), commentMember.getName(), findPost.getMember(), newComment);
+    }
+
+    private CommentLike pressCommentLike(Long memberId, Comment findComment) {
+        return new CommentLike(findMember(memberId), findComment, makeCommentLikeNotification(memberId, findComment));
+    }
+
+    private Notification makeCommentLikeNotification(Long memberId, Comment findComment) {
+        return new Notification(findMember(memberId), findComment, findComment.getPost().getMember());
     }
 }
