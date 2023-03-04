@@ -114,6 +114,9 @@ public class CommentService {
     }
 
     private CommentLike pressCommentLike(Long memberId, Comment findComment) {
+        if (findComment.getPost().getMember() == findMember(memberId)) {
+            return new CommentLike(findMember(memberId), findComment);
+        }
         return new CommentLike(findMember(memberId), findComment, makeCommentLikeNotification(memberId, findComment));
     }
 

@@ -28,6 +28,11 @@ public class CommentLike {
     @OneToOne(mappedBy = "commentLike", cascade = CascadeType.ALL)
     private Notification notification;
 
+    public CommentLike(Member findMember, Comment findComment) {
+        this.member = findMember;
+        this.comment = findComment;
+    }
+
     public CommentLike(Member findMember, Comment findComment, Notification notification) {
         this.member = findMember;
         this.comment = findComment;
