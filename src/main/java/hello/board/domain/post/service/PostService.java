@@ -45,19 +45,19 @@ public class PostService {
     }
 
     @Transactional
-    public PostWriteResDto writePost(Long memberId, PostWriteReqDto postWriteReqDto) {
-        return new PostWriteResDto(savePost(memberId, postWriteReqDto));
+    public PostWriteResDto writePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
+        return new PostWriteResDto(savePost(loginMember, postWriteReqDto));
     }
 
-    private Post savePost(Long memberId, PostWriteReqDto postWriteReqDto) {
-        return postRepository.save(createPost(memberId, postWriteReqDto));
+    private Post savePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
+        return postRepository.save(createPost(loginMember, postWriteReqDto));
     }
 
-    private Post createPost(Long memberId, PostWriteReqDto postWriteReqDto) {
+    private Post createPost(Member loginMember, PostWriteReqDto postWriteReqDto) {
         return Post.builder()
                 .title(postWriteReqDto.getTitle())
                 .content(postWriteReqDto.getContent())
-                .member(findMember(memberId))
+                .member(loginMember)
                 .build();
     }
 

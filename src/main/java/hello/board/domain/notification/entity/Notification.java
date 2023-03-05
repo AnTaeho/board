@@ -4,7 +4,10 @@ import hello.board.controller.notification.dto.req.NotificationUpdateReqDto;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.entity.CommentLike;
 import hello.board.domain.member.entity.Member;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -44,7 +47,7 @@ public class Notification {
         comment.getNotifications().add(this);
     }
 
-    public Notification(Member member, Comment comment, Member notifiedMember) {
+    public Notification(Member member, Member notifiedMember, Comment comment) {
         this.content = "comment like";
         this.writer = member.getName();
         this.ownerComment = comment;

@@ -2,6 +2,7 @@ package hello.board.domain.comment.entity;
 
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.notification.entity.Notification;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -9,7 +10,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CommentLike {
 
     @Id

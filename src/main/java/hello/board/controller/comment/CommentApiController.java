@@ -55,11 +55,7 @@ public class CommentApiController {
     //리쿼스트 리스폰스 삭제하는 방법이 있는 것으로 기억한다.
     @PostMapping("/post/{postId}")
     public ResponseEntity<CommentResDto> writeComment(@PathVariable Long postId, @RequestBody CommentWriteDto writeDto, HttpServletRequest request) {
-
-        //세션에 저장되어 있는 로그인된 멤버를 가져온다
-        Member loginMember = findLoginMember(request);
-        CommentResDto writtenComment = commentService.writeComment(postId, loginMember.getId(), writeDto);
-
+        CommentResDto writtenComment = commentService.writeComment(postId, findLoginMember(request), writeDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(writtenComment);
@@ -71,7 +67,6 @@ public class CommentApiController {
     @PatchMapping("/edit")
     public ResponseEntity<CommentResDto> updateComment(@RequestParam Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
         CommentResDto updateComment = commentService.updateComment(commentId, commentUpdateDto);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(updateComment);
@@ -91,10 +86,7 @@ public class CommentApiController {
     //댓글 좋아요 화면은 아직 미구현.
     @PatchMapping("/{commentId}/like")
     public ResponseEntity<String> likeComment(@PathVariable Long commentId, HttpServletRequest request) {
-
-        Member loginMember = findLoginMember(request);
-        String result = commentService.likeComment(commentId, loginMember.getId());
-
+        String result = commentService.likeComment(commentId, findLoginMember(request).getId());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(result);

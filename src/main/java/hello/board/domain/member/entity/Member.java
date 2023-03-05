@@ -4,7 +4,10 @@ import hello.board.controller.member.dto.req.MemberUpdateReqDto;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.post.entity.Post;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,14 +39,6 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "notifiedMember")
     private List<Notification> notifications = new ArrayList<>();
-
-    public Member(String name, int age, String loginId, String password, MemberRole role) {
-        this.name = name;
-        this.age = age;
-        this.loginId = loginId;
-        this.password = password;
-        this.role = role;
-    }
 
     //== 업데이트 로직 ==//
     public void updateInfo(MemberUpdateReqDto memberUpdateReqDto) {

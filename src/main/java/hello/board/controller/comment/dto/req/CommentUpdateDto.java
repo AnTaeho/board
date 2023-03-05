@@ -1,10 +1,14 @@
 package hello.board.controller.comment.dto.req;
 
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Lob;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 public class CommentUpdateDto {
 
     @Lob

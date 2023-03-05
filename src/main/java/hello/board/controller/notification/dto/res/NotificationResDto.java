@@ -2,12 +2,10 @@ package hello.board.controller.notification.dto.res;
 
 import hello.board.domain.notification.entity.Notification;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 public class NotificationResDto {
 
     private Long id;

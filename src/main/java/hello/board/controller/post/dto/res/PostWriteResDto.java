@@ -1,11 +1,15 @@
 package hello.board.controller.post.dto.res;
 
 import hello.board.domain.post.entity.Post;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.Lob;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
 public class PostWriteResDto {
 
     private Long id;

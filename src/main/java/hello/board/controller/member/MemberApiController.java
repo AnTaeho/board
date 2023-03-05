@@ -19,9 +19,7 @@ public class MemberApiController {
     //멤버 상세정보 메서드
     @GetMapping
     public ResponseEntity<MemberResDto> findById(@RequestParam Long id) {
-
         MemberResDto findMember = memberService.findById(id);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(findMember);
@@ -31,9 +29,7 @@ public class MemberApiController {
     //수정후 멤버 상세정보 화면으로 리다이렉팅
     @PatchMapping("/edit")
     public ResponseEntity<MemberUpdateResDto> updateMember(@RequestParam Long memberId, @RequestBody MemberUpdateReqDto memberUpdateReqDto) {
-
         MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(memberUpdateResDto);

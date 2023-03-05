@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.util.List;
 
 import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
@@ -29,9 +28,7 @@ public class PostApiController {
     //게시글 상세 화면 메서드
     @GetMapping("/{postId}")
     public ResponseEntity<PostResDto> findSinglePost(@PathVariable Long postId) {
-
         PostResDto findPost = postService.findSinglePost(postId);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(findPost);
@@ -41,9 +38,7 @@ public class PostApiController {
     //회원의 모든 게시글 화면 메서드
     @GetMapping("/member")
     public ResponseEntity<List<PostResDto>> findAllByMember(@RequestParam Long memberId) {
-        //회원은 모든 게시글을 찾아온다.
         List<PostResDto> posts = findAllPostOfMember(memberId);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(posts);
@@ -58,11 +53,7 @@ public class PostApiController {
     //작성후 게시글 목록으로 리다이렉팅
     @PostMapping("/post")
     public ResponseEntity<PostWriteResDto> writePost(HttpServletRequest request, @RequestBody PostWriteReqDto postWriteReqDto) {
-
-        //로그인 멤버를 찾아온다.
-        Member loginMember = findLoginMember(request);
-        PostWriteResDto writtenPost = postService.writePost(loginMember.getId(), postWriteReqDto);
-
+        PostWriteResDto writtenPost = postService.writePost(findLoginMember(request), postWriteReqDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(writtenPost);
@@ -72,9 +63,7 @@ public class PostApiController {
     //수정후 게시글 목록으로 리다이렉팅
     @PatchMapping("/edit/{postId}")
     public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable Long postId, @RequestBody PostUpdateReqDto postUpdateReqDto) {
-
         PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(updatedPost);
@@ -85,9 +74,7 @@ public class PostApiController {
     //게시글 삭제 화면은 아직 미구현.
     @DeleteMapping("{postId}")
     public ResponseEntity<String> deletePost(@PathVariable Long postId) {
-
         postService.deletePost(postId);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("post delete");

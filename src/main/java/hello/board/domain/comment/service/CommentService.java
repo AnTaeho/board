@@ -40,21 +40,19 @@ public class CommentService {
     }
 
     public List<CommentResDto> findCommentsByPost(Long postId) {
-        Post findPost = findPost(postId);
-        return findPost.getComments()
+        return findPost(postId).getComments()
                 .stream()
                 .map(CommentResDto::new)
                 .collect(Collectors.toList());
     }
 
     @Transactional
-    public CommentResDto writeComment(Long postId, Long memberId, CommentWriteDto commentWriteDto) {
-        Member commentMember = findMember(memberId);
+    public CommentResDto writeComment(Long postId, Member commentMember, CommentWriteDto commentWriteDto) {
         Post findPost = findPost(postId);
         Comment newComment = new Comment(commentMember.getName(), commentWriteDto.getContent());
         newComment.setPost(findPost);
         if (findPost.getMember() != commentMember) {
-            notificationRepository.save(makeCommentNotification(commentWriteDto, commentMember, findPost, newComment));
+            notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
         return new CommentResDto(commentRepository.save(newComment));
     }
@@ -109,18 +107,27 @@ public class CommentService {
                 });
     }
 
-    private Notification makeCommentNotification(CommentWriteDto commentWriteDto, Member commentMember, Post findPost, Comment newComment) {
-        return new Notification(commentWriteDto.getContent(), commentMember.getName(), findPost.getMember(), newComment);
+    private Notification makeCommentNotification(Member commentMember, Post findPost, Comment newComment) {
+        return new Notification(newComment.getContent(), commentMember.getName(), findPost.getMember(), newComment);
     }
 
     private CommentLike pressCommentLike(Long memberId, Comment findComment) {
-        if (findComment.getPost().getMember() == findMember(memberId)) {
-            return new CommentLike(findMember(memberId), findComment);
+
+        Member commentOwner = findCommentOwner(findComment);
+        Member loginMember = findMember(memberId);
+
+        if (commentOwner == loginMember) {
+            return new CommentLike(loginMember, findComment);
         }
-        return new CommentLike(findMember(memberId), findComment, makeCommentLikeNotification(memberId, findComment));
+
+        return new CommentLike(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner, findComment));
     }
 
-    private Notification makeCommentLikeNotification(Long memberId, Comment findComment) {
-        return new Notification(findMember(memberId), findComment, findComment.getPost().getMember());
+    private Notification makeCommentLikeNotification(Member loginMember, Member commentOwner, Comment findComment) {
+        return new Notification(loginMember, commentOwner, findComment);
+    }
+
+    private Member findCommentOwner(Comment findComment) {
+        return findComment.getPost().getMember();
     }
 }

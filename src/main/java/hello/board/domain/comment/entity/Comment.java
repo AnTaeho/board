@@ -3,7 +3,7 @@ package hello.board.domain.comment.entity;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.post.entity.Post;
-import lombok.AllArgsConstructor;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseTimeEntity {
 
     @Id @GeneratedValue

@@ -10,7 +10,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -28,7 +30,6 @@ public class LoginController {
     @PostMapping("/login/join")
     public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @RequestBody MemberRegisterReqDto memberRegisterReqDto) {
         MemberRegisterResDto memberRegisterResDto = memberService.joinMember(memberRegisterReqDto);
-
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(memberRegisterResDto);
@@ -66,12 +67,10 @@ public class LoginController {
         session.setAttribute(LOGIN_MEMBER, loginMember);
 
         if (loginMember.getRole() == MemberRole.ADMIN) {
-            session.setAttribute("admin", "admin");
+            session.setAttribute("admin", "관리자");
         } else {
-            session.setAttribute("user", "user");
+            session.setAttribute("user", "일반 회원");
         }
-
-        session.setMaxInactiveInterval(1800);
 
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -81,11 +80,16 @@ public class LoginController {
     //로그아웃 메서드
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
+
+
         HttpSession session = request.getSession(false);
+
+        //현재 필터때문에 로그인을 하지 않으면 로그아웃 URL 로 접근도 불가능하다.
+        //그래서 바로 아래 로직이 생기는 일은 없다.
+        //하지만 혹시나하는 마음에 남겨둔다.
         if (session != null) {
             session.invalidate();
         } else {
-            //현재 필터때문에 로그인을 하지 않으면 로그아웃 URL 로 접근도 불가능하다.
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("로그인 되어 있지 않습니다.");

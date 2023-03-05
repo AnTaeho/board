@@ -21,7 +21,6 @@ public class NotificationApiController {
     @PatchMapping("/edit/{noticeId}")
     public ResponseEntity<NotificationUpdateResDto> updateNotification(@PathVariable Long noticeId, @RequestBody NotificationUpdateReqDto updateReqDto) {
         NotificationUpdateResDto notificationUpdateResDto = notificationService.updateNotification(noticeId, updateReqDto);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(notificationUpdateResDto);
@@ -31,7 +30,6 @@ public class NotificationApiController {
     @GetMapping("/{noticeId}")
     public ResponseEntity<NotificationResDto> findSingleNotification(@PathVariable Long noticeId) {
         NotificationResDto findNotice = notificationService.findById(noticeId);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(findNotice);
@@ -40,7 +38,6 @@ public class NotificationApiController {
     @GetMapping("/all")
     public ResponseEntity<List<NotificationResDto>> findAllNotification() {
         List<NotificationResDto> allNotifications = notificationService.findAll();
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(allNotifications);
@@ -49,7 +46,6 @@ public class NotificationApiController {
     @DeleteMapping("/{noticeId}")
     public ResponseEntity<String> deleteNotification(@PathVariable Long noticeId) {
         notificationService.deleteNotification(noticeId);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("notification delete");

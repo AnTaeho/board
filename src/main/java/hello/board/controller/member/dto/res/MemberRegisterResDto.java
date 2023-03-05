@@ -2,11 +2,13 @@ package hello.board.controller.member.dto.res;
 
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
-@NoArgsConstructor
 @Getter
 @Setter
+@AllArgsConstructor
 public class MemberRegisterResDto {
 
     private Long id;

@@ -36,11 +36,6 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    public Post(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
     //== 연관관계 메서드 ==//
     public void setMember(Member member) {
         this.member = member;
