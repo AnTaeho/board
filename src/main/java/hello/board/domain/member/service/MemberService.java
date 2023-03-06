@@ -5,7 +5,9 @@ import hello.board.controller.member.dto.req.MemberUpdateReqDto;
 import hello.board.controller.member.dto.res.MemberRegisterResDto;
 import hello.board.controller.member.dto.res.MemberResDto;
 import hello.board.controller.member.dto.res.MemberUpdateResDto;
+import hello.board.domain.member.entity.Follow;
 import hello.board.domain.member.entity.Member;
+import hello.board.domain.member.repository.FollowRepository;
 import hello.board.domain.member.repository.MemberRepository;
 import hello.board.exception.CustomNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -14,12 +16,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final FollowRepository followRepository;
 
     @Transactional
     public MemberRegisterResDto joinMember(MemberRegisterReqDto memberRegisterReqDto) {
@@ -66,6 +71,21 @@ public class MemberService {
         return memberRepository.findByLoginId(loginId)
                 .filter(m -> m.getPassword().equals(password))
                 .orElse(null);
+    }
+
+    @Transactional
+    public String followMember(Long memberId, Member fromMember) {
+        Member toMember = findMember(memberId);
+        if (followRepository.isAlreadyFollow(toMember, fromMember)) {
+            followRepository.deleteByToMemberAndFromMember(toMember, fromMember);
+            return "unfollow success";
+        }
+        followRepository.save(new Follow(fromMember, toMember));
+        return "follow success";
+    }
+
+    public List<Member> findAll(Member toMember) {
+        return followRepository.findAllByToMember(toMember);
     }
 
     private Member findMember(Long memberId) {
