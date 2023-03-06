@@ -31,6 +31,12 @@ public class Member extends BaseTimeEntity {
     private String loginId;
     private String password;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Member parent;
+
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+    private List<Member> followers = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
@@ -45,5 +51,13 @@ public class Member extends BaseTimeEntity {
         this.name = memberUpdateReqDto.getName();
         this.age = memberUpdateReqDto.getAge();
         this.loginId = memberUpdateReqDto.getLoginId();
+    }
+
+    public void addFollower(Member followMember) {
+        this.followers.add(followMember);
+    }
+
+    public void deleteFollower(Member followMember) {
+        this.followers.remove(followMember);
     }
 }

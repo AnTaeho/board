@@ -50,6 +50,17 @@ public class MemberService {
     }
 
     @Transactional
+    public String addFollower(Long memberId, Member loginMember) {
+        Member ownerMember = findMember(memberId);
+        if (isAlreadyContains(loginMember, ownerMember)) {
+            ownerMember.deleteFollower(loginMember);
+            return "unfollow success";
+        }
+        ownerMember.addFollower(loginMember);
+        return "follow success";
+    }
+
+    @Transactional
     public MemberUpdateResDto updateMember(Long id, MemberUpdateReqDto MemberUpdateReqDto) {
         Member findMember = findMember(id);
         findMember.updateInfo(MemberUpdateReqDto);
@@ -75,4 +86,7 @@ public class MemberService {
                 });
     }
 
+    private boolean isAlreadyContains(Member loginMember, Member ownerMember) {
+        return ownerMember.getFollowers().contains(loginMember);
+    }
 }
