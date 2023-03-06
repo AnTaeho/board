@@ -22,7 +22,7 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
-    @GetMapping("/{memberId}/follow")
+    @PostMapping("/{memberId}/follow")
     public ResponseEntity<String> followMember(@PathVariable Long memberId, HttpServletRequest request) {
         String result = memberService.addFollower(memberId, findLoginMember(request));
         return ResponseEntity

@@ -31,10 +31,10 @@ public class Member extends BaseTimeEntity {
     private String loginId;
     private String password;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Member parent;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    private Member parent;
 
-    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+//    @OneToMany(mappedBy = "parent", cascade = CascadeType.REMOVE)
     private List<Member> followers = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)

@@ -14,6 +14,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -57,6 +59,11 @@ public class MemberService {
             return "unfollow success";
         }
         ownerMember.addFollower(loginMember);
+        List<Member> followers = ownerMember.getFollowers();
+        for (Member follower : followers) {
+            System.out.println(follower.toString());
+            System.out.println(followers.size());
+        }
         return "follow success";
     }
 
