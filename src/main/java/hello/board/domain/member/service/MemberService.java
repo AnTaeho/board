@@ -14,8 +14,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -52,22 +50,6 @@ public class MemberService {
     }
 
     @Transactional
-    public String addFollower(Long memberId, Member loginMember) {
-        Member ownerMember = findMember(memberId);
-        if (isAlreadyContains(loginMember, ownerMember)) {
-            ownerMember.deleteFollower(loginMember);
-            return "unfollow success";
-        }
-        ownerMember.addFollower(loginMember);
-        List<Member> followers = ownerMember.getFollowers();
-        for (Member follower : followers) {
-            System.out.println(follower.toString());
-            System.out.println(followers.size());
-        }
-        return "follow success";
-    }
-
-    @Transactional
     public MemberUpdateResDto updateMember(Long id, MemberUpdateReqDto MemberUpdateReqDto) {
         Member findMember = findMember(id);
         findMember.updateInfo(MemberUpdateReqDto);
@@ -91,9 +73,5 @@ public class MemberService {
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",memberId));
                 });
-    }
-
-    private boolean isAlreadyContains(Member loginMember, Member ownerMember) {
-        return ownerMember.getFollowers().contains(loginMember);
     }
 }
