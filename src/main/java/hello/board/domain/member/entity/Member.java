@@ -60,4 +60,8 @@ public class Member extends BaseTimeEntity {
     public void deleteFollower(Member followMember) {
         this.followers.remove(followMember);
     }
+
+    public void addNotification(Notification notification) {
+        this.notifications.add(notification);
+    }
 }

@@ -4,6 +4,7 @@ import hello.board.controller.notification.dto.req.NotificationUpdateReqDto;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.entity.CommentLike;
 import hello.board.domain.member.entity.Member;
+import hello.board.domain.post.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,13 +31,16 @@ public class Notification {
     private Member notifiedMember;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "post_id")
+    private Post ownerPost;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_id")
     private Comment ownerComment;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_like_id")
     private CommentLike commentLike;
-
 
     public Notification(String content, String writer, Member member, Comment comment) {
         this.content = content;
@@ -52,6 +56,13 @@ public class Notification {
         this.writer = member.getName();
         this.ownerComment = comment;
         this.notifiedMember = notifiedMember;
+    }
+
+    public Notification(String title, String writer, Member loginMember, Post post) {
+        this.content = title;
+        this.writer = writer;
+        this.notifiedMember = loginMember;
+        this.ownerPost = post;
     }
 
     public void updateInfo(NotificationUpdateReqDto updateReqDto) {

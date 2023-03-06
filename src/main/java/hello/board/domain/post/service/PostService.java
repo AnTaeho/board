@@ -7,6 +7,7 @@ import hello.board.controller.post.dto.res.PostUpdateResDto;
 import hello.board.controller.post.dto.res.PostWriteResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.MemberRepository;
+import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
 import hello.board.exception.CustomNotFoundException;
@@ -46,7 +47,12 @@ public class PostService {
 
     @Transactional
     public PostWriteResDto writePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
-        return new PostWriteResDto(savePost(loginMember, postWriteReqDto));
+        List<Member> followers = loginMember.getFollowers();
+        PostWriteResDto postWriteResDto = new PostWriteResDto(savePost(loginMember, postWriteReqDto));
+        for (Member follower : followers) {
+            follower.addNotification(new Notification(postWriteReqDto.getTitle(), loginMember.getName(), follower, findPost(postWriteResDto.getId())));
+        }
+        return postWriteResDto;
     }
 
     private Post savePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
