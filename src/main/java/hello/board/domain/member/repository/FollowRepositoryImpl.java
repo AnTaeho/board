@@ -5,7 +5,6 @@ import hello.board.domain.member.entity.Follow;
 import hello.board.domain.member.entity.Member;
 
 import javax.persistence.EntityManager;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

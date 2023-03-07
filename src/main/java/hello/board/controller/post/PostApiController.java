@@ -33,7 +33,6 @@ public class PostApiController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(findPost);
-
     }
 
     //회원의 모든 게시글 화면 메서드

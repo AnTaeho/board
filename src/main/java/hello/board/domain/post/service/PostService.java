@@ -33,7 +33,8 @@ public class PostService {
     private final NotificationRepository notificationRepository;
 
     public PostResDto findSinglePost(Long id) {
-        return new PostResDto(findPost(id));
+        Post post = postRepository.findByIdWithFetchJoinMember(id).orElseThrow();
+        return new PostResDto(post);
     }
 
     public List<PostResDto> findMemberPost(Long memberId) {
