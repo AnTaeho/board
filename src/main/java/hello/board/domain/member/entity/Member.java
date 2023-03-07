@@ -47,4 +47,8 @@ public class Member extends BaseTimeEntity {
         this.loginId = memberUpdateReqDto.getLoginId();
     }
 
+    public void addNotification(Notification notification) {
+        this.notifications.add(notification);
+        notification.setNotifiedMember(this);
+    }
 }

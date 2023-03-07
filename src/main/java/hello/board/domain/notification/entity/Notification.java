@@ -58,8 +58,8 @@ public class Notification {
         this.notifiedMember = notifiedMember;
     }
 
-    public Notification(String title, String writer, Member loginMember, Post post) {
-        this.content = title;
+    public Notification(String writer, Member loginMember, Post post) {
+        this.content = post.getTitle();
         this.writer = writer;
         this.notifiedMember = loginMember;
         this.ownerPost = post;
