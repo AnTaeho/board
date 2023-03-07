@@ -26,6 +26,7 @@ public class PostApiController {
     private final PostService postService;
 
     //게시글 상세 화면 메서드
+    //쿼리 성능 발전 가능성 있음 -> 멤버 쿼리도 나감
     @GetMapping("/{postId}")
     public ResponseEntity<PostResDto> findSinglePost(@PathVariable Long postId) {
         PostResDto findPost = postService.findSinglePost(postId);
@@ -36,6 +37,7 @@ public class PostApiController {
     }
 
     //회원의 모든 게시글 화면 메서드
+    //쿼리 성능 발전 가능성 있음
     @GetMapping("/member")
     public ResponseEntity<List<PostResDto>> findAllByMember(@RequestParam Long memberId) {
         List<PostResDto> posts = findAllPostOfMember(memberId);
@@ -49,8 +51,7 @@ public class PostApiController {
     }
 
     //게시글 작성 메서드
-    //세션에서 저장된 로그인 멤버를 가져온다.
-    //작성후 게시글 목록으로 리다이렉팅
+    //팔로워가 있으면 쿼리 작살남
     @PostMapping("/post")
     public ResponseEntity<PostWriteResDto> writePost(HttpServletRequest request, @RequestBody PostWriteReqDto postWriteReqDto) {
         PostWriteResDto writtenPost = postService.writePost(findLoginMember(request), postWriteReqDto);
@@ -60,7 +61,7 @@ public class PostApiController {
     }
 
     //게시글 수정 메서드
-    //수정후 게시글 목록으로 리다이렉팅
+    //쿼리 성능 발전 가능성 있음
     @PatchMapping("/edit/{postId}")
     public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable Long postId, @RequestBody PostUpdateReqDto postUpdateReqDto) {
         PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);

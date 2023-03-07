@@ -51,8 +51,7 @@ public class CommentApiController {
     }
 
     //댓글 작성하는 메서드
-    //댓글 목록으로 리다이렉팅
-    //리쿼스트 리스폰스 삭제하는 방법이 있는 것으로 기억한다.
+    //알람과 관련된 쿼리 확인 필요
     @PostMapping("/post/{postId}")
     public ResponseEntity<CommentResDto> writeComment(@PathVariable Long postId, @RequestBody CommentWriteDto writeDto, HttpServletRequest request) {
         CommentResDto writtenComment = commentService.writeComment(postId, findLoginMember(request), writeDto);
@@ -62,8 +61,6 @@ public class CommentApiController {
     }
 
     //댓글 수정 메서드
-    //댓글 상세정보로 리다이렉팅
-    //리쿼스트 리스폰스 삭제하는 방법이 있는 것으로 기억한다.
     @PatchMapping("/edit")
     public ResponseEntity<CommentResDto> updateComment(@RequestParam Long commentId, @RequestBody CommentUpdateDto commentUpdateDto) {
         CommentResDto updateComment = commentService.updateComment(commentId, commentUpdateDto);
@@ -73,7 +70,6 @@ public class CommentApiController {
     }
 
     //댓글 삭제 메서드
-    //삭제 기능 화면은 아직 미구현.
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable Long id) {
         commentService.deleteComment(id);
@@ -83,7 +79,6 @@ public class CommentApiController {
     }
 
     //댓글 좋아요 메서드
-    //댓글 좋아요 화면은 아직 미구현.
     @PatchMapping("/{commentId}/like")
     public ResponseEntity<String> likeComment(@PathVariable Long commentId, HttpServletRequest request) {
         String result = commentService.likeComment(commentId, findLoginMember(request).getId());
