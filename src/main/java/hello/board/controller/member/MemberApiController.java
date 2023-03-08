@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 
@@ -44,7 +45,7 @@ public class MemberApiController {
     //멤버 정보 수정 메서드
     //수정후 멤버 상세정보 화면으로 리다이렉팅
     @PatchMapping("/edit")
-    public ResponseEntity<MemberUpdateResDto> updateMember(@RequestParam Long memberId, @RequestBody MemberUpdateReqDto memberUpdateReqDto) {
+    public ResponseEntity<MemberUpdateResDto> updateMember(@RequestParam Long memberId, @Valid @ModelAttribute MemberUpdateReqDto memberUpdateReqDto) {
         MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)

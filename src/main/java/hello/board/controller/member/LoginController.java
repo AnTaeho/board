@@ -10,8 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,7 +28,7 @@ public class LoginController {
 
     //회원 가입 메서드
     @PostMapping("/login/join")
-    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @RequestBody MemberRegisterReqDto memberRegisterReqDto) {
+    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @ModelAttribute MemberRegisterReqDto memberRegisterReqDto) {
         MemberRegisterResDto memberRegisterResDto = memberService.joinMember(memberRegisterReqDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -38,8 +38,8 @@ public class LoginController {
     //로그인 메서드
     //세션에 로그인 정보를 저장한다.
     @PostMapping("/login")
-    public ResponseEntity<MemberRegisterResDto> login(@Valid @RequestBody LoginFormDto form, BindingResult bindingResult,
-                        HttpServletRequest request) {
+    public ResponseEntity<MemberRegisterResDto> login(@Valid @ModelAttribute LoginFormDto form, BindingResult bindingResult,
+                                                      HttpServletRequest request) {
 
         if (!(request.getSession(false) == null)) {
             return ResponseEntity

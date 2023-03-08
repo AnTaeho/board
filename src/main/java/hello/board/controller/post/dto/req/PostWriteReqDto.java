@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Lob;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
@@ -13,8 +14,10 @@ import javax.persistence.Lob;
 @AllArgsConstructor
 public class PostWriteReqDto {
 
+    @NotEmpty
     private String title;
 
+    @NotEmpty
     @Lob
     private String content;
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.util.List;
 
 import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
@@ -52,7 +53,7 @@ public class PostApiController {
     //게시글 작성 메서드
     //팔로워가 있으면 쿼리 작살남
     @PostMapping("/post")
-    public ResponseEntity<PostWriteResDto> writePost(HttpServletRequest request, @RequestBody PostWriteReqDto postWriteReqDto) {
+    public ResponseEntity<PostWriteResDto> writePost(HttpServletRequest request, @Valid @ModelAttribute PostWriteReqDto postWriteReqDto) {
         PostWriteResDto writtenPost = postService.writePost(findLoginMember(request), postWriteReqDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -62,7 +63,7 @@ public class PostApiController {
     //게시글 수정 메서드
     //쿼리 성능 발전 가능성 있음
     @PatchMapping("/edit/{postId}")
-    public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable Long postId, @RequestBody PostUpdateReqDto postUpdateReqDto) {
+    public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable Long postId, @Valid @ModelAttribute PostUpdateReqDto postUpdateReqDto) {
         PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)

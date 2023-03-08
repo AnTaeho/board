@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -19,7 +20,7 @@ public class NotificationApiController {
     private final NotificationService notificationService;
 
     @PatchMapping("/edit/{noticeId}")
-    public ResponseEntity<NotificationUpdateResDto> updateNotification(@PathVariable Long noticeId, @RequestBody NotificationUpdateReqDto updateReqDto) {
+    public ResponseEntity<NotificationUpdateResDto> updateNotification(@PathVariable Long noticeId, @Valid @ModelAttribute NotificationUpdateReqDto updateReqDto) {
         NotificationUpdateResDto notificationUpdateResDto = notificationService.updateNotification(noticeId, updateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)

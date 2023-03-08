@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Lob;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 @Setter
@@ -13,6 +14,7 @@ import javax.persistence.Lob;
 @AllArgsConstructor
 public class CommentWriteDto {
 
+    @NotEmpty
     @Lob
     private String content;
 
