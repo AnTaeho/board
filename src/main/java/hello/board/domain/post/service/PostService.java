@@ -87,7 +87,7 @@ public class PostService {
         postRepository.deleteById(id);
     }
 
-    private Post findPost(Long postId) {
+    public Post findPost(Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));

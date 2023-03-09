@@ -53,7 +53,7 @@ public class LoginController {
                     .build();
         }
 
-        Member loginMember = memberService.login(form.getLoginId(), form.getPassword());
+        Member loginMember = memberService.login(form);
 
         if (loginMember == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");

@@ -1,5 +1,6 @@
 package hello.board.domain.member.service;
 
+import hello.board.controller.member.dto.req.LoginFormDto;
 import hello.board.controller.member.dto.req.MemberRegisterReqDto;
 import hello.board.controller.member.dto.req.MemberUpdateReqDto;
 import hello.board.controller.member.dto.res.MemberRegisterResDto;
@@ -15,8 +16,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -67,9 +66,9 @@ public class MemberService {
     }
 
     @Transactional
-    public Member login(String loginId, String password) {
-        return memberRepository.findByLoginId(loginId)
-                .filter(m -> m.getPassword().equals(password))
+    public Member login(LoginFormDto form) {
+        return memberRepository.findByLoginId(form.getLoginId())
+                .filter(m -> m.getPassword().equals(form.getPassword()))
                 .orElse(null);
     }
 
@@ -84,11 +83,7 @@ public class MemberService {
         return "follow success";
     }
 
-    public List<Member> findAll(Member toMember) {
-        return followRepository.findAllByToMember(toMember);
-    }
-
-    private Member findMember(Long memberId) {
+    public Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",memberId));
