@@ -90,7 +90,7 @@ public class CommentService {
         return new CommentResDto(findComment(commentId));
     }
 
-    private Comment findComment(Long commentId) {
+    public Comment findComment(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",commentId));
