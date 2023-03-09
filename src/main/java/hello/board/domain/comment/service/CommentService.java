@@ -51,10 +51,14 @@ public class CommentService {
         Post findPost = findPost(postId);
         Comment newComment = new Comment(commentMember.getName(), commentWriteDto.getContent());
         newComment.setPost(findPost);
-        if (findPost.getMember() != commentMember) {
+        if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
         return new CommentResDto(commentRepository.save(newComment));
+    }
+
+    private boolean isNotMyPost(Member commentMember, Post findPost) {
+        return !findPost.getMember().getId().equals(commentMember.getId());
     }
 
     @Transactional
