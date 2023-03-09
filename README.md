@@ -23,6 +23,9 @@
 - MySql
 
 ---
+2023/03/09
+- #14 : 테스트 코드 추가 (Member, Post, Comment)
+
 2023/03/08
 - #13 : BeanValidation 적용
 
