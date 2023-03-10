@@ -73,7 +73,7 @@ public class PostApiController {
 
     //게시글 삭제 메서드
     //게시글 삭제 화면은 아직 미구현.
-    @DeleteMapping("{postId}")
+    @DeleteMapping("/delete/{postId}")
     public ResponseEntity<String> deletePost(@PathVariable Long postId) {
         postService.deletePost(postId);
         return ResponseEntity

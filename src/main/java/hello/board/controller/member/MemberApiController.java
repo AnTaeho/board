@@ -53,7 +53,7 @@ public class MemberApiController {
     }
 
     //멤버 삭제 메서드
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) {
         memberService.deleteMember(id);
         return ResponseEntity
