@@ -62,8 +62,8 @@ public class CommentApiController {
     }
 
     //댓글 수정 메서드
-    @PatchMapping("/edit")
-    public ResponseEntity<CommentResDto> updateComment(@RequestParam Long commentId, @Valid @ModelAttribute CommentUpdateDto commentUpdateDto) {
+    @PatchMapping("/edit/{commentId}")
+    public ResponseEntity<CommentResDto> updateComment(@PathVariable Long commentId, @Valid @ModelAttribute CommentUpdateDto commentUpdateDto) {
         CommentResDto updateComment = commentService.updateComment(commentId, commentUpdateDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
