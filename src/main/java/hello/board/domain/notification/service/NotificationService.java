@@ -3,6 +3,7 @@ package hello.board.domain.notification.service;
 import hello.board.controller.notification.dto.req.NotificationUpdateReqDto;
 import hello.board.controller.notification.dto.res.NotificationResDto;
 import hello.board.controller.notification.dto.res.NotificationUpdateResDto;
+import hello.board.domain.member.entity.Member;
 import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.exception.CustomNotFoundException;
@@ -29,6 +30,10 @@ public class NotificationService {
                 .stream()
                 .map(NotificationResDto::new)
                 .collect(Collectors.toList());
+    }
+
+    public List<Notification> findAllByMember(Member member) {
+        return notificationRepository.findAllNotificationByMember(member);
     }
 
     @Transactional
