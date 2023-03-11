@@ -20,8 +20,7 @@ public class PostUpdateInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Member loginMember = findLoginMember(request);
-        Map<?, ?> pathVariables = (Map<?, ?>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        Long id = Long.parseLong((String)pathVariables.get("postId"));
+        Long id = findIdFromPathVariables(request);
         Post post = postService.findPost(id);
 
         if (isMyPost(loginMember, post)) {
@@ -34,6 +33,11 @@ public class PostUpdateInterceptor implements HandlerInterceptor {
 
     private Member findLoginMember(HttpServletRequest request) {
         return (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
+    }
+
+    private Long findIdFromPathVariables(HttpServletRequest request) {
+        Map<?, ?> pathVariables = (Map<?, ?>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        return Long.parseLong((String)pathVariables.get("postId"));
     }
 
     private boolean isMyPost(Member loginMember, Post post) {

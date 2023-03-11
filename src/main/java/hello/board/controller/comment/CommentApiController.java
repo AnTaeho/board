@@ -71,9 +71,9 @@ public class CommentApiController {
     }
 
     //댓글 삭제 메서드
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long id) {
-        commentService.deleteComment(id);
+    @DeleteMapping("/delete/{commentId}")
+    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
+        commentService.deleteComment(commentId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("comment delete");

@@ -112,7 +112,10 @@ public class CommentService {
     }
 
     private Notification makeCommentNotification(Member commentMember, Post findPost, Comment newComment) {
-        return new Notification(newComment.getContent(), commentMember.getName(), findPost.getMember(), newComment);
+        Member notificatiedMember = findPost.getMember();
+        Notification notification = new Notification(newComment.getContent(), commentMember.getName(), notificatiedMember, newComment);
+        notificatiedMember.addNotification(notification);
+        return notification;
     }
 
     private CommentLike pressCommentLike(Long memberId, Comment findComment) {

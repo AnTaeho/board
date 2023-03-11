@@ -15,8 +15,7 @@ public class MemberDeleteInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Member loginMember = findLoginMember(request);
-        Map<?, ?> pathVariables = (Map<?, ?>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        Long id = Long.parseLong((String)pathVariables.get("id"));
+        Long id = findIdFromPathVariables(request);
 
         if(isMe(loginMember, id) || isAdmin(loginMember)) {
             return true;
@@ -28,6 +27,11 @@ public class MemberDeleteInterceptor implements HandlerInterceptor {
 
     private Member findLoginMember(HttpServletRequest request) {
         return (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
+    }
+
+    private Long findIdFromPathVariables(HttpServletRequest request) {
+        Map<?, ?> pathVariables = (Map<?, ?>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        return Long.parseLong((String)pathVariables.get("memberId"));
     }
 
     private boolean isMe(Member loginMember, Long id) {

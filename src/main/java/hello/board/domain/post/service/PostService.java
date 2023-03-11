@@ -59,10 +59,6 @@ public class PostService {
         return new PostWriteResDto(post);
     }
 
-    private Notification saveNotification(Member loginMember, Post post, Member member) {
-        return notificationRepository.save(new Notification(loginMember.getName(), member, post));
-    }
-
     private Post savePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
         return postRepository.save(createPost(loginMember, postWriteReqDto));
     }
@@ -73,6 +69,10 @@ public class PostService {
                 .content(postWriteReqDto.getContent())
                 .member(loginMember)
                 .build();
+    }
+
+    private Notification saveNotification(Member loginMember, Post post, Member member) {
+        return notificationRepository.save(new Notification(loginMember.getName(), member, post));
     }
 
     @Transactional

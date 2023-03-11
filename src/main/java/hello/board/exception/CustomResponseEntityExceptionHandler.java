@@ -17,12 +17,16 @@ public class CustomResponseEntityExceptionHandler extends ResponseEntityExceptio
     @ExceptionHandler(CustomNotFoundException.class)
     public final ResponseEntity<Object> handleUserNotFoundExceptions(Exception ex, WebRequest request){
 
-        ExceptionResponse exceptionResponse = new ExceptionResponse().builder()
+        ExceptionResponse exceptionResponse = ExceptionResponse
+                .builder()
                 .timestamp(new Date())
                 .message(ex.getMessage())
                 .details(request.getDescription(false))
                 .build();
-        return new ResponseEntity(exceptionResponse, HttpStatus.NOT_FOUND);
+
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(exceptionResponse);
 
     }
 }

@@ -53,9 +53,9 @@ public class MemberApiController {
     }
 
     //멤버 삭제 메서드
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteMember(@PathVariable("id") Long id) {
-        memberService.deleteMember(id);
+    @DeleteMapping("/delete/{memberId}")
+    public ResponseEntity<String> deleteMember(@PathVariable("memberId") Long memberId) {
+        memberService.deleteMember(memberId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("member delete");
