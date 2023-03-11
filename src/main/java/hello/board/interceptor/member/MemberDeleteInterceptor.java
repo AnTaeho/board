@@ -18,11 +18,23 @@ public class MemberDeleteInterceptor implements HandlerInterceptor {
         Map<?, ?> pathVariables = (Map<?, ?>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         Long id = Long.parseLong((String)pathVariables.get("id"));
 
+        if(isMe(loginMember, id) || isAdmin(loginMember)) {
+            return true;
+        }
+
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return loginMember.getId().equals(id) || loginMember.getRole().equals(MemberRole.ADMIN);
+        return false;
     }
 
     private Member findLoginMember(HttpServletRequest request) {
         return (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
+    }
+
+    private boolean isMe(Member loginMember, Long id) {
+        return loginMember.getId().equals(id);
+    }
+
+    private boolean isAdmin(Member loginMember) {
+        return loginMember.getRole().equals(MemberRole.ADMIN);
     }
 }

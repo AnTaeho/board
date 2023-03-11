@@ -25,11 +25,23 @@ public class CommentDeleteInterceptor implements HandlerInterceptor {
         Long id = Long.parseLong((String)pathVariables.get("id"));
         Comment comment = commentService.findComment(id);
 
+        if(isMyComment(loginMember, comment) || isAdmin(loginMember)) {
+            return true;
+        }
+
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return loginMember.getId().equals(comment.getPost().getMember().getId()) || loginMember.getRole().equals(MemberRole.ADMIN);
+        return false;
     }
 
     private Member findLoginMember(HttpServletRequest request) {
         return (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
+    }
+
+    private boolean isMyComment(Member loginMember, Comment comment) {
+        return loginMember.getId().equals(comment.getPost().getMember().getId());
+    }
+
+    private boolean isAdmin(Member loginMember) {
+        return loginMember.getRole().equals(MemberRole.ADMIN);
     }
 }

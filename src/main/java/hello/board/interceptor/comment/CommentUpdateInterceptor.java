@@ -24,10 +24,19 @@ public class CommentUpdateInterceptor implements HandlerInterceptor {
         Long id = Long.parseLong((String)pathVariables.get("commentId"));
         Comment comment = commentService.findComment(id);
 
-        return comment.getPost().getMember().getId().equals(loginMember.getId());
+        if (isMyComment(loginMember, comment)) {
+            return true;
+        }
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        return false;
     }
 
     private Member findLoginMember(HttpServletRequest request) {
         return (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
+    }
+
+    private boolean isMyComment(Member loginMember, Comment comment) {
+        return comment.getPost().getMember().getId().equals(loginMember.getId());
     }
 }

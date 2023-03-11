@@ -24,10 +24,19 @@ public class PostUpdateInterceptor implements HandlerInterceptor {
         Long id = Long.parseLong((String)pathVariables.get("postId"));
         Post post = postService.findPost(id);
 
-        return post.getMember().getId().equals(loginMember.getId());
+        if (isMyPost(loginMember, post)) {
+            return true;
+        }
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        return false;
     }
 
     private Member findLoginMember(HttpServletRequest request) {
         return (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
+    }
+
+    private boolean isMyPost(Member loginMember, Post post) {
+        return post.getMember().getId().equals(loginMember.getId());
     }
 }

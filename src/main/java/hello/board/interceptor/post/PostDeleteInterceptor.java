@@ -25,11 +25,23 @@ public class PostDeleteInterceptor implements HandlerInterceptor {
         Long id = Long.parseLong((String)pathVariables.get("postId"));
         Post post = postService.findPost(id);
 
+        if (isMyPost(loginMember, post) || isAdmin(loginMember)) {
+            return true;
+        }
+
         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return loginMember.getId().equals(post.getMember().getId()) || loginMember.getRole().equals(MemberRole.ADMIN);
+        return false;
     }
 
     private Member findLoginMember(HttpServletRequest request) {
         return (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
+    }
+
+    private boolean isMyPost(Member loginMember, Post post) {
+        return loginMember.getId().equals(post.getMember().getId());
+    }
+
+    private boolean isAdmin(Member loginMember) {
+        return loginMember.getRole().equals(MemberRole.ADMIN);
     }
 }

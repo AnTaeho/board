@@ -17,10 +17,19 @@ public class MemberUpdateInterceptor implements HandlerInterceptor {
         Map<?, ?> pathVariables = (Map<?, ?>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
         Long id = Long.parseLong((String)pathVariables.get("memberId"));
 
-        return loginMember.getId().equals(id);
+        if (isMe(loginMember, id)) {
+            return true;
+        }
+
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        return false;
     }
 
     private Member findLoginMember(HttpServletRequest request) {
         return (Member) request.getSession().getAttribute(SessionConst.LOGIN_MEMBER);
+    }
+
+    private boolean isMe(Member loginMember, Long id) {
+        return loginMember.getId().equals(id);
     }
 }
