@@ -26,7 +26,7 @@ public class CommentLike {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @OneToOne(mappedBy = "commentLike", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "commentLike", cascade = CascadeType.ALL, orphanRemoval = true)
     private Notification notification;
 
     public CommentLike(Member findMember, Comment findComment) {
