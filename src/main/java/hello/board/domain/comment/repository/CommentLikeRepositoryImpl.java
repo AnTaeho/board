@@ -6,6 +6,9 @@ import hello.board.domain.comment.entity.QCommentLike;
 
 import javax.persistence.EntityManager;
 
+import static hello.board.domain.comment.entity.QCommentLike.*;
+import static hello.board.domain.notification.entity.QNotification.*;
+
 public class CommentLikeRepositoryImpl implements CommentLikeRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
@@ -27,8 +30,13 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepositoryCustom {
     @Override
     public void deleteByCommentIdAndMemberId(Long commentId, Long memberId) {
         queryFactory
-                .delete(QCommentLike.commentLike)
-                .where(QCommentLike.commentLike.comment.id.eq(commentId), QCommentLike.commentLike.member.id.eq(memberId))
+                .delete(notification)
+                .where(notification.commentLike.id.eq(commentId))
+                .execute();
+
+        queryFactory
+                .delete(commentLike)
+                .where(commentLike.comment.id.eq(commentId), commentLike.member.id.eq(memberId))
                 .execute();
     }
 

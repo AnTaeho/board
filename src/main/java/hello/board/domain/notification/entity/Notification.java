@@ -38,7 +38,7 @@ public class Notification {
     @JoinColumn(name = "comment_id")
     private Comment ownerComment;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "comment_like_id")
     private CommentLike commentLike;
 

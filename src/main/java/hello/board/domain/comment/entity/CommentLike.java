@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -26,8 +28,8 @@ public class CommentLike {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    @OneToOne(mappedBy = "commentLike", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Notification notification;
+    @OneToMany(mappedBy = "commentLike", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    private List<Notification> notification = new ArrayList<>();
 
     public CommentLike(Member findMember, Comment findComment) {
         this.member = findMember;
@@ -37,7 +39,7 @@ public class CommentLike {
     public CommentLike(Member findMember, Comment findComment, Notification notification) {
         this.member = findMember;
         this.comment = findComment;
-        this.notification = notification;
+        this.notification.add(notification);
         notification.setCommentLike(this);
     }
 }
