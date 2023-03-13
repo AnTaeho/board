@@ -17,6 +17,7 @@ import hello.board.domain.notification.service.NotificationService;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.service.PostService;
 import hello.board.exception.CustomNotFoundException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,9 +36,9 @@ public class NotificationServiceTest {
     @Autowired private NotificationService notificationService;
     @Autowired private NotificationRepository notificationRepository;
 
-    //알람 전체 조회
     @Test
     @Transactional
+    @DisplayName("전체 알람 조회 테스트")
     void findAllNotification() {
         //given
         Notification notification = new Notification();
@@ -55,9 +56,9 @@ public class NotificationServiceTest {
         assertThat(all.size()).isEqualTo(3);
     }
 
-    //회원의 알람 조회
     @Test
     @Transactional
+    @DisplayName("회원의 알람 조회 테스트")
     void findAllByMemberTest() {
         //given
         Member member = memberService.findMember(1L);
@@ -79,9 +80,9 @@ public class NotificationServiceTest {
         }
     }
 
-    //알람 수정
     @Test
     @Transactional
+    @DisplayName("알람 수정 테스트")
     void updateNotificationTest() {
         //given
         Notification notification = notificationRepository.save(new Notification());
@@ -94,9 +95,9 @@ public class NotificationServiceTest {
         assertThat(updateResDto.getContent()).isEqualTo(updateReqDto.getContent());
     }
 
-    //알람 삭제
     @Test
     @Transactional
+    @DisplayName("알람 삭제 테스트")
     void deleteNotificationTest() {
         //given
         Notification notification = notificationRepository.save(new Notification());
@@ -109,9 +110,9 @@ public class NotificationServiceTest {
                 .isInstanceOf(CustomNotFoundException.class);
     }
 
-    //게시글 작성시 알람
     @Test
     @Transactional
+    @DisplayName("게시글 작성시 작성자를 팔로우한 회원에게 알람 생성 테스트")
     void followMemberPostNotificationTest() {
         //given
         Member fromMember = memberService.findMember(1L);
@@ -130,9 +131,9 @@ public class NotificationServiceTest {
         }
     }
 
-    //댓글 작성시 알람
     @Test
     @Transactional
+    @DisplayName("댓글 작성시 해당 게시글의 작성자에게 알람 생성 테스트")
     void commentNotificationTest() {
         //given
         Post post = postService.findPost(2L);
@@ -150,9 +151,9 @@ public class NotificationServiceTest {
         }
     }
 
-    //댓글 좋아요시 알람
     @Test
     @Transactional
+    @DisplayName("댓글 좋아요시 해당 댓글 좋아요 주인에게 알람 생성 테스트")
     void commentLikeNotificationTest() {
         //given
         Long commentId = 3L;

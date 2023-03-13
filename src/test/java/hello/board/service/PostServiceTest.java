@@ -9,6 +9,7 @@ import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.service.MemberService;
 import hello.board.domain.post.service.PostService;
 import hello.board.exception.CustomNotFoundException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -35,9 +36,9 @@ public class PostServiceTest {
     @Autowired
     private MemberService memberService;
 
-    //단건 조회
     @Test
     @Transactional
+    @DisplayName("단일 게시글 조회 테스트")
     void findSinglePostTest() {
         PostResDto singlePost = postService.findSinglePost(postId);
 
@@ -45,18 +46,18 @@ public class PostServiceTest {
         assertThat(singlePost.getId()).isEqualTo(postId);
     }
 
-    //전체 조회
     @Test
     @Transactional
+    @DisplayName("전체 게시글 조회 테스트")
     void findAllPostTest() {
         Page<PostResDto> allPost = postService.findAllPost(Pageable.unpaged());
 
         assertThat(allPost.getSize()).isEqualTo(3);
     }
 
-    //멤버별 조회
     @Test
     @Transactional
+    @DisplayName("회원의 게시글 조회 테스트")
     void findMemberPostTest() {
         List<PostResDto> memberPost = postService.findMemberPost(memberId1);
         Member member1 = memberService.findMember(memberId1);
@@ -80,9 +81,9 @@ public class PostServiceTest {
 
     }
 
-    //게시글 작성
     @Test
     @Transactional
+    @DisplayName("게시글 작성 테스트")
     void writePostTest() {
         Member loginMember = memberService.findMember(memberId1);
         PostWriteReqDto writeReqDto = new PostWriteReqDto("title", "content");
@@ -94,9 +95,9 @@ public class PostServiceTest {
         assertThat(writeResDto.getContent()).isEqualTo(writeReqDto.getContent());
     }
 
-    //게시글 수정
     @Test
     @Transactional
+    @DisplayName("게시글 수정 테스트")
     void updatePostTest() {
         PostUpdateReqDto updateReqDto = new PostUpdateReqDto("new-title", "new-content");
 
@@ -106,9 +107,9 @@ public class PostServiceTest {
         assertThat(updatePost.getContent()).isEqualTo(updateReqDto.getContent());
     }
 
-    //게시글 삭제
     @Test
     @Transactional
+    @DisplayName("게시글 삭제 테스트")
     void deletePostTest() {
         postService.deletePost(postId);
 

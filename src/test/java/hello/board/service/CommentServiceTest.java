@@ -9,6 +9,7 @@ import hello.board.domain.member.service.MemberService;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.service.PostService;
 import hello.board.exception.CustomNotFoundException;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,18 +31,18 @@ public class CommentServiceTest {
     @Autowired
     private MemberService memberService;
 
-    //전체 댓글 조회
     @Test
     @Transactional
+    @DisplayName("전체 댓글 조회 테스트")
     void findAllComment() {
         List<CommentResDto> allComments = commentService.findAllComments();
 
         assertThat(allComments.size()).isEqualTo(3);
     }
 
-    //게시글의 댓글 조회
     @Test
     @Transactional
+    @DisplayName("게시글의 전체 댓글 조회 테스트")
     void findAllCommentOfPost() {
         List<CommentResDto> commentsByPost = commentService.findCommentsByPost(2L);
         Post post = postService.findPost(2L);
@@ -62,9 +63,9 @@ public class CommentServiceTest {
 
     // TODO : 회원의 댓글 조회 및 테스트
 
-    //댓글 작성
     @Test
     @Transactional
+    @DisplayName("댓글 작성 테스트")
     void writeCommentTest() {
         Member loginMember = memberService.findMember(1L);
         CommentWriteDto writeDto = new CommentWriteDto("comment-content");
@@ -74,9 +75,9 @@ public class CommentServiceTest {
         assertThat(commentResDto.getContent()).isEqualTo(writeDto.getContent());
     }
 
-    //댓글 수정
     @Test
     @Transactional
+    @DisplayName("댓글 수정 테스트")
     void updateCommentTest() {
         CommentUpdateDto updateDto = new CommentUpdateDto("new-content");
         CommentResDto commentResDto = commentService.updateComment(3L, updateDto);
@@ -84,9 +85,9 @@ public class CommentServiceTest {
         assertThat(commentResDto.getContent()).isEqualTo(updateDto.getContent());
     }
 
-    //댓글 삭제
     @Test
     @Transactional
+    @DisplayName("댓글 삭제 테스트")
     void deleteCommentTest() {
         commentService.deleteComment(3L);
 
@@ -94,9 +95,9 @@ public class CommentServiceTest {
                 .isInstanceOf(CustomNotFoundException.class);
     }
 
-    //댓글 좋아요
     @Test
     @Transactional
+    @DisplayName("댓글 좋아요 테스트")
     void likeCommentTest() {
         String likeResult = commentService.likeComment(3L, 5L);
         assertThat(likeResult).isEqualTo("Like success");
