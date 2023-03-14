@@ -1,5 +1,6 @@
 package hello.board.domain.notification.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.post.entity.Post;
 import lombok.Getter;
@@ -14,18 +15,15 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class PostNotification extends Notification{
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post ownerPost;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member notifiedMember;
-
     public PostNotification(String writer, Member member, Post post) {
-        inputInfo(post.getTitle(), writer);
-        this.notifiedMember = member;
+        inputInfo(post.getTitle(), writer, member);
         this.ownerPost = post;
+        member.getNotifications().add(this);
     }
 
 }

@@ -51,8 +51,7 @@ public class CommentService {
     @Transactional
     public CommentResDto writeComment(Long postId, Member commentMember, CommentWriteDto commentWriteDto) {
         Post findPost = findPost(postId);
-        Comment newComment = new Comment(commentMember, commentWriteDto.getContent());
-        newComment.setPost(findPost);
+        Comment newComment = new Comment(commentMember, commentWriteDto.getContent(), findPost);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
@@ -79,7 +78,7 @@ public class CommentService {
     public String likeComment(Long commentId, Long memberId) {
         Comment findComment = findComment(commentId);
 
-        if (commentLikeRepository.hasNoLike(commentId, memberId)) {
+        if (isNotLiked(commentId, memberId)) {
             commentLikeRepository.save(pressCommentLike(memberId, findComment));
             return "Like success";
         } else {
@@ -115,9 +114,11 @@ public class CommentService {
 
     private Notification makeCommentNotification(Member commentMember, Post findPost, Comment newComment) {
         Member notificatiedMember = findPost.getMember();
-        CommentNotification notification = new CommentNotification(newComment.getContent(), commentMember.getName(), notificatiedMember, newComment);
-        notificatiedMember.addNotification(notification);
-        return notification;
+        return new CommentNotification(commentMember.getName(), notificatiedMember, newComment);
+    }
+
+    private boolean isNotLiked(Long commentId, Long memberId) {
+        return commentLikeRepository.hasNoLike(commentId, memberId);
     }
 
     private CommentLike pressCommentLike(Long memberId, Comment findComment) {
@@ -129,11 +130,11 @@ public class CommentService {
             return new CommentLike(loginMember, findComment);
         }
 
-        return new CommentLike(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner, findComment));
+        return new CommentLike(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner));
     }
 
-    private CommentLikeNotification makeCommentLikeNotification(Member loginMember, Member commentOwner, Comment findComment) {
-        return new CommentLikeNotification(loginMember, commentOwner, findComment);
+    private CommentLikeNotification makeCommentLikeNotification(Member loginMember, Member commentOwner) {
+        return new CommentLikeNotification(loginMember, commentOwner);
     }
 
     private Member findCommentOwner(Comment findComment) {

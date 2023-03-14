@@ -39,6 +39,10 @@ public class CommentLike {
     public CommentLike(Member findMember, Comment findComment, CommentLikeNotification notification) {
         this.member = findMember;
         this.comment = findComment;
+        setNotification(notification);
+    }
+
+    private void setNotification(CommentLikeNotification notification) {
         this.notification.add(notification);
         notification.setCommentLike(this);
     }

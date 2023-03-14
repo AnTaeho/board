@@ -1,5 +1,6 @@
 package hello.board.domain.notification.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hello.board.controller.notification.dto.req.NotificationUpdateReqDto;
 import hello.board.domain.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -24,13 +25,15 @@ public abstract class Notification {
     private String content;
     private String writer;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member notifiedMember;
 
-    protected void inputInfo(String content, String writer) {
+    protected void inputInfo(String content, String writer, Member member) {
         this.content = content;
         this.writer = writer;
+        this.notifiedMember = member;
     }
 
     public void updateInfo(NotificationUpdateReqDto updateReqDto) {

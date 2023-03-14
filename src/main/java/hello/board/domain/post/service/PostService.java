@@ -54,7 +54,7 @@ public class PostService {
     public PostWriteResDto writePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
         Post post = savePost(loginMember, postWriteReqDto);
         for (Member member : followRepository.findAllByToMember(loginMember)) {
-            member.addNotification(saveNotification(loginMember, post, member));
+            saveNotification(loginMember, post, member);
         }
         return new PostWriteResDto(post);
     }
@@ -71,8 +71,8 @@ public class PostService {
                 .build();
     }
 
-    private PostNotification saveNotification(Member loginMember, Post post, Member member) {
-        return notificationRepository.save(new PostNotification(loginMember.getName(), member, post));
+    private void saveNotification(Member loginMember, Post post, Member member) {
+        notificationRepository.save(new PostNotification(loginMember.getName(), member, post));
     }
 
     @Transactional

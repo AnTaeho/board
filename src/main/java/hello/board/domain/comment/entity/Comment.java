@@ -40,15 +40,15 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "ownerComment", cascade = CascadeType.REMOVE)
     private List<CommentNotification> notifications = new ArrayList<>();
 
-    public Comment(Member commentMember, String content) {
+    public Comment(Member commentMember, String content, Post post) {
         this.writer = commentMember.getName();
         this.commentMember = commentMember;
         this.content = content;
+        setPost(post);
     }
 
     //== 연관관계 메서드 ==//
-    public void setPost(Post post) {
-        //*중요*//
+    private void setPost(Post post) {
         this.post = post;
         post.getComments().add(this);
     }
