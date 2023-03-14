@@ -9,6 +9,8 @@ import hello.board.domain.comment.repository.CommentLikeRepository;
 import hello.board.domain.comment.repository.CommentRepository;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.MemberRepository;
+import hello.board.domain.notification.entity.CommentLikeNotification;
+import hello.board.domain.notification.entity.CommentNotification;
 import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
@@ -113,7 +115,7 @@ public class CommentService {
 
     private Notification makeCommentNotification(Member commentMember, Post findPost, Comment newComment) {
         Member notificatiedMember = findPost.getMember();
-        Notification notification = new Notification(newComment.getContent(), commentMember.getName(), notificatiedMember, newComment);
+        CommentNotification notification = new CommentNotification(newComment.getContent(), commentMember.getName(), notificatiedMember, newComment);
         notificatiedMember.addNotification(notification);
         return notification;
     }
@@ -130,8 +132,8 @@ public class CommentService {
         return new CommentLike(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner, findComment));
     }
 
-    private Notification makeCommentLikeNotification(Member loginMember, Member commentOwner, Comment findComment) {
-        return new Notification(loginMember, commentOwner, findComment);
+    private CommentLikeNotification makeCommentLikeNotification(Member loginMember, Member commentOwner, Comment findComment) {
+        return new CommentLikeNotification(loginMember, commentOwner, findComment);
     }
 
     private Member findCommentOwner(Comment findComment) {

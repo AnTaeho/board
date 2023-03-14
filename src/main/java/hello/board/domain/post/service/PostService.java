@@ -8,7 +8,7 @@ import hello.board.controller.post.dto.res.PostWriteResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.FollowRepository;
 import hello.board.domain.member.repository.MemberRepository;
-import hello.board.domain.notification.entity.Notification;
+import hello.board.domain.notification.entity.PostNotification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
@@ -71,8 +71,8 @@ public class PostService {
                 .build();
     }
 
-    private Notification saveNotification(Member loginMember, Post post, Member member) {
-        return notificationRepository.save(new Notification(loginMember.getName(), member, post));
+    private PostNotification saveNotification(Member loginMember, Post post, Member member) {
+        return notificationRepository.save(new PostNotification(loginMember.getName(), member, post));
     }
 
     @Transactional

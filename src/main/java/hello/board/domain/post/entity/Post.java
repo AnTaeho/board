@@ -4,7 +4,7 @@ import hello.board.controller.post.dto.req.PostUpdateReqDto;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.member.entity.Member;
-import hello.board.domain.notification.entity.Notification;
+import hello.board.domain.notification.entity.PostNotification;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,7 +38,7 @@ public class Post extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @OneToMany(mappedBy = "ownerPost", cascade = CascadeType.REMOVE)
-    private List<Notification> notifications = new ArrayList<>();
+    private List<PostNotification> notifications = new ArrayList<>();
 
     //== 연관관계 메서드 ==//
     public void setMember(Member member) {

@@ -1,7 +1,7 @@
 package hello.board.domain.comment.entity;
 
 import hello.board.domain.base.BaseTimeEntity;
-import hello.board.domain.notification.entity.Notification;
+import hello.board.domain.notification.entity.CommentNotification;
 import hello.board.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -33,7 +33,7 @@ public class Comment extends BaseTimeEntity {
     private List<CommentLike> commentLikeList = new ArrayList<>();
 
     @OneToMany(mappedBy = "ownerComment", cascade = CascadeType.REMOVE)
-    private List<Notification> notifications = new ArrayList<>();
+    private List<CommentNotification> notifications = new ArrayList<>();
 
     public Comment(String writer, String content) {
         this.writer = writer;
