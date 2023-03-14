@@ -60,30 +60,6 @@ public class NotificationServiceTest {
 
     @Test
     @Transactional
-    @DisplayName("회원의 알람 조회 테스트")
-    void findAllByMemberTest() {
-//        //given
-//        Member member = memberService.findMember(1L);
-//        Notification notification = notificationRepository.save(new CommentNotification());
-//        Notification notification2 = notificationRepository.save(new CommentNotification());
-//        Notification notification3 = notificationRepository.save(new CommentNotification());
-//
-//        //when
-//        member.addNotification(notification);
-//        member.addNotification(notification2);
-//        member.addNotification(notification3);
-//
-//        //then
-//        List<Notification> allByMember = notificationService.findAllByMember(member);
-//        assertThat(allByMember.size()).isEqualTo(3);
-//
-//        for (Notification notification1 : allByMember) {
-//            assertThat(notification1.getNotifiedMember()).isEqualTo(member);
-//        }
-    }
-
-    @Test
-    @Transactional
     @DisplayName("알람 수정 테스트")
     void updateNotificationTest() {
         //given
