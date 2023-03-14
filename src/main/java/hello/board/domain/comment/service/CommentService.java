@@ -51,7 +51,7 @@ public class CommentService {
     @Transactional
     public CommentResDto writeComment(Long postId, Member commentMember, CommentWriteDto commentWriteDto) {
         Post findPost = findPost(postId);
-        Comment newComment = new Comment(commentMember.getName(), commentWriteDto.getContent());
+        Comment newComment = new Comment(commentMember, commentWriteDto.getContent());
         newComment.setPost(findPost);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));

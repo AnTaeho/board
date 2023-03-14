@@ -1,6 +1,7 @@
 package hello.board.domain.comment.entity;
 
 import hello.board.domain.base.BaseTimeEntity;
+import hello.board.domain.member.entity.Member;
 import hello.board.domain.notification.entity.CommentNotification;
 import hello.board.domain.post.entity.Post;
 import lombok.AccessLevel;
@@ -26,6 +27,10 @@ public class Comment extends BaseTimeEntity {
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
+    private Member commentMember;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
@@ -35,8 +40,9 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "ownerComment", cascade = CascadeType.REMOVE)
     private List<CommentNotification> notifications = new ArrayList<>();
 
-    public Comment(String writer, String content) {
-        this.writer = writer;
+    public Comment(Member commentMember, String content) {
+        this.writer = commentMember.getName();
+        this.commentMember = commentMember;
         this.content = content;
     }
 
