@@ -1,4 +1,4 @@
-package hello.board.domain.comment.repository;
+package hello.board.domain.comment.repository.commentlike;
 
 public interface CommentLikeRepositoryCustom {
 

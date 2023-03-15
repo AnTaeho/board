@@ -5,8 +5,8 @@ import hello.board.controller.comment.dto.req.CommentWriteDto;
 import hello.board.controller.comment.dto.res.CommentResDto;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.entity.CommentLike;
-import hello.board.domain.comment.repository.CommentLikeRepository;
-import hello.board.domain.comment.repository.CommentRepository;
+import hello.board.domain.comment.repository.commentlike.CommentLikeRepository;
+import hello.board.domain.comment.repository.comment.CommentRepository;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.MemberRepository;
 import hello.board.domain.notification.entity.CommentLikeNotification;
@@ -50,7 +50,7 @@ public class CommentService {
 
     @Transactional
     public CommentResDto writeComment(Long postId, Member commentMember, CommentWriteDto commentWriteDto) {
-        Post findPost = findPost(postId);
+        Post findPost = findPostWithMemberInfo(postId);
         Comment newComment = new Comment(commentMember, commentWriteDto.getContent(), findPost);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
@@ -76,7 +76,7 @@ public class CommentService {
 
     @Transactional
     public String likeComment(Long commentId, Long memberId) {
-        Comment findComment = findComment(commentId);
+        Comment findComment = findCommentWithMemberInfo(commentId);
 
         if (isNotLiked(commentId, memberId)) {
             commentLikeRepository.save(pressCommentLike(memberId, findComment));
@@ -98,8 +98,22 @@ public class CommentService {
                 });
     }
 
+    private Comment findCommentWithMemberInfo(Long commentId) {
+        return commentRepository.findCommentWithMemberInfo(commentId)
+                .orElseThrow(() -> {
+                    throw new CustomNotFoundException(String.format("id=%s not found",commentId));
+                });
+    }
+
     private Post findPost(Long postId) {
         return postRepository.findById(postId)
+                .orElseThrow(() -> {
+                    throw new CustomNotFoundException(String.format("id=%s not found",postId));
+                });
+    }
+
+    private Post findPostWithMemberInfo(Long postId) {
+        return postRepository.findByIdWithFetchJoinMember(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });

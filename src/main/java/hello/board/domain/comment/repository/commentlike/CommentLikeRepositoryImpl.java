@@ -1,4 +1,4 @@
-package hello.board.domain.comment.repository;
+package hello.board.domain.comment.repository.commentlike;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.domain.comment.entity.CommentLike;

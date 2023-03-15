@@ -1,4 +1,4 @@
-package hello.board.domain.comment.repository;
+package hello.board.domain.comment.repository.commentlike;
 
 import hello.board.domain.comment.entity.CommentLike;
 import org.springframework.data.jpa.repository.JpaRepository;
