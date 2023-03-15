@@ -6,10 +6,10 @@ import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.entity.QPost;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 import static hello.board.domain.member.entity.QMember.*;
-import static hello.board.domain.post.entity.QPost.*;
 
 public class PostRepositoryImpl implements PostRepositoryCustom{
 
@@ -28,5 +28,15 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .fetchOne();
 
         return Optional.ofNullable(post);
+    }
+
+    @Override
+    public List<Post> findPostsOfMember(Long memberId) {
+        return queryFactory
+                .selectFrom(QPost.post)
+                .join(QPost.post.member, member).fetchJoin()
+                .where(QMember.member.id.eq(memberId))
+                .fetch();
+
     }
 }

@@ -38,8 +38,7 @@ public class PostService {
     }
 
     public List<PostResDto> findMemberPost(Long memberId) {
-        Member findMember = findMember(memberId);
-        return findMember.getPosts()
+        return postRepository.findPostsOfMember(memberId)
                 .stream()
                 .map(PostResDto::new)
                 .collect(Collectors.toList());
@@ -91,13 +90,6 @@ public class PostService {
         return postRepository.findById(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
-                });
-    }
-
-    private Member findMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",memberId));
                 });
     }
 }
