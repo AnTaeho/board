@@ -74,7 +74,6 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
-    //좋아요를 했을 때 알람 안생기는 문제 있음
     @Transactional
     public String likeComment(Long commentId, Long memberId) {
         Comment findComment = findCommentWithMemberInfo(commentId);
@@ -103,7 +102,7 @@ public class CommentService {
         return commentRepository.findCommentWithPostInfo(commentId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",commentId));
-                });
+        });
     }
 
     private Comment findCommentWithMemberInfo(Long commentId) {
@@ -156,7 +155,7 @@ public class CommentService {
     }
 
     private CommentLikeNotification makeCommentLikeNotification(Member loginMember, Member commentOwner) {
-        return new CommentLikeNotification(loginMember, commentOwner);
+        return notificationRepository.save(new CommentLikeNotification(loginMember, commentOwner));
     }
 
     private Member findCommentOwner(Comment findComment) {
