@@ -3,6 +3,7 @@ package hello.board.domain.member.repository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.domain.member.entity.Follow;
 import hello.board.domain.member.entity.Member;
+import hello.board.domain.member.entity.QMember;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -41,6 +42,8 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
     public boolean isAlreadyFollow(Member toMember, Member fromMember) {
         Follow findFollow = queryFactory
                 .selectFrom(follow)
+                .join(follow.toMember, QMember.member).fetchJoin()
+                .join(follow.fromMember, QMember.member).fetchJoin()
                 .where(follow.toMember.id.eq(toMember.getId()), follow.fromMember.id.eq(fromMember.getId()))
                 .fetchOne();
         return findFollow != null;

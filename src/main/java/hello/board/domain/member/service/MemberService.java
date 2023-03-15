@@ -54,8 +54,8 @@ public class MemberService {
     }
 
     @Transactional
-    public MemberUpdateResDto updateMember(Long id, MemberUpdateReqDto MemberUpdateReqDto) {
-        Member findMember = findMember(id);
+    public MemberUpdateResDto updateMember(Long memberId, MemberUpdateReqDto MemberUpdateReqDto) {
+        Member findMember = findMember(memberId);
         findMember.updateInfo(MemberUpdateReqDto);
         return new MemberUpdateResDto(findMember);
     }
