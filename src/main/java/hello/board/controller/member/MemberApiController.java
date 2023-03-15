@@ -23,6 +23,7 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    //멤버 팔로우 메서드
     @PostMapping("/{memberId}/follow")
     public ResponseEntity<String> followMember(@PathVariable Long memberId, HttpServletRequest request) {
         String result = memberService.followMember(memberId, findLoginMember(request));
@@ -30,8 +31,6 @@ public class MemberApiController {
                 .status(HttpStatus.OK)
                 .body(result);
     }
-
-//    @GetMapping("/")
 
     //멤버 상세정보 메서드
     @GetMapping
@@ -43,9 +42,8 @@ public class MemberApiController {
     }
 
     //멤버 정보 수정 메서드
-    //수정후 멤버 상세정보 화면으로 리다이렉팅
     @PatchMapping("/edit/{memberId}")
-    public ResponseEntity<MemberUpdateResDto> updateMember(@PathVariable Long memberId, @Valid @ModelAttribute MemberUpdateReqDto memberUpdateReqDto) {
+    public ResponseEntity<MemberUpdateResDto> updateMember(@PathVariable("memberId") Long memberId, @Valid @ModelAttribute MemberUpdateReqDto memberUpdateReqDto) {
         MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)

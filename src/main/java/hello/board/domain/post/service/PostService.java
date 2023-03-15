@@ -7,7 +7,6 @@ import hello.board.controller.post.dto.res.PostUpdateResDto;
 import hello.board.controller.post.dto.res.PostWriteResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.FollowRepository;
-import hello.board.domain.member.repository.MemberRepository;
 import hello.board.domain.notification.entity.PostNotification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
@@ -28,7 +27,6 @@ import java.util.stream.Collectors;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
     private final NotificationRepository notificationRepository;
 
@@ -76,7 +74,7 @@ public class PostService {
 
     @Transactional
     public PostUpdateResDto updatePost(Long id, PostUpdateReqDto postUpdateReqDto) {
-        Post findPost = findPost(id);
+        Post findPost = postRepository.findByIdWithFetchJoinMember(id).orElseThrow();
         findPost.updateInfo(postUpdateReqDto);
         return new PostUpdateResDto(findPost);
     }
