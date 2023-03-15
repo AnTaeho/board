@@ -42,7 +42,7 @@ public class CommentService {
     }
 
     public List<CommentResDto> findCommentsByPost(Long postId) {
-        return findPost(postId).getComments()
+        return findPostWithComment(postId).getComments()
                 .stream()
                 .map(CommentResDto::new)
                 .collect(Collectors.toList());
@@ -74,6 +74,7 @@ public class CommentService {
         commentRepository.deleteById(id);
     }
 
+    //좋아요를 했을 때 알람 안생기는 문제 있음
     @Transactional
     public String likeComment(Long commentId, Long memberId) {
         Comment findComment = findCommentWithMemberInfo(commentId);
@@ -91,8 +92,15 @@ public class CommentService {
         return new CommentResDto(findComment(commentId));
     }
 
-    public Comment findComment(Long commentId) {
+    private Comment findComment(Long commentId) {
         return commentRepository.findById(commentId)
+                .orElseThrow(() -> {
+                    throw new CustomNotFoundException(String.format("id=%s not found",commentId));
+                });
+    }
+
+    public Comment findCommentWithPostInfo(Long commentId) {
+        return commentRepository.findCommentWithPostInfo(commentId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",commentId));
                 });
@@ -105,8 +113,8 @@ public class CommentService {
                 });
     }
 
-    private Post findPost(Long postId) {
-        return postRepository.findById(postId)
+    private Post findPostWithComment(Long postId) {
+        return postRepository.findByIdWithFetchJoinComment(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });

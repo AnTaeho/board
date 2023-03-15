@@ -9,5 +9,7 @@ public interface PostRepositoryCustom {
 
     Optional<Post> findByIdWithFetchJoinMember(Long postId);
 
+    Optional<Post> findByIdWithFetchJoinComment(Long postId);
+
     List<Post> findPostsOfMember(Long memberId);
 }

@@ -1,6 +1,7 @@
 package hello.board.domain.post.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hello.board.domain.comment.entity.QComment;
 import hello.board.domain.member.entity.QMember;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.entity.QPost;
@@ -24,6 +25,17 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         Post post = queryFactory
                 .selectFrom(QPost.post)
                 .join(QPost.post.member, member).fetchJoin()
+                .where(QPost.post.id.eq(postId))
+                .fetchOne();
+
+        return Optional.ofNullable(post);
+    }
+
+    @Override
+    public Optional<Post> findByIdWithFetchJoinComment(Long postId) {
+        Post post = queryFactory
+                .selectFrom(QPost.post)
+                .join(QPost.post.comments, QComment.comment).fetchJoin()
                 .where(QPost.post.id.eq(postId))
                 .fetchOne();
 

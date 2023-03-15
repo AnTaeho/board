@@ -22,7 +22,7 @@ public class CommentDeleteInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Member loginMember = findLoginMember(request);
         Long id = findIdFromPathVariables(request);
-        Comment comment = commentService.findComment(id);
+        Comment comment = commentService.findCommentWithPostInfo(id);
 
         if(isMyComment(loginMember, comment) || isAdmin(loginMember)) {
             return true;
