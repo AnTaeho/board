@@ -41,7 +41,7 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    public List<CommentResDto> findCommentsByPost(Long postId) {
+    public List<CommentResDto> findCommentsOfPost(Long postId) {
         return findPostWithComment(postId).getComments()
                 .stream()
                 .map(CommentResDto::new)
@@ -70,8 +70,8 @@ public class CommentService {
     }
 
     @Transactional
-    public void deleteComment(Long id) {
-        commentRepository.deleteById(id);
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteById(commentId);
     }
 
     @Transactional
@@ -91,7 +91,7 @@ public class CommentService {
         return new CommentResDto(findComment(commentId));
     }
 
-    private Comment findComment(Long commentId) {
+    public Comment findComment(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",commentId));
@@ -113,14 +113,14 @@ public class CommentService {
     }
 
     private Post findPostWithComment(Long postId) {
-        return postRepository.findByIdWithFetchJoinComment(postId)
+        return postRepository.findPostWithCommentInfo(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
     private Post findPostWithMemberInfo(Long postId) {
-        return postRepository.findByIdWithFetchJoinMember(postId)
+        return postRepository.findPostWithMemberInfo(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
@@ -139,7 +139,7 @@ public class CommentService {
     }
 
     private boolean isNotLiked(Long commentId, Long memberId) {
-        return commentLikeRepository.hasNoLike(commentId, memberId);
+        return commentLikeRepository.haveNoLike(commentId, memberId);
     }
 
     private CommentLike pressCommentLike(Long memberId, Comment findComment) {

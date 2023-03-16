@@ -7,9 +7,9 @@ import java.util.Optional;
 
 public interface PostRepositoryCustom {
 
-    Optional<Post> findByIdWithFetchJoinMember(Long postId);
+    Optional<Post> findPostWithMemberInfo(Long postId);
 
-    Optional<Post> findByIdWithFetchJoinComment(Long postId);
+    Optional<Post> findPostWithCommentInfo(Long postId);
 
     List<Post> findPostsOfMember(Long memberId);
 }

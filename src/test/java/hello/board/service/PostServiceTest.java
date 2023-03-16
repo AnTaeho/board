@@ -59,20 +59,20 @@ public class PostServiceTest {
     @Transactional
     @DisplayName("회원의 게시글 조회 테스트")
     void findMemberPostTest() {
-        List<PostResDto> memberPost = postService.findMemberPost(memberId1);
+        List<PostResDto> memberPost = postService.findPostsOfMember(memberId1);
         Member member1 = memberService.findMember(memberId1);
 
         assertThat(memberPost.size()).isEqualTo(1);
         assertThat(memberPost.get(0).getMemberName()).isEqualTo(member1.getName());
 
-        List<PostResDto> memberPost1 = postService.findMemberPost(memberId2);
+        List<PostResDto> memberPost1 = postService.findPostsOfMember(memberId2);
         Member member2 = memberService.findMember(memberId2);
 
         assertThat(memberPost1.size()).isEqualTo(1);
         assertThat(memberPost1.get(0).getMemberName()).isEqualTo(member2.getName());
 
 
-        List<PostResDto> memberPost2 = postService.findMemberPost(memberId3);
+        List<PostResDto> memberPost2 = postService.findPostsOfMember(memberId3);
         Member member3 = memberService.findMember(memberId3);
 
         assertThat(memberPost2.size()).isEqualTo(1);

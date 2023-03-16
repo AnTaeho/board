@@ -27,7 +27,7 @@ public class CommentApiController {
     //게시글에 달린 모든 댓글 메서드
     @GetMapping("/post/{postId}")
     public ResponseEntity<List<CommentResDto>> findCommentsByPost(@PathVariable @ModelAttribute Long postId) {
-        List<CommentResDto> comments = commentService.findCommentsByPost(postId);
+        List<CommentResDto> comments = commentService.findCommentsOfPost(postId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(comments);

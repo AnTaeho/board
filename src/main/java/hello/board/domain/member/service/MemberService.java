@@ -34,8 +34,8 @@ public class MemberService {
         return memberRepository.save(Member.createMember(memberRegisterReqDto));
     }
 
-    public MemberResDto findById(Long id) {
-        return new MemberResDto(findMember(id));
+    public MemberResDto findById(Long memberId) {
+        return new MemberResDto(findMember(memberId));
     }
 
     public Page<MemberResDto> findAll(Pageable pageable) {
@@ -51,8 +51,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void deleteMember(Long id) {
-        memberRepository.deleteById(id);
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteById(memberId);
     }
 
     @Transactional

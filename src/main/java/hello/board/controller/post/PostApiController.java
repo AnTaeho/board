@@ -47,7 +47,7 @@ public class PostApiController {
     }
 
     private List<PostResDto> findAllPostOfMember(Long memberId) {
-        return postService.findMemberPost(memberId);
+        return postService.findPostsOfMember(memberId);
     }
 
     //게시글 작성 메서드

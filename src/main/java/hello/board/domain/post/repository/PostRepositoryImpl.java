@@ -21,7 +21,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     }
 
     @Override
-    public Optional<Post> findByIdWithFetchJoinMember(Long postId) {
+    public Optional<Post> findPostWithMemberInfo(Long postId) {
         Post post = queryFactory
                 .selectFrom(QPost.post)
                 .join(QPost.post.member, member).fetchJoin()
@@ -32,7 +32,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     }
 
     @Override
-    public Optional<Post> findByIdWithFetchJoinComment(Long postId) {
+    public Optional<Post> findPostWithCommentInfo(Long postId) {
         Post post = queryFactory
                 .selectFrom(QPost.post)
                 .join(QPost.post.comments, QComment.comment).fetchJoin()

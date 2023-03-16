@@ -44,17 +44,17 @@ public class CommentServiceTest {
     @Transactional
     @DisplayName("게시글의 전체 댓글 조회 테스트")
     void findAllCommentOfPost() {
-        List<CommentResDto> commentsByPost = commentService.findCommentsByPost(2L);
+        List<CommentResDto> commentsByPost = commentService.findCommentsOfPost(2L);
         Post post = postService.findPost(2L);
         assertThat(commentsByPost.size()).isEqualTo(1);
         assertThat(commentsByPost.get(0).getWriter()).isEqualTo(post.getMember().getName());
 
-        List<CommentResDto> commentsByPost2 = commentService.findCommentsByPost(6L);
+        List<CommentResDto> commentsByPost2 = commentService.findCommentsOfPost(6L);
         Post post2 = postService.findPost(6L);
         assertThat(commentsByPost2.size()).isEqualTo(1);
         assertThat(commentsByPost2.get(0).getWriter()).isEqualTo(post2.getMember().getName());
 
-        List<CommentResDto> commentsByPost3 = commentService.findCommentsByPost(10L);
+        List<CommentResDto> commentsByPost3 = commentService.findCommentsOfPost(10L);
         Post post3 = postService.findPost(10L);
         assertThat(commentsByPost3.size()).isEqualTo(1);
         assertThat(commentsByPost3.get(0).getWriter()).isEqualTo(post3.getMember().getName());

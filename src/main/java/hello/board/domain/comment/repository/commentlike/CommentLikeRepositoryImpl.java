@@ -20,7 +20,7 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepositoryCustom {
     }
 
     @Override
-    public boolean hasNoLike(Long commentId, Long memberId) {
+    public boolean haveNoLike(Long commentId, Long memberId) {
         CommentLike commentLike = queryFactory
                 .select(QCommentLike.commentLike)
                 .from(QCommentLike.commentLike)

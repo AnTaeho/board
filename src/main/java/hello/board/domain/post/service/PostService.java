@@ -30,12 +30,12 @@ public class PostService {
     private final FollowRepository followRepository;
     private final NotificationRepository notificationRepository;
 
-    public PostResDto findSinglePost(Long id) {
-        Post post = findPostWithMemberInfo(id);
-        return new PostResDto(post);
+    public PostResDto findSinglePost(Long postId) {
+        Post findPost = findPostWithMemberInfo(postId);
+        return new PostResDto(findPost);
     }
 
-    public List<PostResDto> findMemberPost(Long memberId) {
+    public List<PostResDto> findPostsOfMember(Long memberId) {
         return postRepository.findPostsOfMember(memberId)
                 .stream()
                 .map(PostResDto::new)
@@ -65,15 +65,15 @@ public class PostService {
     }
 
     @Transactional
-    public PostUpdateResDto updatePost(Long id, PostUpdateReqDto postUpdateReqDto) {
-        Post findPost = findPostWithMemberInfo(id);
+    public PostUpdateResDto updatePost(Long postId, PostUpdateReqDto postUpdateReqDto) {
+        Post findPost = findPostWithMemberInfo(postId);
         findPost.updateInfo(postUpdateReqDto);
         return new PostUpdateResDto(findPost);
     }
 
     @Transactional
-    public void deletePost(Long id) {
-        postRepository.deleteById(id);
+    public void deletePost(Long postId) {
+        postRepository.deleteById(postId);
     }
 
     public Post findPost(Long postId) {
@@ -83,10 +83,10 @@ public class PostService {
                 });
     }
 
-    private Post findPostWithMemberInfo(Long id) {
-        return postRepository.findByIdWithFetchJoinMember(id)
+    private Post findPostWithMemberInfo(Long postId) {
+        return postRepository.findPostWithMemberInfo(postId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",id));
+                    throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 }
