@@ -1,5 +1,6 @@
 package hello.board.domain.member.entity;
 
+import hello.board.controller.member.dto.req.MemberRegisterReqDto;
 import hello.board.controller.member.dto.req.MemberUpdateReqDto;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.comment.entity.Comment;
@@ -43,6 +44,17 @@ public class Member extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "notifiedMember")
     private List<Notification> notifications = new ArrayList<>();
+
+    //== 생성 메서드 ==//
+    public static Member createMember(MemberRegisterReqDto memberRegisterReqDto) {
+        return Member.builder()
+                .name(memberRegisterReqDto.getName())
+                .age(memberRegisterReqDto.getAge())
+                .loginId(memberRegisterReqDto.getLoginId())
+                .password(memberRegisterReqDto.getPassword())
+                .role(memberRegisterReqDto.getRole())
+                .build();
+    }
 
     //== 업데이트 로직 ==//
     public void updateInfo(MemberUpdateReqDto memberUpdateReqDto) {

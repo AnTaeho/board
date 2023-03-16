@@ -1,6 +1,7 @@
 package hello.board.domain.post.entity;
 
 import hello.board.controller.post.dto.req.PostUpdateReqDto;
+import hello.board.controller.post.dto.req.PostWriteReqDto;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.member.entity.Member;
@@ -39,6 +40,15 @@ public class Post extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "ownerPost", cascade = CascadeType.REMOVE)
     private List<PostNotification> notifications = new ArrayList<>();
+
+    //== 생성 메서드 ==//
+    public static Post createPost(Member loginMember, PostWriteReqDto postWriteReqDto) {
+        return Post.builder()
+                .title(postWriteReqDto.getTitle())
+                .content(postWriteReqDto.getContent())
+                .member(loginMember)
+                .build();
+    }
 
     //== 연관관계 메서드 ==//
     public void setMember(Member member) {

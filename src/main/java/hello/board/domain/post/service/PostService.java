@@ -31,7 +31,7 @@ public class PostService {
     private final NotificationRepository notificationRepository;
 
     public PostResDto findSinglePost(Long id) {
-        Post post = postRepository.findByIdWithFetchJoinMember(id).orElseThrow();
+        Post post = findPostWithMemberInfo(id);
         return new PostResDto(post);
     }
 
@@ -57,15 +57,7 @@ public class PostService {
     }
 
     private Post savePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
-        return postRepository.save(createPost(loginMember, postWriteReqDto));
-    }
-
-    private Post createPost(Member loginMember, PostWriteReqDto postWriteReqDto) {
-        return Post.builder()
-                .title(postWriteReqDto.getTitle())
-                .content(postWriteReqDto.getContent())
-                .member(loginMember)
-                .build();
+        return postRepository.save(Post.createPost(loginMember, postWriteReqDto));
     }
 
     private void saveNotification(Member loginMember, Post post, Member member) {
@@ -74,7 +66,7 @@ public class PostService {
 
     @Transactional
     public PostUpdateResDto updatePost(Long id, PostUpdateReqDto postUpdateReqDto) {
-        Post findPost = postRepository.findByIdWithFetchJoinMember(id).orElseThrow();
+        Post findPost = findPostWithMemberInfo(id);
         findPost.updateInfo(postUpdateReqDto);
         return new PostUpdateResDto(findPost);
     }
@@ -88,6 +80,13 @@ public class PostService {
         return postRepository.findById(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
+                });
+    }
+
+    private Post findPostWithMemberInfo(Long id) {
+        return postRepository.findByIdWithFetchJoinMember(id)
+                .orElseThrow(() -> {
+                    throw new CustomNotFoundException(String.format("id=%s not found",id));
                 });
     }
 }

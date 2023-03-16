@@ -31,17 +31,7 @@ public class MemberService {
     }
 
     private Member saveMember(MemberRegisterReqDto memberRegisterReqDto) {
-        return memberRepository.save(createMember(memberRegisterReqDto));
-    }
-
-    private Member createMember(MemberRegisterReqDto memberRegisterReqDto) {
-        return Member.builder()
-                .name(memberRegisterReqDto.getName())
-                .age(memberRegisterReqDto.getAge())
-                .loginId(memberRegisterReqDto.getLoginId())
-                .password(memberRegisterReqDto.getPassword())
-                .role(memberRegisterReqDto.getRole())
-                .build();
+        return memberRepository.save(Member.createMember(memberRegisterReqDto));
     }
 
     public MemberResDto findById(Long id) {
