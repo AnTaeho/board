@@ -8,7 +8,7 @@ import hello.board.domain.comment.entity.CommentLike;
 import hello.board.domain.comment.repository.commentlike.CommentLikeRepository;
 import hello.board.domain.comment.repository.comment.CommentRepository;
 import hello.board.domain.member.entity.Member;
-import hello.board.domain.member.repository.MemberRepository;
+import hello.board.domain.member.repository.member.MemberRepository;
 import hello.board.domain.notification.entity.CommentLikeNotification;
 import hello.board.domain.notification.entity.CommentNotification;
 import hello.board.domain.notification.entity.Notification;
@@ -74,6 +74,7 @@ public class CommentService {
         commentRepository.deleteById(commentId);
     }
 
+    //회원 아이디와 댓글 아이디로 코멘트를 찾아오는 것을 줄일 수 있음
     @Transactional
     public String likeComment(Long commentId, Long memberId) {
         Comment findComment = findCommentWithMemberInfo(commentId);

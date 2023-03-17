@@ -1,4 +1,4 @@
-package hello.board.domain.member.repository;
+package hello.board.domain.member.repository.follow;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.domain.member.entity.Follow;

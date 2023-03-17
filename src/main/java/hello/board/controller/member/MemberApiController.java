@@ -1,6 +1,7 @@
 package hello.board.controller.member;
 
 import hello.board.controller.member.dto.req.MemberUpdateReqDto;
+import hello.board.controller.member.dto.res.AllMemberInfoDto;
 import hello.board.controller.member.dto.res.MemberResDto;
 import hello.board.controller.member.dto.res.MemberUpdateResDto;
 import hello.board.domain.member.entity.Member;
@@ -22,6 +23,15 @@ import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 public class MemberApiController {
 
     private final MemberService memberService;
+
+    @GetMapping("/all/{memberId}")
+    public ResponseEntity<AllMemberInfoDto> findAllInfoOfMember(@PathVariable Long memberId) {
+        AllMemberInfoDto allInfo = memberService.findAllInfo(memberId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(allInfo);
+    }
 
     //멤버 팔로우 메서드
     @PostMapping("/{memberId}/follow")

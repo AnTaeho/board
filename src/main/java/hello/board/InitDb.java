@@ -10,7 +10,7 @@
 //import hello.board.domain.comment.service.CommentService;
 //import hello.board.domain.member.entity.Member;
 //import hello.board.domain.member.entity.MemberRole;
-//import hello.board.domain.member.repository.MemberRepository;
+//import hello.board.domain.member.repository.member.MemberRepository;
 //import hello.board.domain.member.service.MemberService;
 //import hello.board.domain.post.service.PostService;
 //import lombok.RequiredArgsConstructor;
@@ -56,7 +56,16 @@
 //            reflect();
 //            CommentResDto comment1 = commentService.writeComment(writePost1.getId(), member, new CommentWriteDto("안산식 ㄷㄷ 역시 안산의 이병건"));
 //            reflect();
+//            CommentResDto comment3 = commentService.writeComment(writePost1.getId(), member, new CommentWriteDto("안산식 ㄷㄷ 역시 안산의 이병건"));
+//            reflect();
 //            commentService.likeComment(comment1.getId(), userA.getId());
+//            reflect();
+//
+//            PostWriteResDto writePost2 = postService.writePost(member, new PostWriteReqDto("\"안산은 이게 일상이야2\"", "대충 안산 이야기2"));
+//            reflect();
+//            CommentResDto comment2 = commentService.writeComment(writePost2.getId(), member, new CommentWriteDto("안산식 ㄷㄷ 역시 안산의 이병건2"));
+//            reflect();
+//            commentService.likeComment(comment2.getId(), userA.getId());
 //            reflect();
 //        }
 //

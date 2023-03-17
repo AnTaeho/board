@@ -1,4 +1,4 @@
-package hello.board.domain.member.repository;
+package hello.board.domain.member.repository.follow;
 
 import hello.board.domain.member.entity.Member;
 

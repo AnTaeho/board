@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static hello.board.domain.member.entity.QMember.*;
+import static hello.board.domain.post.entity.QPost.*;
 
 public class PostRepositoryImpl implements PostRepositoryCustom{
 
@@ -34,7 +35,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     @Override
     public Optional<Post> findPostWithCommentInfo(Long postId) {
         Post post = queryFactory
-                .selectFrom(QPost.post)
+                .select(QPost.post).distinct()
+                .from(QPost.post)
                 .join(QPost.post.comments, QComment.comment).fetchJoin()
                 .where(QPost.post.id.eq(postId))
                 .fetchOne();
@@ -45,8 +47,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     @Override
     public List<Post> findPostsOfMember(Long memberId) {
         return queryFactory
-                .selectFrom(QPost.post)
-                .join(QPost.post.member, member).fetchJoin()
+                .selectFrom(post)
+                .join(post.member, member).fetchJoin()
                 .where(QMember.member.id.eq(memberId))
                 .fetch();
 

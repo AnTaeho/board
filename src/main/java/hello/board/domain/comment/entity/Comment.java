@@ -1,5 +1,6 @@
 package hello.board.domain.comment.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.notification.entity.CommentNotification;
@@ -26,14 +27,17 @@ public class Comment extends BaseTimeEntity {
     @Lob
     private String content;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member commentMember;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CommentLike> commentLikeList = new ArrayList<>();
 

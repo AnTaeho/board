@@ -3,13 +3,14 @@ package hello.board.domain.member.service;
 import hello.board.controller.member.dto.req.LoginFormDto;
 import hello.board.controller.member.dto.req.MemberRegisterReqDto;
 import hello.board.controller.member.dto.req.MemberUpdateReqDto;
+import hello.board.controller.member.dto.res.AllMemberInfoDto;
 import hello.board.controller.member.dto.res.MemberRegisterResDto;
 import hello.board.controller.member.dto.res.MemberResDto;
 import hello.board.controller.member.dto.res.MemberUpdateResDto;
 import hello.board.domain.member.entity.Follow;
 import hello.board.domain.member.entity.Member;
-import hello.board.domain.member.repository.FollowRepository;
-import hello.board.domain.member.repository.MemberRepository;
+import hello.board.domain.member.repository.follow.FollowRepository;
+import hello.board.domain.member.repository.member.MemberRepository;
 import hello.board.exception.CustomNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -78,5 +79,16 @@ public class MemberService {
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",memberId));
                 });
+    }
+
+    private Member findMemberWithAllInfo(Long memberId) {
+        return memberRepository.findMemberWithAllInfo(memberId)
+                .orElseThrow(() -> {
+                    throw new CustomNotFoundException(String.format("id=%s not found",memberId));
+                });
+    }
+
+    public AllMemberInfoDto findAllInfo(Long memberId) {
+        return new AllMemberInfoDto(findMemberWithAllInfo(memberId));
     }
 }

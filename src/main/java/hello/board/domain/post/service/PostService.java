@@ -6,7 +6,7 @@ import hello.board.controller.post.dto.res.PostResDto;
 import hello.board.controller.post.dto.res.PostUpdateResDto;
 import hello.board.controller.post.dto.res.PostWriteResDto;
 import hello.board.domain.member.entity.Member;
-import hello.board.domain.member.repository.FollowRepository;
+import hello.board.domain.member.repository.follow.FollowRepository;
 import hello.board.domain.notification.entity.PostNotification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;

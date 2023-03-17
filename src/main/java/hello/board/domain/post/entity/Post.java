@@ -1,5 +1,6 @@
 package hello.board.domain.post.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import hello.board.controller.post.dto.req.PostUpdateReqDto;
 import hello.board.controller.post.dto.req.PostWriteReqDto;
 import hello.board.domain.base.BaseTimeEntity;
@@ -31,6 +32,7 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;

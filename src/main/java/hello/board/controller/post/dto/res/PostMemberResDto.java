@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-public class PostResDto {
+public class PostMemberResDto {
     private Long id;
     private String title;
 
@@ -23,15 +23,15 @@ public class PostResDto {
 
     private String memberName;
 
-    private List<CommentResDto> commentResDtos = new ArrayList<>();
+    private List<CommentResDto> commentResDto = new ArrayList<>();
 
-    public PostResDto(Post post) {
+    public PostMemberResDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.memberName = post.getMember().getName();
         for (Comment comment : post.getComments()) {
-            commentResDtos.add(new CommentResDto(comment));
+            commentResDto.add(new CommentResDto(comment));
         }
     }
 }
