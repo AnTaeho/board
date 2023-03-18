@@ -3,7 +3,6 @@ package hello.board.domain.comment.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.member.entity.Member;
-import hello.board.domain.notification.entity.CommentNotification;
 import hello.board.domain.post.entity.Post;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -40,9 +39,6 @@ public class Comment extends BaseTimeEntity {
     @JsonIgnore
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CommentLike> commentLikeList = new ArrayList<>();
-
-    @OneToMany(mappedBy = "ownerComment", cascade = CascadeType.REMOVE)
-    private List<CommentNotification> notifications = new ArrayList<>();
 
     public Comment(Member commentMember, String content, Post post) {
         this.writer = commentMember.getName();

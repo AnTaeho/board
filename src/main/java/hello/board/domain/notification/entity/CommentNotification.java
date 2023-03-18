@@ -24,7 +24,6 @@ public class CommentNotification extends Notification{
         inputInfo(comment.getContent(), writer, member);
         this.ownerComment = comment;
         member.getNotifications().add(this);
-        comment.getNotifications().add(this);
     }
 
 }

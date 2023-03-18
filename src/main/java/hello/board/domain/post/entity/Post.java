@@ -6,7 +6,6 @@ import hello.board.controller.post.dto.req.PostWriteReqDto;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.member.entity.Member;
-import hello.board.domain.notification.entity.PostNotification;
 import lombok.*;
 
 import javax.persistence.*;
@@ -36,9 +35,6 @@ public class Post extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
-
-    @OneToMany(mappedBy = "ownerPost", cascade = CascadeType.REMOVE)
-    private List<PostNotification> notifications = new ArrayList<>();
 
     //== 생성 메서드 ==//
     public static Post createPost(Member loginMember, PostWriteReqDto postWriteReqDto) {
