@@ -6,10 +6,7 @@ import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.post.entity.Post;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class Member extends BaseTimeEntity {
@@ -42,7 +39,7 @@ public class Member extends BaseTimeEntity {
     @OneToMany(mappedBy = "commentMember", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "notifiedMember")
+    @OneToMany(mappedBy = "notifiedMember", cascade = CascadeType.REMOVE)
     private List<Notification> notifications = new ArrayList<>();
 
     //== 생성 메서드 ==//

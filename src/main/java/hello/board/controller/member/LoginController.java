@@ -26,17 +26,22 @@ public class LoginController {
 
     private final MemberService memberService;
 
-    //회원 가입 메서드
     @PostMapping("/login/join")
-    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @ModelAttribute MemberRegisterReqDto memberRegisterReqDto) {
+    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @ModelAttribute MemberRegisterReqDto memberRegisterReqDto,
+                                                           BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
         MemberRegisterResDto memberRegisterResDto = memberService.joinMember(memberRegisterReqDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(memberRegisterResDto);
     }
 
-    //로그인 메서드
-    //세션에 로그인 정보를 저장한다.
     @PostMapping("/login")
     public ResponseEntity<MemberRegisterResDto> login(@Valid @ModelAttribute LoginFormDto form, BindingResult bindingResult,
                                                       HttpServletRequest request) {
@@ -62,7 +67,6 @@ public class LoginController {
                     .build();
         }
 
-        //세션에 저장
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_MEMBER, loginMember);
 
@@ -77,7 +81,6 @@ public class LoginController {
                 .body(new MemberRegisterResDto(loginMember));
     }
 
-    //로그아웃 메서드
     @PostMapping("/logout")
     public ResponseEntity<String> logout(HttpServletRequest request) {
 

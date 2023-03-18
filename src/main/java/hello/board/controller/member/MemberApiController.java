@@ -24,16 +24,15 @@ public class MemberApiController {
 
     private final MemberService memberService;
 
+    //어드민 컨트롤러로 옮길 예정
     @GetMapping("/all/{memberId}")
     public ResponseEntity<AllMemberInfoDto> findAllInfoOfMember(@PathVariable Long memberId) {
         AllMemberInfoDto allInfo = memberService.findAllInfo(memberId);
-
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(allInfo);
     }
 
-    //멤버 팔로우 메서드
     @PostMapping("/{memberId}/follow")
     public ResponseEntity<String> followMember(@PathVariable Long memberId, HttpServletRequest request) {
         String result = memberService.followMember(memberId, findLoginMember(request));
@@ -42,7 +41,6 @@ public class MemberApiController {
                 .body(result);
     }
 
-    //멤버 상세정보 메서드
     @GetMapping
     public ResponseEntity<MemberResDto> findById(@RequestParam Long id) {
         MemberResDto findMember = memberService.findById(id);
@@ -51,7 +49,6 @@ public class MemberApiController {
                 .body(findMember);
     }
 
-    //멤버 정보 수정 메서드
     @PatchMapping("/edit/{memberId}")
     public ResponseEntity<MemberUpdateResDto> updateMember(@PathVariable("memberId") Long memberId, @Valid @ModelAttribute MemberUpdateReqDto memberUpdateReqDto) {
         MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
@@ -60,7 +57,6 @@ public class MemberApiController {
                 .body(memberUpdateResDto);
     }
 
-    //멤버 삭제 메서드
     @DeleteMapping("/delete/{memberId}")
     public ResponseEntity<String> deleteMember(@PathVariable("memberId") Long memberId) {
         memberService.deleteMember(memberId);
@@ -69,6 +65,7 @@ public class MemberApiController {
                 .body("member delete");
     }
 
+    //세션에서 로그인 되어 있는 멤버 찾는 메서드
     private Member findLoginMember(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return (Member) session.getAttribute(LOGIN_MEMBER);

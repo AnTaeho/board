@@ -1,7 +1,7 @@
 package hello.board.controller.member.dto.res;
 
 import hello.board.controller.notification.dto.res.NotificationResDto;
-import hello.board.controller.post.dto.res.PostMemberResDto;
+import hello.board.controller.post.dto.res.*;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
 import hello.board.domain.notification.entity.Notification;
@@ -24,7 +24,7 @@ public class AllMemberInfoDto {
     private String password;
     private MemberRole role;
 
-    private List<PostMemberResDto> postResDto = new ArrayList<>();
+    private List<PostResDto> postResDto = new ArrayList<>();
 
     private List<NotificationResDto> notificationResDto = new ArrayList<>();
 
@@ -40,7 +40,7 @@ public class AllMemberInfoDto {
 
     private void makePostForm(Member member) {
         for (Post post : member.getPosts()) {
-            postResDto.add(new PostMemberResDto(post));
+            postResDto.add(new PostResDto(post));
         }
     }
 

@@ -34,6 +34,11 @@ public class CommentService {
     private final CommentLikeRepository commentLikeRepository;
     private final NotificationRepository notificationRepository;
 
+    /**
+     * 모든 댓글 조회 메서드
+     * 모든 댓글을 찾아서 반환한다.
+     * @return List<CommentResDto>
+     */
     public List<CommentResDto> findAllComments() {
         return commentRepository.findAll()
                 .stream()
@@ -41,13 +46,24 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 게시글의 모든 댓글 조회 메서드
+     * 게시글 아이디를 받아서 해당 게시글의 모든 댓글을 반환한다.
+     * @return List<CommentResDto>
+     */
     public List<CommentResDto> findCommentsOfPost(Long postId) {
-        return findPostWithComment(postId).getComments()
+        return findPostWithCommentInfo(postId).getComments()
                 .stream()
                 .map(CommentResDto::new)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * 댓글 작성 메서드
+     * 게시글 아이디, 로그인한 회원, 작성 폼을받아서
+     * 댓글을 작성하고, 본인의 게시글이 아닌경우 알람 발생
+     * @return CommentResDto
+     */
     @Transactional
     public CommentResDto writeComment(Long postId, Member commentMember, CommentWriteDto commentWriteDto) {
         Post findPost = findPostWithMemberInfo(postId);
@@ -62,6 +78,17 @@ public class CommentService {
         return !findPost.getMember().getId().equals(commentMember.getId());
     }
 
+    private Notification makeCommentNotification(Member commentMember, Post findPost, Comment newComment) {
+        Member notificatiedMember = findPost.getMember();
+        return new CommentNotification(commentMember.getName(), notificatiedMember, newComment);
+    }
+
+    /**
+     * 댓글 수정 메서드
+     * 댓글 아이디와 수정 폼을 받아서
+     * 해당 댓글의 내용을 수정한다.
+     * @return CommentResDto
+     */
     @Transactional
     public CommentResDto updateComment(Long commentId, CommentUpdateDto commentUpdateDto) {
         Comment findComment = findComment(commentId);
@@ -69,29 +96,72 @@ public class CommentService {
         return new CommentResDto(findComment);
     }
 
+    /**
+     * 댓글 삭제 메서드
+     * 댓글의 아이디를 받아서 해당 댓글을 삭제한다.
+     */
     @Transactional
     public void deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
     }
 
-    //회원 아이디와 댓글 아이디로 코멘트를 찾아오는 것을 줄일 수 있음
+    /**
+     * 댓글 좋아요 메서드
+     * 댓글 아이디와 회원 아이디를 받아서
+     * 이미 남겨져 있지 않다면 해당 댓글의 좋아요를 남기고, 있다면 좋아요를 취소한다.
+     * 자신의 댓글도 좋아요를 누를 수 있고, 자신의 댓글이 아니면 알람을 보낸다.
+     * @return String
+     */
     @Transactional
     public String likeComment(Long commentId, Long memberId) {
-        Comment findComment = findCommentWithMemberInfo(commentId);
 
-        if (isNotLiked(commentId, memberId)) {
+        Comment findComment = findCommentWithMemberInfo(commentId);
+        CommentLike notLiked = findLike(commentId, memberId);
+
+        if (notLiked == null) {
             commentLikeRepository.save(pressCommentLike(memberId, findComment));
             return "Like success";
         } else {
-            commentLikeRepository.deleteByCommentIdAndMemberId(commentId, memberId);
+            commentLikeRepository.delete(notLiked);
             return "Like deleted";
         }
     }
 
+    private CommentLike findLike(Long commentId, Long memberId) {
+        return commentLikeRepository.haveNoLike(commentId, memberId);
+    }
+
+    private CommentLike pressCommentLike(Long memberId, Comment findComment) {
+
+        Member commentOwner = findCommentOwner(findComment);
+        Member loginMember = findMember(memberId);
+
+        if (commentOwner == loginMember) {
+            return new CommentLike(loginMember, findComment);
+        }
+
+        return new CommentLike(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner));
+    }
+
+    private Member findCommentOwner(Comment findComment) {
+        return findComment.getPost().getMember();
+    }
+
+    private CommentLikeNotification makeCommentLikeNotification(Member loginMember, Member commentOwner) {
+        return notificationRepository.save(new CommentLikeNotification(loginMember, commentOwner));
+    }
+
+    /**
+     * 댓글 상세 조회 메서드
+     * 댓글 아이디를 받아서
+     * 해당 댓글의 상세 정보를 조회한다.
+     * @return CommentResDto
+     */
     public CommentResDto findCommentDetail(Long commentId) {
         return new CommentResDto(findComment(commentId));
     }
 
+    //공용 메서드
     public Comment findComment(Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
@@ -113,7 +183,7 @@ public class CommentService {
                 });
     }
 
-    private Post findPostWithComment(Long postId) {
+    private Post findPostWithCommentInfo(Long postId) {
         return postRepository.findPostWithCommentInfo(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
@@ -134,32 +204,4 @@ public class CommentService {
                 });
     }
 
-    private Notification makeCommentNotification(Member commentMember, Post findPost, Comment newComment) {
-        Member notificatiedMember = findPost.getMember();
-        return new CommentNotification(commentMember.getName(), notificatiedMember, newComment);
-    }
-
-    private boolean isNotLiked(Long commentId, Long memberId) {
-        return commentLikeRepository.haveNoLike(commentId, memberId);
-    }
-
-    private CommentLike pressCommentLike(Long memberId, Comment findComment) {
-
-        Member commentOwner = findCommentOwner(findComment);
-        Member loginMember = findMember(memberId);
-
-        if (commentOwner == loginMember) {
-            return new CommentLike(loginMember, findComment);
-        }
-
-        return new CommentLike(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner));
-    }
-
-    private CommentLikeNotification makeCommentLikeNotification(Member loginMember, Member commentOwner) {
-        return notificationRepository.save(new CommentLikeNotification(loginMember, commentOwner));
-    }
-
-    private Member findCommentOwner(Comment findComment) {
-        return findComment.getPost().getMember();
-    }
 }

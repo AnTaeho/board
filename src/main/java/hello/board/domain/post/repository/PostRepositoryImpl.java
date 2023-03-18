@@ -2,9 +2,7 @@ package hello.board.domain.post.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.domain.comment.entity.QComment;
-import hello.board.domain.member.entity.QMember;
 import hello.board.domain.post.entity.Post;
-import hello.board.domain.post.entity.QPost;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -23,25 +21,24 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
 
     @Override
     public Optional<Post> findPostWithMemberInfo(Long postId) {
-        Post post = queryFactory
-                .selectFrom(QPost.post)
-                .join(QPost.post.member, member).fetchJoin()
-                .where(QPost.post.id.eq(postId))
+        Post findPost = queryFactory
+                .selectFrom(post)
+                .join(post.member, member).fetchJoin()
+                .where(post.id.eq(postId))
                 .fetchOne();
 
-        return Optional.ofNullable(post);
+        return Optional.ofNullable(findPost);
     }
 
     @Override
     public Optional<Post> findPostWithCommentInfo(Long postId) {
-        Post post = queryFactory
-                .select(QPost.post).distinct()
-                .from(QPost.post)
-                .join(QPost.post.comments, QComment.comment).fetchJoin()
-                .where(QPost.post.id.eq(postId))
+        Post findPost = queryFactory
+                .selectFrom(post)
+                .join(post.comments, QComment.comment).fetchJoin()
+                .where(post.id.eq(postId))
                 .fetchOne();
 
-        return Optional.ofNullable(post);
+        return Optional.ofNullable(findPost);
     }
 
     @Override
@@ -49,7 +46,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         return queryFactory
                 .selectFrom(post)
                 .join(post.member, member).fetchJoin()
-                .where(QMember.member.id.eq(memberId))
+                .where(member.id.eq(memberId))
                 .fetch();
 
     }

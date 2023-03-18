@@ -1,9 +1,9 @@
 package hello.board.domain.comment.repository.commentlike;
 
+import hello.board.domain.comment.entity.CommentLike;
+
 public interface CommentLikeRepositoryCustom {
 
-    boolean haveNoLike(Long commentId, Long memberId);
-
-    void deleteByCommentIdAndMemberId(Long commentId, Long memberId);
+    CommentLike haveNoLike(Long commentId, Long memberId);
 
 }

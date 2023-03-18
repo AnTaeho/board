@@ -26,6 +26,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
 
+    /**
+     * 회원 가입 메서드
+     * 가입 폼을 받아서 회원 엔티티를 생성하고 저장한다.
+     * @return MemberRegisterResDto
+     */
     @Transactional
     public MemberRegisterResDto joinMember(MemberRegisterReqDto memberRegisterReqDto) {
         return new MemberRegisterResDto(saveMember(memberRegisterReqDto));
@@ -35,15 +40,31 @@ public class MemberService {
         return memberRepository.save(Member.createMember(memberRegisterReqDto));
     }
 
+    /**
+     * 회원 찾기 메서드
+     * 아이디 값을 받아서 회원을 찾는다.
+     * @return MemberResDto
+     */
     public MemberResDto findById(Long memberId) {
         return new MemberResDto(findMember(memberId));
     }
 
+    /**
+     * 전체 회원 조회 메서드
+     * 전체 회원 목록을 페이징해서 반환한다.
+     * @return Page<MemberResDto>
+     */
     public Page<MemberResDto> findAll(Pageable pageable) {
         return memberRepository.findAll(pageable)
                 .map(MemberResDto::new);
     }
 
+    /**
+     * 회원 정보 업데이트 메서드
+     * 업데이트 폼과 회원 아이디 값을 받아서
+     * 정보를 업데이트한다.
+     * @return MemberUpdateResDto
+     */
     @Transactional
     public MemberUpdateResDto updateMember(Long memberId, MemberUpdateReqDto MemberUpdateReqDto) {
         Member findMember = findMember(memberId);
@@ -51,11 +72,21 @@ public class MemberService {
         return new MemberUpdateResDto(findMember);
     }
 
+    /**
+     * 회원 삭제 메서드
+     * 아이디 값을 받아서 회원을 삭제한다.
+     */
     @Transactional
     public void deleteMember(Long memberId) {
         memberRepository.deleteById(memberId);
     }
 
+    /**
+     * 로그인 메서드
+     * 로그인 폼을 받아서 리포지토리에서 매칭되는 멤버를 찾는다.
+     * 있다면 해당 멤버를 반환하고, 없다면 null을 반환한다.
+     * @return Member
+     */
     @Transactional
     public Member login(LoginFormDto form) {
         return memberRepository.findByLoginId(form.getLoginId())
@@ -63,6 +94,12 @@ public class MemberService {
                 .orElse(null);
     }
 
+    /**
+     * 팔로우 메서드
+     * 팔로우할 멤버의 아이디 값과 로그인 되어있는 멤버를 받아서
+     * 팔로우 여부를 체크한 뒤 없다면 팔로우하고 있다면 팔로우를 취소한다.
+     * @return String
+     */
     @Transactional
     public String followMember(Long memberId, Member fromMember) {
         Member toMember = findMember(memberId);
@@ -74,6 +111,16 @@ public class MemberService {
         return "follow success";
     }
 
+    /**
+     * 회원의 모든 정보 조회 메서드
+     * OneToMany 관계에서 페치 조인시 생기는 문제점을 확인하기 위해 구현한 메서드
+     * @return AllMemberInfoDto
+     */
+    public AllMemberInfoDto findAllInfo(Long memberId) {
+        return new AllMemberInfoDto(findMemberWithAllInfo(memberId));
+    }
+
+    //공용 메서드
     public Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
@@ -86,9 +133,5 @@ public class MemberService {
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",memberId));
                 });
-    }
-
-    public AllMemberInfoDto findAllInfo(Long memberId) {
-        return new AllMemberInfoDto(findMemberWithAllInfo(memberId));
     }
 }

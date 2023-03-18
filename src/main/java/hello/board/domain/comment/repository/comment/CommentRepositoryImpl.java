@@ -2,12 +2,13 @@ package hello.board.domain.comment.repository.comment;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.domain.comment.entity.Comment;
-import hello.board.domain.comment.entity.QComment;
-import hello.board.domain.member.entity.QMember;
-import hello.board.domain.post.entity.QPost;
 
 import javax.persistence.EntityManager;
 import java.util.Optional;
+
+import static hello.board.domain.comment.entity.QComment.*;
+import static hello.board.domain.member.entity.QMember.*;
+import static hello.board.domain.post.entity.QPost.*;
 
 public class CommentRepositoryImpl implements CommentRepositoryCustom{
 
@@ -19,25 +20,25 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
 
     @Override
     public Optional<Comment> findCommentWithMemberInfo(Long commentId) {
-        Comment comment = queryFactory
-                .selectFrom(QComment.comment)
-                .join(QComment.comment.post, QPost.post).fetchJoin()
-                .join(QPost.post.member, QMember.member).fetchJoin()
-                .where(QComment.comment.id.eq(commentId))
+        Comment findComment = queryFactory
+                .selectFrom(comment)
+                .join(comment.post, post).fetchJoin()
+                .join(post.member, member).fetchJoin()
+                .where(comment.id.eq(commentId))
                 .fetchOne();
 
-        return Optional.ofNullable(comment);
+        return Optional.ofNullable(findComment);
     }
 
     @Override
     public Optional<Comment> findCommentWithPostInfo(Long commentId) {
-        Comment comment = queryFactory
-                .selectFrom(QComment.comment)
-                .join(QComment.comment.post, QPost.post).fetchJoin()
-                .where(QComment.comment.id.eq(commentId))
+        Comment findComment = queryFactory
+                .selectFrom(comment)
+                .join(comment.post, post).fetchJoin()
+                .where(comment.id.eq(commentId))
                 .fetchOne();
 
-        return Optional.ofNullable(comment);
+        return Optional.ofNullable(findComment);
     }
 
 }
