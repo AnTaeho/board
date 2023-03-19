@@ -1,7 +1,6 @@
 package hello.board.controller.member;
 
 import hello.board.controller.member.dto.req.MemberUpdateReqDto;
-import hello.board.controller.member.dto.res.AllMemberInfoDto;
 import hello.board.controller.member.dto.res.MemberResDto;
 import hello.board.controller.member.dto.res.MemberUpdateResDto;
 import hello.board.domain.member.entity.Member;
@@ -23,15 +22,6 @@ import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 public class MemberApiController {
 
     private final MemberService memberService;
-
-    //어드민 컨트롤러로 옮길 예정
-    @GetMapping("/all/{memberId}")
-    public ResponseEntity<AllMemberInfoDto> findAllInfoOfMember(@PathVariable Long memberId) {
-        AllMemberInfoDto allInfo = memberService.findAllInfo(memberId);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(allInfo);
-    }
 
     @PostMapping("/{memberId}/follow")
     public ResponseEntity<String> followMember(@PathVariable Long memberId, HttpServletRequest request) {
