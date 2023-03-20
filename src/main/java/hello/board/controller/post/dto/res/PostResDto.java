@@ -1,5 +1,6 @@
 package hello.board.controller.post.dto.res;
 
+import com.querydsl.core.annotations.QueryProjection;
 import hello.board.controller.comment.dto.res.CommentResDto;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.post.entity.Post;
@@ -25,6 +26,7 @@ public class PostResDto {
 
     private List<CommentResDto> commentResDtos = new ArrayList<>();
 
+    @QueryProjection
     public PostResDto(Post post) {
         this.id = post.getId();
         this.title = post.getTitle();

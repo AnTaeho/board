@@ -1,5 +1,6 @@
 package hello.board.controller.post;
 
+import hello.board.controller.post.dto.req.PostSearchCondition;
 import hello.board.controller.post.dto.req.PostUpdateReqDto;
 import hello.board.controller.post.dto.req.PostWriteReqDto;
 import hello.board.controller.post.dto.res.PostResDto;
@@ -8,6 +9,8 @@ import hello.board.controller.post.dto.res.PostWriteResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -26,6 +29,19 @@ import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 public class PostApiController {
 
     private final PostService postService;
+
+    @GetMapping("/search")
+    public ResponseEntity<Page<PostResDto>> searchPost(@ModelAttribute PostSearchCondition condition,
+                                                       @RequestParam("page") int page) {
+
+        PageRequest pageRequest = PageRequest.of(page, 10);
+
+        Page<PostResDto> searchedPost = postService.searchPost(condition, pageRequest);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(searchedPost);
+    }
 
     @GetMapping("/{postId}")
     public ResponseEntity<PostResDto> findSinglePost(@PathVariable Long postId) {

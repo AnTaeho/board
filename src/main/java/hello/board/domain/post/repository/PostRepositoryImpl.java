@@ -1,8 +1,15 @@
 package hello.board.domain.post.repository;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import hello.board.controller.post.dto.req.PostSearchCondition;
+import hello.board.controller.post.dto.res.PostResDto;
+import hello.board.controller.post.dto.res.QPostResDto;
 import hello.board.domain.comment.entity.QComment;
 import hello.board.domain.post.entity.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -10,6 +17,7 @@ import java.util.Optional;
 
 import static hello.board.domain.member.entity.QMember.*;
 import static hello.board.domain.post.entity.QPost.*;
+import static org.springframework.util.StringUtils.hasText;
 
 public class PostRepositoryImpl implements PostRepositoryCustom{
 
@@ -49,5 +57,37 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .where(member.id.eq(memberId))
                 .fetch();
 
+    }
+
+    @Override
+    public Page<PostResDto> search(PostSearchCondition condition, Pageable pageable) {
+        List<PostResDto> result = queryFactory
+                .select(new QPostResDto(
+                        post
+                ))
+                .from(post)
+                .leftJoin(post.member, member)
+                .where(
+                        titleEq(condition.getTitle()),
+                        contentEq(condition.getContent()),
+                        writerEq(condition.getWriter())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
+    private BooleanExpression titleEq(String title) {
+        return hasText(title) ? post.title.contains(title) : null;
+    }
+
+    private BooleanExpression contentEq(String content) {
+        return hasText(content) ? post.content.contains(content) : null;
+    }
+
+    private BooleanExpression writerEq(String writer) {
+        return hasText(writer) ? post.member.name.eq(writer) : null;
     }
 }

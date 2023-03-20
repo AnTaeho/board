@@ -1,5 +1,6 @@
 package hello.board.domain.post.service;
 
+import hello.board.controller.post.dto.req.PostSearchCondition;
 import hello.board.controller.post.dto.req.PostUpdateReqDto;
 import hello.board.controller.post.dto.req.PostWriteReqDto;
 import hello.board.controller.post.dto.res.PostResDto;
@@ -122,5 +123,9 @@ public class PostService {
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
+    }
+
+    public Page<PostResDto> searchPost(PostSearchCondition condition, Pageable pageable) {
+        return postRepository.search(condition, pageable);
     }
 }
