@@ -11,6 +11,7 @@ import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -34,7 +35,7 @@ public class PostApiController {
     public ResponseEntity<Page<PostResDto>> searchPost(@ModelAttribute PostSearchCondition condition,
                                                        @RequestParam("page") int page) {
 
-        PageRequest pageRequest = PageRequest.of(page, 10);
+        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
 
         Page<PostResDto> searchedPost = postService.searchPost(condition, pageRequest);
 

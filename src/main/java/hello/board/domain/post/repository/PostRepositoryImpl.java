@@ -68,9 +68,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .from(post)
                 .leftJoin(post.member, member)
                 .where(
-                        titleEq(condition.getTitle()),
-                        contentEq(condition.getContent()),
-                        writerEq(condition.getWriter())
+                        checkTitle(condition.getTitle()),
+                        checkContent(condition.getContent()),
+                        checkWriter(condition.getWriter())
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -79,15 +79,15 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
         return new PageImpl<>(result, pageable, result.size());
     }
 
-    private BooleanExpression titleEq(String title) {
+    private BooleanExpression checkTitle(String title) {
         return hasText(title) ? post.title.contains(title) : null;
     }
 
-    private BooleanExpression contentEq(String content) {
+    private BooleanExpression checkContent(String content) {
         return hasText(content) ? post.content.contains(content) : null;
     }
 
-    private BooleanExpression writerEq(String writer) {
+    private BooleanExpression checkWriter(String writer) {
         return hasText(writer) ? post.member.name.eq(writer) : null;
     }
 }
