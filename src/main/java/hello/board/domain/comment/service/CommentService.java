@@ -65,9 +65,9 @@ public class CommentService {
      * @return CommentResDto
      */
     @Transactional
-    public CommentResDto writeComment(Long postId, Member commentMember, CommentWriteDto commentWriteDto) {
+    public CommentResDto writeComment(Long postId, Member commentMember, CommentWriteDto writeDto) {
         Post findPost = findPostWithMemberInfo(postId);
-        Comment newComment = new Comment(commentMember, commentWriteDto.getContent(), findPost);
+        Comment newComment = new Comment(commentMember, writeDto.getContent(), findPost);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
@@ -81,6 +81,15 @@ public class CommentService {
     private Notification makeCommentNotification(Member commentMember, Post findPost, Comment newComment) {
         Member notificatiedMember = findPost.getMember();
         return new CommentNotification(commentMember.getName(), notificatiedMember, newComment);
+    }
+
+    @Transactional
+    public CommentResDto writeChildComment(Long postId, Long commentId, Member commentMember, CommentWriteDto writeDto) {
+        Post findPost = findPostWithCommentInfo(postId);
+        Comment findComment = findComment(commentId);
+        Comment newComment = new Comment(commentMember, writeDto.getContent(), findPost, findComment);
+
+        return new CommentResDto(commentRepository.save(newComment));
     }
 
     /**

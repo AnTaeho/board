@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import hello.board.domain.base.BaseTimeEntity;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.post.entity.Post;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -36,6 +34,13 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @JoinColumn(name = "parent_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Comment parent;
+
+    @OneToMany(mappedBy = "parent", orphanRemoval = true)
+    private List<Comment> child = new ArrayList<>();
+
     @JsonIgnore
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CommentLike> commentLikeList = new ArrayList<>();
@@ -44,6 +49,14 @@ public class Comment extends BaseTimeEntity {
         this.writer = commentMember.getName();
         this.commentMember = commentMember;
         this.content = content;
+        setPost(post);
+    }
+
+    public Comment(Member commentMember, String content, Post post, Comment comment) {
+        this.writer = commentMember.getName();
+        this.commentMember = commentMember;
+        this.content = content;
+        this.parent = comment;
         setPost(post);
     }
 

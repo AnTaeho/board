@@ -60,8 +60,19 @@ public class CommentApiController {
 
         CommentResDto writtenComment = commentService.writeComment(postId, findLoginMember(request), writeDto);
         return ResponseEntity
-                .status(HttpStatus.OK)
+                .status(HttpStatus.CREATED)
                 .body(writtenComment);
+    }
+
+    @PostMapping("/post/{postId}/{commentId}")
+    public ResponseEntity<CommentResDto> writeChildComment(@PathVariable Long postId, @PathVariable Long commentId,
+                                                           @Valid @ModelAttribute CommentWriteDto writeDto, HttpServletRequest request) {
+        Member loginMember = findLoginMember(request);
+        CommentResDto comment = commentService.writeChildComment(postId, commentId, loginMember, writeDto);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(comment);
     }
 
     @PatchMapping("/edit/{commentId}")
