@@ -49,5 +49,11 @@ public class AdminController {
                 .body(allWaitingPost);
     }
 
-
+    @PatchMapping("/posts/waiting/{postId}")
+    public ResponseEntity<PostResDto> updatePostToPosted(@PathVariable Long postId) {
+        PostResDto postResDto = postService.updatePostToPosted(postId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(postResDto);
+    }
 }

@@ -125,6 +125,17 @@ public class PostService {
     }
 
     /**
+     * 게시글을 등록 완료 상태로 바꾼다.
+     * @return PostResDto
+     */
+    @Transactional
+    public PostResDto updatePostToPosted(Long postId) {
+        Post findPost = findPost(postId);
+        findPost.changeToPosted();
+        return new PostResDto(findPost);
+    }
+
+    /**
      * 게시글 삭제 메서드
      * 게시글 아이디를 받아서 삭제한다.
      */
@@ -151,4 +162,5 @@ public class PostService {
     public Page<PostResDto> searchPost(PostSearchCondition condition, Pageable pageable) {
         return postRepository.search(condition, pageable);
     }
+
 }
