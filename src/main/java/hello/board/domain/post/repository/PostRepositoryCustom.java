@@ -18,4 +18,8 @@ public interface PostRepositoryCustom {
     List<Post> findPostsOfMember(Long memberId);
 
     Page<PostResDto> search(PostSearchCondition condition, Pageable pageable);
+
+    Page<PostResDto> findAllPostedPost(Pageable pageable);
+
+    Page<PostResDto> findAllAllWaitingPost(Pageable pageable);
 }

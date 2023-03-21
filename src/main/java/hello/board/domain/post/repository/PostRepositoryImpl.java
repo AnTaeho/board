@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static hello.board.domain.member.entity.QMember.*;
+import static hello.board.domain.post.entity.PostStatus.*;
 import static hello.board.domain.post.entity.QPost.*;
 import static org.springframework.util.StringUtils.hasText;
 
@@ -72,6 +73,36 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                         checkContent(condition.getContent()),
                         checkWriter(condition.getWriter())
                 )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
+    @Override
+    public Page<PostResDto> findAllPostedPost(Pageable pageable) {
+        List<PostResDto> result = queryFactory
+                .select(new QPostResDto(
+                        post
+                ))
+                .from(post)
+                .where(post.status.eq(POSTED))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        return new PageImpl<>(result, pageable, result.size());
+    }
+
+    @Override
+    public Page<PostResDto> findAllAllWaitingPost(Pageable pageable) {
+        List<PostResDto> result = queryFactory
+                .select(new QPostResDto(
+                        post
+                ))
+                .from(post)
+                .where(post.status.eq(WAITING_TO_POST))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();

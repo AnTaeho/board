@@ -50,7 +50,7 @@ public class PostServiceTest {
     @Transactional
     @DisplayName("전체 게시글 조회 테스트")
     void findAllPostTest() {
-        Page<PostResDto> allPost = postService.findAllPost(Pageable.unpaged());
+        Page<PostResDto> allPost = postService.findAllPostedPost(Pageable.unpaged());
 
         assertThat(allPost.getSize()).isEqualTo(3);
     }

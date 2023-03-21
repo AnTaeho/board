@@ -43,9 +43,8 @@ public class HomeController {
     //모든 게시글 화면 메서드
     @GetMapping("/home/posts")
     public ResponseEntity<Page<PostResDto>> findAllPost(@RequestParam("page") int page) {
-
         PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
-        Page<PostResDto> posts = postService.findAllPost(pageRequest);
+        Page<PostResDto> posts = postService.findAllPostedPost(pageRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(posts);

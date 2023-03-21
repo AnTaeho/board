@@ -62,9 +62,15 @@ public class PostService {
      * 모든 게시글을 찾아서 페이징해서 반환한다.
      * @return Page<PostResDto>
      */
-    public Page<PostResDto> findAllPost(Pageable pageable) {
-        return postRepository.findAll(pageable)
-                .map(PostResDto::new);
+    public Page<PostResDto> findAllPostedPost(Pageable pageable) {
+        return postRepository.findAllPostedPost(pageable);
+    }
+
+    /**
+     * 등록 대기중인 모든 게시글 찾기
+     */
+    public Page<PostResDto> findAllWaitingPost(Pageable pageable) {
+        return postRepository.findAllAllWaitingPost(pageable);
     }
 
     /**
