@@ -88,7 +88,9 @@ public class CommentService {
         Post findPost = findPostWithCommentInfo(postId);
         Comment findComment = findComment(commentId);
         Comment newComment = new Comment(commentMember, writeDto.getContent(), findPost, findComment);
-
+        if (isNotMyPost(commentMember, findPost)) {
+            notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
+        }
         return new CommentResDto(commentRepository.save(newComment));
     }
 
