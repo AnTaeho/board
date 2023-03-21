@@ -18,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.PatternMatchUtils;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,8 @@ import java.util.stream.Collectors;
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class PostService {
+
+    private static final String[] BLACK_LIST = {"*메이플*", "*로아*"};
 
     private final PostRepository postRepository;
     private final FollowRepository followRepository;
@@ -81,7 +84,21 @@ public class PostService {
 
     //입력 관련 메서드
     private Post savePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
-        return postRepository.save(Post.createPost(loginMember, postWriteReqDto));
+        Post post = Post.createPost(loginMember, postWriteReqDto);
+        isCorrect(postWriteReqDto.getContent(), post);
+        return postRepository.save(post);
+    }
+
+    private void isCorrect(String content, Post post) {
+        if (checkBlackList(content)) {
+            post.changeToWaitingPost();
+        } else {
+            post.changeToPosted();
+        }
+    }
+
+    private boolean checkBlackList(String content) {
+        return PatternMatchUtils.simpleMatch(BLACK_LIST, content);
     }
 
     private void saveNotification(Member loginMember, Post post, Member member) {

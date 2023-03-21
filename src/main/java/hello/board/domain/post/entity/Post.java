@@ -28,6 +28,9 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    private PostStatus status;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -42,6 +45,7 @@ public class Post extends BaseTimeEntity {
                 .title(postWriteReqDto.getTitle())
                 .content(postWriteReqDto.getContent())
                 .member(loginMember)
+                .status(PostStatus.WRITING)
                 .build();
     }
 
@@ -55,5 +59,13 @@ public class Post extends BaseTimeEntity {
     public void updateInfo(PostUpdateReqDto updatePost) {
         this.title = updatePost.getTitle();
         this.content = updatePost.getContent();
+    }
+
+    public void changeToWaitingPost() {
+        this.status = PostStatus.WAITING_TO_POST;
+    }
+
+    public void changeToPosted() {
+        this.status = PostStatus.POSTED;
     }
 }
