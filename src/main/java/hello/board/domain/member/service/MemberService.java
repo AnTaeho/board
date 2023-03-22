@@ -103,6 +103,9 @@ public class MemberService {
     @Transactional
     public String followMember(Long memberId, Member fromMember) {
         Member toMember = findMember(memberId);
+        if (toMember.getId().equals(fromMember.getId())) {
+            return "자기 자신은 팔로우 할 수 없습니다.";
+        }
         if (followRepository.isAlreadyFollow(toMember, fromMember)) {
             followRepository.deleteByToMemberAndFromMember(toMember, fromMember);
             return "unfollow success";
