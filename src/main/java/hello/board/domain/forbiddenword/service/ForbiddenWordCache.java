@@ -3,18 +3,17 @@ package hello.board.domain.forbiddenword.service;
 import hello.board.domain.forbiddenword.entity.ForbiddenWord;
 import hello.board.domain.post.entity.Post;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 public class ForbiddenWordCache {
 
-    private static List<String> forbiddenWords = new ArrayList<>();
+    private static Set<String> forbiddenWords;
 
-    public static List<String> getForbiddenWords() {
+    public static Set<String> getForbiddenWords() {
         return forbiddenWords;
     }
 
-    public static void setForbiddenWords(List<String> forbiddenWords) {
+    public static void setForbiddenWords(Set<String> forbiddenWords) {
         ForbiddenWordCache.forbiddenWords = forbiddenWords;
     }
 

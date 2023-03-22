@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -66,10 +66,10 @@ public class InitDb {
         }
 
         public void initForbiddenWordCache() {
-            List<String> result = forbiddenWordRepository.findAll()
+            Set<String> result = forbiddenWordRepository.findAll()
                     .stream()
                     .map(ForbiddenWord::getWord)
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
             ForbiddenWordCache.setForbiddenWords(result);
             reflect();
         }
