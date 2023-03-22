@@ -8,11 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class WordDto {
+public class WordResDto {
 
     private String word;
 
-    public WordDto(ForbiddenWord forbiddenWord) {
+    public WordResDto(ForbiddenWord forbiddenWord) {
         this.word = forbiddenWord.getWord();
     }
 }

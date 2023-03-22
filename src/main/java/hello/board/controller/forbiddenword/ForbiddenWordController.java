@@ -2,7 +2,7 @@ package hello.board.controller.forbiddenword;
 
 import hello.board.controller.forbiddenword.dto.req.AddWordDto;
 import hello.board.controller.forbiddenword.dto.req.UpdateWordDto;
-import hello.board.controller.forbiddenword.dto.res.WordDto;
+import hello.board.controller.forbiddenword.dto.res.WordResDto;
 import hello.board.domain.forbiddenword.service.ForbiddenWordCache;
 import hello.board.domain.forbiddenword.service.ForbiddenWordService;
 import lombok.RequiredArgsConstructor;
@@ -20,24 +20,24 @@ public class ForbiddenWordController {
     private final ForbiddenWordService forbiddenWordService;
 
     @GetMapping("/all")
-    public List<WordDto> findAll() {
+    public List<WordResDto> findAll() {
         return forbiddenWordService.findAll();
     }
 
     @GetMapping("/{wordId}")
-    public WordDto findOne(@PathVariable Long wordId) {
+    public WordResDto findOne(@PathVariable Long wordId) {
         return forbiddenWordService.findOne(wordId);
     }
 
     @GetMapping("/cache")
-    public List<WordDto> findAllCache() {
+    public List<WordResDto> findAllCache() {
         return ForbiddenWordCache.getForbiddenWords()
-                .stream().map(WordDto::new)
+                .stream().map(WordResDto::new)
                 .collect(Collectors.toList());
     }
 
     @PostMapping
-    public WordDto save(@Valid @ModelAttribute AddWordDto addWordDto) {
+    public WordResDto save(@Valid @ModelAttribute AddWordDto addWordDto) {
         return forbiddenWordService.save(addWordDto);
     }
 

@@ -2,7 +2,7 @@ package hello.board.domain.forbiddenword.service;
 
 import hello.board.controller.forbiddenword.dto.req.AddWordDto;
 import hello.board.controller.forbiddenword.dto.req.UpdateWordDto;
-import hello.board.controller.forbiddenword.dto.res.WordDto;
+import hello.board.controller.forbiddenword.dto.res.WordResDto;
 import hello.board.domain.forbiddenword.entity.ForbiddenWord;
 import hello.board.domain.forbiddenword.repository.ForbiddenWordRepository;
 import hello.board.exception.CustomNotFoundException;
@@ -21,26 +21,26 @@ public class ForbiddenWordService {
     private final ForbiddenWordRepository forbiddenWordRepository;
 
     @Transactional
-    public WordDto save(AddWordDto addWordDto) {
+    public WordResDto save(AddWordDto addWordDto) {
         ForbiddenWord saveWord = forbiddenWordRepository.save(new ForbiddenWord(addWordDto.getWord()));
         ForbiddenWordCache.addForbiddenWord(saveWord);
-        return new WordDto(saveWord);
+        return new WordResDto(saveWord);
     }
 
-    public List<WordDto> findAll() {
+    public List<WordResDto> findAll() {
         return forbiddenWordRepository.findAll()
-                .stream().map(WordDto::new)
+                .stream().map(WordResDto::new)
                 .collect(Collectors.toList());
     }
 
-    public WordDto findOne(Long id) {
-        return new WordDto(findWord(id));
+    public WordResDto findOne(Long wordId) {
+        return new WordResDto(findWord(wordId));
     }
 
     @Transactional
     public void updateWord(Long wordId, UpdateWordDto updateWordDto) {
-        ForbiddenWord one = findWord(wordId);
-        one.updateWord(updateWordDto.getWord());
+        ForbiddenWord findWord = findWord(wordId);
+        findWord.updateWord(updateWordDto.getWord());
     }
 
     @Transactional
