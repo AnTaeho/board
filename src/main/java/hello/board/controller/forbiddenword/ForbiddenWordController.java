@@ -1,12 +1,15 @@
 package hello.board.controller.forbiddenword;
 
-import hello.board.domain.forbiddenword.entity.ForbiddenWord;
+import hello.board.controller.forbiddenword.dto.req.AddWordDto;
+import hello.board.controller.forbiddenword.dto.req.UpdateWordDto;
+import hello.board.controller.forbiddenword.dto.res.WordDto;
 import hello.board.domain.forbiddenword.service.ForbiddenWordCache;
 import hello.board.domain.forbiddenword.service.ForbiddenWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,28 +19,30 @@ public class ForbiddenWordController {
     private final ForbiddenWordService forbiddenWordService;
 
     @GetMapping("/all")
-    public List<ForbiddenWord> findAll() {
+    public List<WordDto> findAll() {
         return forbiddenWordService.findAll();
     }
 
     @GetMapping("/{wordId}")
-    public ForbiddenWord findOne(@PathVariable Long wordId) {
+    public WordDto findOne(@PathVariable Long wordId) {
         return forbiddenWordService.findOne(wordId);
     }
 
     @GetMapping("/cache")
-    public List<String> findAllCache() {
-        return ForbiddenWordCache.getForbiddenWords();
+    public List<WordDto> findAllCache() {
+        return ForbiddenWordCache.getForbiddenWords()
+                .stream().map(WordDto::new)
+                .collect(Collectors.toList());
     }
 
     @PostMapping
-    public ForbiddenWord save(@ModelAttribute String word) {
-        return forbiddenWordService.save(word);
+    public WordDto save(@ModelAttribute AddWordDto addWordDto) {
+        return forbiddenWordService.save(addWordDto);
     }
 
     @PatchMapping("/{wordId}")
-    public void updateWord(@PathVariable Long wordId, @ModelAttribute String word) {
-        forbiddenWordService.updateWord(wordId, word);
+    public void updateWord(@PathVariable Long wordId, @ModelAttribute UpdateWordDto updateWordDto) {
+        forbiddenWordService.updateWord(wordId, updateWordDto);
     }
 
     @DeleteMapping("/{wordId}")
