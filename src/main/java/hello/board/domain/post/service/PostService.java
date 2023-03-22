@@ -6,6 +6,7 @@ import hello.board.controller.post.dto.req.PostWriteReqDto;
 import hello.board.controller.post.dto.res.PostResDto;
 import hello.board.controller.post.dto.res.PostUpdateResDto;
 import hello.board.controller.post.dto.res.PostWriteResDto;
+import hello.board.domain.forbiddenword.service.ForbiddenWordCache;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.follow.FollowRepository;
 import hello.board.domain.notification.entity.PostNotification;
@@ -88,7 +89,16 @@ public class PostService {
     //입력 관련 메서드
     private Post savePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
         Post post = Post.createPost(loginMember, postWriteReqDto);
+        checkForbiddenWord(post);
         return postRepository.save(post);
+    }
+
+    private void checkForbiddenWord(Post post) {
+        if(ForbiddenWordCache.checkForbiddenWord(post)) {
+            post.changeToWaitingPost();
+        } else {
+            post.changeToPosted();
+        }
     }
 
     private void saveNotification(Member loginMember, Post post, Member member) {

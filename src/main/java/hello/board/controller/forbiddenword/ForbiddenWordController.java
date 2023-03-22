@@ -8,6 +8,7 @@ import hello.board.domain.forbiddenword.service.ForbiddenWordService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,12 +37,12 @@ public class ForbiddenWordController {
     }
 
     @PostMapping
-    public WordDto save(@ModelAttribute AddWordDto addWordDto) {
+    public WordDto save(@Valid @ModelAttribute AddWordDto addWordDto) {
         return forbiddenWordService.save(addWordDto);
     }
 
     @PatchMapping("/{wordId}")
-    public void updateWord(@PathVariable Long wordId, @ModelAttribute UpdateWordDto updateWordDto) {
+    public void updateWord(@PathVariable Long wordId, @Valid @ModelAttribute UpdateWordDto updateWordDto) {
         forbiddenWordService.updateWord(wordId, updateWordDto);
     }
 
