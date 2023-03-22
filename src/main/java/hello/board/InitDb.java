@@ -4,10 +4,10 @@
 //import hello.board.controller.comment.dto.res.CommentResDto;
 //import hello.board.controller.member.dto.req.MemberRegisterReqDto;
 //import hello.board.controller.member.dto.res.MemberRegisterResDto;
-//import hello.board.controller.member.session.SessionConst;
 //import hello.board.controller.post.dto.req.PostWriteReqDto;
 //import hello.board.controller.post.dto.res.PostWriteResDto;
 //import hello.board.domain.comment.service.CommentService;
+//import hello.board.domain.forbiddenword.service.ForbiddenWordService;
 //import hello.board.domain.member.entity.Member;
 //import hello.board.domain.member.entity.MemberRole;
 //import hello.board.domain.member.repository.member.MemberRepository;
@@ -19,9 +19,6 @@
 //
 //import javax.annotation.PostConstruct;
 //import javax.persistence.EntityManager;
-//import javax.servlet.http.HttpServletRequest;
-//import java.util.Optional;
-//
 //
 //@Component
 //@RequiredArgsConstructor
@@ -45,6 +42,7 @@
 //        private final MemberService memberService;
 //        private final PostService postService;
 //        private final CommentService commentService;
+//        private final ForbiddenWordService forbiddenWordService;
 //
 //        public void dbInit1() {
 //            MemberRegisterResDto userA = memberService.joinMember(new MemberRegisterReqDto("안태호", 20, "AnID", "AnPW", MemberRole.ADMIN));
@@ -66,6 +64,12 @@
 //            CommentResDto comment2 = commentService.writeComment(writePost2.getId(), member, new CommentWriteDto("안산식 ㄷㄷ 역시 안산의 이병건2"));
 //            reflect();
 //            commentService.likeComment(comment2.getId(), userA.getId());
+//            reflect();
+//
+//            forbiddenWordService.save("파이썬");
+//            forbiddenWordService.save("c언어");
+//            forbiddenWordService.save("장고");
+//            forbiddenWordService.save("어셈블리어");
 //            reflect();
 //        }
 //
