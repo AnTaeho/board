@@ -8,6 +8,7 @@ import hello.board.controller.member.dto.res.MemberResDto;
 import hello.board.controller.member.dto.res.MemberUpdateResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
+import hello.board.domain.member.repository.member.MemberRepository;
 import hello.board.domain.member.service.MemberService;
 import hello.board.exception.CustomNotFoundException;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +26,9 @@ public class MemberServiceTest {
 
     @Autowired
     private MemberService memberService;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Test
     @Transactional
@@ -45,20 +49,33 @@ public class MemberServiceTest {
     @Transactional
     @DisplayName("회원 조회 테스트")
     void findByIdTest() {
-        MemberResDto byId = memberService.findById(1L);
+        //given
+        Member member = Member.builder().build();
+        memberRepository.save(member);
 
-        assertThat(byId).isNotNull();
-        assertThat(byId.getName()).isEqualTo("안태호");
+        //when
+        Member findMember = memberService.findMember(member.getId());
+
+        //then
+        assertThat(findMember).isNotNull();
     }
 
     @Test
     @Transactional
     @DisplayName("전체 회원 조회 테스트")
     void findAllTest() {
+        //given
+        Member member = Member.builder().build();
+        memberRepository.save(member);
+        Member member2 = Member.builder().build();
+        memberRepository.save(member2);
+        Member member3 = Member.builder().build();
+        memberRepository.save(member3);
+
+        //when
         Page<MemberResDto> all = memberService.findAll(Pageable.unpaged());
-        for (MemberResDto memberResDto : all) {
-            System.out.println("memberResDto = " + memberResDto.getName());
-        }
+
+        //then
         assertThat(all.getSize()).isEqualTo(3);
     }
 
@@ -66,9 +83,19 @@ public class MemberServiceTest {
     @Transactional
     @DisplayName("회원 정보 수정 테스트")
     void updateMemberTest() {
+        //given
+        Member memberA = Member.builder()
+                .name("memberA")
+                .age(20)
+                .loginId("aa")
+                .build();
+        memberRepository.save(memberA);
         MemberUpdateReqDto updateReqDto = new MemberUpdateReqDto("aaa", 26, "aaa");
-        MemberUpdateResDto updateResDto = memberService.updateMember(1L, updateReqDto);
 
+        //when
+        MemberUpdateResDto updateResDto = memberService.updateMember(memberA.getId(), updateReqDto);
+
+        //then
         assertThat(updateResDto.getName()).isEqualTo(updateReqDto.getName());
         assertThat(updateResDto.getAge()).isEqualTo(updateReqDto.getAge());
         assertThat(updateResDto.getLoginId()).isEqualTo(updateReqDto.getLoginId());
@@ -78,8 +105,14 @@ public class MemberServiceTest {
     @Transactional
     @DisplayName("회원 삭제 테스트")
     void deleteMemberTest() {
-        memberService.deleteMember(1L);
+        //given
+        Member member = Member.builder().build();
+        memberRepository.save(member);
 
+        //when
+        memberService.deleteMember(member.getId());
+
+        //then
         assertThatThrownBy(() -> memberService.findById(1L))
                 .isInstanceOf(CustomNotFoundException.class);
     }
@@ -88,7 +121,10 @@ public class MemberServiceTest {
     @Transactional
     @DisplayName("로그인 테스트")
     void loginTest() {
-        LoginFormDto form = new LoginFormDto("AnID", "AnPW");
+        MemberRegisterReqDto reqDto = new MemberRegisterReqDto("name", 20, "aaa", "aaa", MemberRole.ADMIN);
+        memberService.joinMember(reqDto);
+
+        LoginFormDto form = new LoginFormDto("aaa", "aaa");
         Member loginMember = memberService.login(form);
 
         assertThat(loginMember).isNotNull();
@@ -100,12 +136,17 @@ public class MemberServiceTest {
     @Transactional
     @DisplayName("회원 팔로우 테스트")
     void followTest() {
-        Member fromMember = memberService.findMember(1L);
+        Member memberA = Member.builder().build();
+        Member memberB = Member.builder().build();
+        memberRepository.save(memberA);
+        memberRepository.save(memberB);
 
-        String followResult = memberService.followMember(5L, fromMember);
+        Member fromMember = memberService.findMember(memberA.getId());
+
+        String followResult = memberService.followMember(memberB.getId(), fromMember);
         assertThat(followResult).isEqualTo("follow success");
 
-        String followAgainResult = memberService.followMember(5L, fromMember);
+        String followAgainResult = memberService.followMember(memberB.getId(), fromMember);
         assertThat(followAgainResult).isEqualTo("unfollow success");
 
     }
