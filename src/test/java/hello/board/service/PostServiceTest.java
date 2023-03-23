@@ -1,5 +1,6 @@
 package hello.board.service;
 
+import hello.board.controller.forbiddenword.dto.req.AddWordDto;
 import hello.board.controller.member.dto.req.MemberRegisterReqDto;
 import hello.board.controller.member.dto.res.MemberRegisterResDto;
 import hello.board.controller.post.dto.req.PostUpdateReqDto;
@@ -7,10 +8,12 @@ import hello.board.controller.post.dto.req.PostWriteReqDto;
 import hello.board.controller.post.dto.res.PostResDto;
 import hello.board.controller.post.dto.res.PostUpdateResDto;
 import hello.board.controller.post.dto.res.PostWriteResDto;
+import hello.board.domain.forbiddenword.service.ForbiddenWordService;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
 import hello.board.domain.member.service.MemberService;
 import hello.board.domain.post.entity.Post;
+import hello.board.domain.post.entity.PostStatus;
 import hello.board.domain.post.repository.PostRepository;
 import hello.board.domain.post.service.PostService;
 import hello.board.exception.CustomNotFoundException;
@@ -35,6 +38,8 @@ public class PostServiceTest {
 
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private ForbiddenWordService forbiddenWordService;
 
     @Test
     @Transactional
@@ -53,8 +58,6 @@ public class PostServiceTest {
         assertThat(singlePost.getMemberName()).isEqualTo(member.getName());
         assertThat(singlePost.getTitle()).isEqualTo(writeReqDto.getTitle());
         assertThat(singlePost.getContent()).isEqualTo(writeReqDto.getContent());
-
-
     }
 
     @Test
@@ -149,6 +152,27 @@ public class PostServiceTest {
         //then
         assertThatThrownBy(() -> postService.findPost(postWriteResDto.getId()))
                 .isInstanceOf(CustomNotFoundException.class);
+    }
+
+    @Test
+    void postWithForbiddenTest() {
+        //given
+        forbiddenWordService.save(new AddWordDto("fuck"));
+
+        //when
+        Member member = registerMember();
+        PostWriteReqDto writeReqDto = new PostWriteReqDto("title", "good");
+        PostWriteResDto postWriteResDto = postService.writePost(member, writeReqDto);
+
+        PostWriteReqDto writeReqDto2 = new PostWriteReqDto("title", "fuck");
+        PostWriteResDto postWriteResDto2 = postService.writePost(member, writeReqDto2);
+
+        //then
+        Post post = postService.findPost(postWriteResDto.getId());
+        Post post2 = postService.findPost(postWriteResDto2.getId());
+
+        assertThat(post.getStatus()).isEqualTo(PostStatus.POSTED);
+        assertThat(post2.getStatus()).isEqualTo(PostStatus.WAITING_TO_POST);
     }
 
     private Member registerMember() {
