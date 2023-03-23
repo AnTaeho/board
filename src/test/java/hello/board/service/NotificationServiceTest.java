@@ -2,6 +2,8 @@ package hello.board.service;
 
 import hello.board.controller.comment.dto.req.CommentWriteDto;
 import hello.board.controller.comment.dto.res.CommentResDto;
+import hello.board.controller.member.dto.req.MemberRegisterReqDto;
+import hello.board.controller.member.dto.res.MemberRegisterResDto;
 import hello.board.controller.notification.dto.req.NotificationUpdateReqDto;
 import hello.board.controller.notification.dto.res.NotificationResDto;
 import hello.board.controller.notification.dto.res.NotificationUpdateResDto;
@@ -10,6 +12,7 @@ import hello.board.controller.post.dto.res.PostWriteResDto;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.service.CommentService;
 import hello.board.domain.member.entity.Member;
+import hello.board.domain.member.entity.MemberRole;
 import hello.board.domain.member.service.MemberService;
 import hello.board.domain.notification.entity.CommentNotification;
 import hello.board.domain.notification.entity.Notification;
@@ -93,8 +96,8 @@ public class NotificationServiceTest {
     @DisplayName("게시글 작성시 작성자를 팔로우한 회원에게 알람 생성 테스트")
     void followMemberPostNotificationTest() {
         //given
-        Member fromMember = memberService.findMember(1L);
-        Member toMember = memberService.findMember(5L);
+        Member fromMember = registerMember();
+        Member toMember = registerMember();
         memberService.followMember(toMember.getId(), fromMember);
 
         //when
@@ -115,8 +118,11 @@ public class NotificationServiceTest {
     @DisplayName("댓글 작성시 해당 게시글의 작성자에게 알람 생성 테스트")
     void commentNotificationTest() {
         //given
-        Post post = postService.findPost(2L);
-        Member commentMember = memberService.findMember(5L);
+        Member postMember = registerMember();
+        PostWriteReqDto writeReqDto = new PostWriteReqDto("title", "content");
+        PostWriteResDto postWriteResDto = postService.writePost(postMember, writeReqDto);
+        Post post = postService.findPost(postWriteResDto.getId());
+        Member commentMember = registerMember();
 
         //when
         CommentResDto comment = commentService.writeComment(post.getId(), commentMember, new CommentWriteDto("content"));
@@ -135,12 +141,16 @@ public class NotificationServiceTest {
     @DisplayName("댓글 좋아요시 해당 댓글 좋아요 주인에게 알람 생성 테스트")
     void commentLikeNotificationTest() {
         //given
-        Long commentId = 3L;
-        Long likeMemberId = 5L;
-        Member likeMember = memberService.findMember(likeMemberId);
+        Member member = registerMember();
+        PostWriteReqDto writeReqDto = new PostWriteReqDto("title", "content");
+        PostWriteResDto postWriteResDto = postService.writePost(member, writeReqDto);
+        CommentWriteDto writeDto = new CommentWriteDto("content");
+        CommentResDto commentResDto = commentService.writeComment(postWriteResDto.getId(), member, writeDto);
+
+        Member likeMember = registerMember();
 
         //when
-        commentService.likeComment(commentId, likeMemberId);
+        commentService.likeComment(commentResDto.getId(), likeMember.getId());
         Comment likedComment = commentService.findComment(3L);
         Member notifiedMember = likedComment.getPost().getMember();
 
@@ -152,6 +162,12 @@ public class NotificationServiceTest {
             assertThat(notification.getNotifiedMember().getId()).isEqualTo(notifiedMember.getId());
 //            assertThat(notification.getOwnerComment()).isEqualTo(likedComment);
         }
+    }
+
+    private Member registerMember() {
+        MemberRegisterReqDto registerReqDto = new MemberRegisterReqDto("memberA", 20, "aaa", "aaa", MemberRole.ADMIN);
+        MemberRegisterResDto memberRegisterResDto = memberService.joinMember(registerReqDto);
+        return memberService.findMember(memberRegisterResDto.getId());
     }
 
 }
