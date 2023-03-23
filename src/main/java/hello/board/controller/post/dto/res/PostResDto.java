@@ -32,8 +32,11 @@ public class PostResDto {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.memberName = post.getMember().getName();
-        for (Comment comment : post.getComments()) {
-            commentResDtos.add(new CommentResDto(comment));
+        List<Comment> comments = post.getComments();
+        if (comments != null) {
+            for (Comment comment : post.getComments()) {
+                commentResDtos.add(new CommentResDto(comment));
+            }
         }
     }
 }
