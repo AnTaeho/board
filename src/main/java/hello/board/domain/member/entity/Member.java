@@ -33,12 +33,15 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
+    @Builder.Default
     @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
     private List<Post> posts = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "commentMember", cascade = CascadeType.REMOVE)
     private List<Comment> comments = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "notifiedMember", cascade = CascadeType.REMOVE)
     private List<Notification> notifications = new ArrayList<>();
 

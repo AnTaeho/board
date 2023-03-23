@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,7 @@ public class InitDb {
 
 //    @PostConstruct
     public void init() {
+        ForbiddenWordCache.setForbiddenWords(new HashSet<>());
         initService.dbForbiddenWord();
         initService.dbInit1();
         initService.dbInit2();

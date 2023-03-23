@@ -3,8 +3,13 @@ package hello.board.service;
 import hello.board.controller.comment.dto.req.CommentUpdateDto;
 import hello.board.controller.comment.dto.req.CommentWriteDto;
 import hello.board.controller.comment.dto.res.CommentResDto;
+import hello.board.controller.member.dto.req.MemberRegisterReqDto;
+import hello.board.controller.member.dto.res.MemberRegisterResDto;
+import hello.board.controller.post.dto.req.PostWriteReqDto;
+import hello.board.controller.post.dto.res.PostWriteResDto;
 import hello.board.domain.comment.service.CommentService;
 import hello.board.domain.member.entity.Member;
+import hello.board.domain.member.entity.MemberRole;
 import hello.board.domain.member.service.MemberService;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.service.PostService;
@@ -35,8 +40,13 @@ public class CommentServiceTest {
     @Transactional
     @DisplayName("전체 댓글 조회 테스트")
     void findAllComment() {
+        //given
+        testSetting();
+
+        //when
         List<CommentResDto> allComments = commentService.findAllComments();
 
+        //then
         assertThat(allComments.size()).isEqualTo(3);
     }
 
@@ -44,21 +54,16 @@ public class CommentServiceTest {
     @Transactional
     @DisplayName("게시글의 전체 댓글 조회 테스트")
     void findAllCommentOfPost() {
-        List<CommentResDto> commentsByPost = commentService.findCommentsOfPost(2L);
-        Post post = postService.findPost(2L);
-        assertThat(commentsByPost.size()).isEqualTo(1);
+        //given
+        PostWriteResDto postWriteResDto = testSetting();
+
+        //when
+        List<CommentResDto> commentsByPost = commentService.findCommentsOfPost(postWriteResDto.getId());
+        Post post = postService.findPost(postWriteResDto.getId());
+
+        //then
+        assertThat(commentsByPost.size()).isEqualTo(3);
         assertThat(commentsByPost.get(0).getWriter()).isEqualTo(post.getMember().getName());
-
-        List<CommentResDto> commentsByPost2 = commentService.findCommentsOfPost(6L);
-        Post post2 = postService.findPost(6L);
-        assertThat(commentsByPost2.size()).isEqualTo(1);
-        assertThat(commentsByPost2.get(0).getWriter()).isEqualTo(post2.getMember().getName());
-
-        List<CommentResDto> commentsByPost3 = commentService.findCommentsOfPost(10L);
-        Post post3 = postService.findPost(10L);
-        assertThat(commentsByPost3.size()).isEqualTo(1);
-        assertThat(commentsByPost3.get(0).getWriter()).isEqualTo(post3.getMember().getName());
-
     }
 
     // TODO : 회원의 댓글 조회 및 테스트
@@ -67,11 +72,17 @@ public class CommentServiceTest {
     @Transactional
     @DisplayName("댓글 작성 테스트")
     void writeCommentTest() {
-        Member loginMember = memberService.findMember(1L);
-        CommentWriteDto writeDto = new CommentWriteDto("comment-content");
-        CommentResDto commentResDto = commentService.writeComment(2L, loginMember, writeDto);
+        //given
+        Member member = registerMember();
+        PostWriteReqDto writeReqDto = new PostWriteReqDto("title", "content");
+        PostWriteResDto postWriteResDto = postService.writePost(member, writeReqDto);
+        CommentWriteDto writeDto = new CommentWriteDto("content");
 
-        assertThat(commentResDto.getWriter()).isEqualTo(loginMember.getName());
+        //when
+        CommentResDto commentResDto = commentService.writeComment(postWriteResDto.getId(), member, writeDto);
+
+        //then
+        assertThat(commentResDto.getWriter()).isEqualTo(member.getName());
         assertThat(commentResDto.getContent()).isEqualTo(writeDto.getContent());
     }
 
@@ -79,19 +90,37 @@ public class CommentServiceTest {
     @Transactional
     @DisplayName("댓글 수정 테스트")
     void updateCommentTest() {
-        CommentUpdateDto updateDto = new CommentUpdateDto("new-content");
-        CommentResDto commentResDto = commentService.updateComment(3L, updateDto);
+        //given
+        Member member = registerMember();
+        PostWriteReqDto writeReqDto = new PostWriteReqDto("title", "content");
+        PostWriteResDto postWriteResDto = postService.writePost(member, writeReqDto);
+        CommentWriteDto writeDto = new CommentWriteDto("content");
+        CommentResDto commentResDto = commentService.writeComment(postWriteResDto.getId(), member, writeDto);
 
-        assertThat(commentResDto.getContent()).isEqualTo(updateDto.getContent());
+        //when
+        CommentUpdateDto updateDto = new CommentUpdateDto("new-content");
+        CommentResDto updateResDto = commentService.updateComment(commentResDto.getId(), updateDto);
+
+        //then
+        assertThat(updateResDto.getContent()).isEqualTo(updateDto.getContent());
     }
 
     @Test
     @Transactional
     @DisplayName("댓글 삭제 테스트")
     void deleteCommentTest() {
-        commentService.deleteComment(3L);
+        //given
+        Member member = registerMember();
+        PostWriteReqDto writeReqDto = new PostWriteReqDto("title", "content");
+        PostWriteResDto postWriteResDto = postService.writePost(member, writeReqDto);
+        CommentWriteDto writeDto = new CommentWriteDto("content");
+        CommentResDto commentResDto = commentService.writeComment(postWriteResDto.getId(), member, writeDto);
 
-        assertThatThrownBy(() -> commentService.findComment(3L))
+        //when
+        commentService.deleteComment(commentResDto.getId());
+
+        //then
+        assertThatThrownBy(() -> commentService.findComment(commentResDto.getId()))
                 .isInstanceOf(CustomNotFoundException.class);
     }
 
@@ -99,11 +128,37 @@ public class CommentServiceTest {
     @Transactional
     @DisplayName("댓글 좋아요 테스트")
     void likeCommentTest() {
-        String likeResult = commentService.likeComment(3L, 5L);
+        //given
+        Member member = registerMember();
+        PostWriteReqDto writeReqDto = new PostWriteReqDto("title", "content");
+        PostWriteResDto postWriteResDto = postService.writePost(member, writeReqDto);
+        CommentWriteDto writeDto = new CommentWriteDto("content");
+        CommentResDto commentResDto = commentService.writeComment(postWriteResDto.getId(), member, writeDto);
+
+        //when
+        Member otherMember = registerMember();
+        String likeResult = commentService.likeComment(commentResDto.getId(), otherMember.getId());
         assertThat(likeResult).isEqualTo("Like success");
 
-        String likeAgainResult = commentService.likeComment(3L, 5L);
+        //then
+        String likeAgainResult = commentService.likeComment(commentResDto.getId(), otherMember.getId());
         assertThat(likeAgainResult).isEqualTo("Like deleted");
 
+    }
+
+    private PostWriteResDto testSetting() {
+        Member member = registerMember();
+        PostWriteReqDto writeReqDto = new PostWriteReqDto("title", "content");
+        PostWriteResDto postWriteResDto = postService.writePost(member, writeReqDto);
+        commentService.writeComment(postWriteResDto.getId(), member, new CommentWriteDto("content"));
+        commentService.writeComment(postWriteResDto.getId(), member, new CommentWriteDto("content"));
+        commentService.writeComment(postWriteResDto.getId(), member, new CommentWriteDto("content"));
+        return postWriteResDto;
+    }
+
+    private Member registerMember() {
+        MemberRegisterReqDto registerReqDto = new MemberRegisterReqDto("memberA", 20, "aaa", "aaa", MemberRole.ADMIN);
+        MemberRegisterResDto memberRegisterResDto = memberService.joinMember(registerReqDto);
+        return memberService.findMember(memberRegisterResDto.getId());
     }
 }
