@@ -10,9 +10,12 @@ import lombok.Setter;
 @AllArgsConstructor
 public class WordResDto {
 
+    private Long id;
+
     private String word;
 
     public WordResDto(ForbiddenWord forbiddenWord) {
+        this.id = forbiddenWord.getId();
         this.word = forbiddenWord.getWord();
     }
 }

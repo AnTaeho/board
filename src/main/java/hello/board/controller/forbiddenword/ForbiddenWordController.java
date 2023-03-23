@@ -2,6 +2,7 @@ package hello.board.controller.forbiddenword;
 
 import hello.board.controller.forbiddenword.dto.req.AddWordDto;
 import hello.board.controller.forbiddenword.dto.req.UpdateWordDto;
+import hello.board.controller.forbiddenword.dto.res.WordCacheDto;
 import hello.board.controller.forbiddenword.dto.res.WordResDto;
 import hello.board.domain.forbiddenword.service.ForbiddenWordCache;
 import hello.board.domain.forbiddenword.service.ForbiddenWordService;
@@ -30,9 +31,9 @@ public class ForbiddenWordController {
     }
 
     @GetMapping("/cache")
-    public List<WordResDto> findAllCache() {
+    public List<WordCacheDto> findAllCache() {
         return ForbiddenWordCache.getForbiddenWords()
-                .stream().map(WordResDto::new)
+                .stream().map(WordCacheDto::new)
                 .collect(Collectors.toList());
     }
 
