@@ -3,10 +3,7 @@ package hello.board.domain.notification.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import hello.board.controller.notification.dto.req.NotificationUpdateReqDto;
 import hello.board.domain.member.entity.Member;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -15,7 +12,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Notification {
 
     @Id @GeneratedValue

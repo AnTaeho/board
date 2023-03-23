@@ -26,18 +26,18 @@ public class CommentLike {
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    public CommentLike(Member findMember, Comment findComment) {
+    private CommentLike(Member findMember, Comment findComment) {
         this.member = findMember;
         this.comment = findComment;
     }
 
-    public CommentLike(Member findMember, Comment findComment, CommentLikeNotification notification) {
-        this.member = findMember;
-        this.comment = findComment;
-        setNotification(notification);
+    public static CommentLike makeCommentLike(Member loginMember, Comment findComment) {
+        return new CommentLike(loginMember, findComment);
     }
 
-    private void setNotification(CommentLikeNotification notification) {
-        notification.setCommentLike(this);
+    public static CommentLike makeCommentLikeWithNotification(Member loginMember, Comment findComment, CommentLikeNotification notification) {
+        CommentLike commentLike = new CommentLike(loginMember, findComment);
+        notification.setCommentLike(commentLike);
+        return commentLike;
     }
 }

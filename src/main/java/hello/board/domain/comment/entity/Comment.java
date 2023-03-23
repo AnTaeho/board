@@ -45,19 +45,21 @@ public class Comment extends BaseTimeEntity {
     @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<CommentLike> commentLikeList = new ArrayList<>();
 
-    public Comment(Member commentMember, String content, Post post) {
+    private Comment(Member commentMember, String content, Post post) {
         this.writer = commentMember.getName();
         this.commentMember = commentMember;
         this.content = content;
         setPost(post);
     }
 
-    public Comment(Member commentMember, String content, Post post, Comment comment) {
-        this.writer = commentMember.getName();
-        this.commentMember = commentMember;
-        this.content = content;
-        this.parent = comment;
-        setPost(post);
+    public static Comment makeComment(Member commentMember, String content, Post post) {
+        return new Comment(commentMember, content, post);
+    }
+
+    public static Comment makeChildComment(Member commentMember, String content, Post post, Comment comment) {
+        Comment childComment = new Comment(commentMember, content, post);
+        childComment.parent = comment;
+        return childComment;
     }
 
     //== 연관관계 메서드 ==//

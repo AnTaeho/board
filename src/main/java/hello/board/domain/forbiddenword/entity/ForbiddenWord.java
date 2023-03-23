@@ -18,8 +18,12 @@ public class ForbiddenWord {
 
     private String word;
 
-    public ForbiddenWord(String word) {
+    private ForbiddenWord(String word) {
         this.word = word;
+    }
+
+    public static ForbiddenWord from(String word) {
+        return new ForbiddenWord(word);
     }
 
     public void updateWord(String updateWord) {

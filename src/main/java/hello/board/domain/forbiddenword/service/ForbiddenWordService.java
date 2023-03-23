@@ -22,7 +22,7 @@ public class ForbiddenWordService {
 
     @Transactional
     public WordResDto save(AddWordDto addWordDto) {
-        ForbiddenWord saveWord = forbiddenWordRepository.save(new ForbiddenWord(addWordDto.getWord()));
+        ForbiddenWord saveWord = forbiddenWordRepository.save(ForbiddenWord.from(addWordDto.getWord()));
         ForbiddenWordCache.addForbiddenWord(saveWord);
         return new WordResDto(saveWord);
     }

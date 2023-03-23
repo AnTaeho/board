@@ -5,12 +5,11 @@ import hello.board.domain.member.entity.Member;
 import hello.board.domain.post.entity.Post;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Getter @Setter
+@Getter
 @DiscriminatorValue("P")
 @NoArgsConstructor
 public class PostNotification extends Notification{
@@ -20,10 +19,14 @@ public class PostNotification extends Notification{
     @JoinColumn(name = "post_id")
     private Post ownerPost;
 
-    public PostNotification(String writer, Member member, Post post) {
+    private PostNotification(String writer, Member member, Post post) {
         inputInfo(post.getTitle(), writer, member);
         this.ownerPost = post;
         member.getNotifications().add(this);
+    }
+
+    public static PostNotification from(String writer, Member member, Post post) {
+        return new PostNotification(writer, member, post);
     }
 
 }

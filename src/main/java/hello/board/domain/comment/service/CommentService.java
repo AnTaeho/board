@@ -67,7 +67,7 @@ public class CommentService {
     @Transactional
     public CommentResDto writeComment(Long postId, Member commentMember, CommentWriteDto writeDto) {
         Post findPost = findPostWithMemberInfo(postId);
-        Comment newComment = new Comment(commentMember, writeDto.getContent(), findPost);
+        Comment newComment = Comment.makeComment(commentMember, writeDto.getContent(), findPost);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
@@ -80,14 +80,14 @@ public class CommentService {
 
     private Notification makeCommentNotification(Member commentMember, Post findPost, Comment newComment) {
         Member notificatiedMember = findPost.getMember();
-        return new CommentNotification(commentMember.getName(), notificatiedMember, newComment);
+        return CommentNotification.from(commentMember.getName(), notificatiedMember, newComment);
     }
 
     @Transactional
     public CommentResDto writeChildComment(Long postId, Long commentId, Member commentMember, CommentWriteDto writeDto) {
         Post findPost = findPostWithCommentInfo(postId);
         Comment findComment = findComment(commentId);
-        Comment newComment = new Comment(commentMember, writeDto.getContent(), findPost, findComment);
+        Comment newComment = Comment.makeChildComment(commentMember, writeDto.getContent(), findPost, findComment);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
@@ -148,10 +148,10 @@ public class CommentService {
         Member loginMember = findMember(memberId);
 
         if (commentOwner == loginMember) {
-            return new CommentLike(loginMember, findComment);
+            return CommentLike.makeCommentLike(loginMember, findComment);
         }
 
-        return new CommentLike(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner));
+        return CommentLike.makeCommentLikeWithNotification(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner));
     }
 
     private Member findCommentOwner(Comment findComment) {
@@ -159,7 +159,7 @@ public class CommentService {
     }
 
     private CommentLikeNotification makeCommentLikeNotification(Member loginMember, Member commentOwner) {
-        return notificationRepository.save(new CommentLikeNotification(loginMember, commentOwner));
+        return notificationRepository.save(CommentLikeNotification.from(loginMember, commentOwner));
     }
 
     /**

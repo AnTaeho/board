@@ -5,13 +5,12 @@ import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
 @DiscriminatorValue("C")
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class CommentNotification extends Notification{
 
@@ -20,10 +19,14 @@ public class CommentNotification extends Notification{
     @JoinColumn(name = "comment_id")
     private Comment ownerComment;
 
-    public CommentNotification(String writer, Member member, Comment comment) {
+    private CommentNotification(String writer, Member member, Comment comment) {
         inputInfo(comment.getContent(), writer, member);
         this.ownerComment = comment;
         member.getNotifications().add(this);
+    }
+
+    public static CommentNotification from(String writer, Member member, Comment comment) {
+        return new CommentNotification(writer, member, comment);
     }
 
 }

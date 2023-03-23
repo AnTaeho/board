@@ -102,7 +102,7 @@ public class PostService {
     }
 
     private void saveNotification(Member loginMember, Post post, Member member) {
-        notificationRepository.save(new PostNotification(loginMember.getName(), member, post));
+        notificationRepository.save(PostNotification.from(loginMember.getName(), member, post));
     }
 
     /**
