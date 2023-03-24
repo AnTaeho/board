@@ -20,7 +20,10 @@ public class CommentLikeRepositoryImpl implements CommentLikeRepositoryCustom {
         return queryFactory
                 .select(commentLike)
                 .from(commentLike)
-                .where(commentLike.comment.id.eq(commentId), commentLike.member.id.eq(memberId))
+                .where(
+                        commentLike.comment.id.eq(commentId),
+                        commentLike.member.id.eq(memberId)
+                )
                 .fetchOne();
     }
 

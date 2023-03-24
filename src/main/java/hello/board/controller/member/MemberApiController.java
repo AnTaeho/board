@@ -8,6 +8,7 @@ import hello.board.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -40,7 +41,15 @@ public class MemberApiController {
     }
 
     @PatchMapping("/edit/{memberId}")
-    public ResponseEntity<MemberUpdateResDto> updateMember(@PathVariable("memberId") Long memberId, @Valid @ModelAttribute MemberUpdateReqDto memberUpdateReqDto) {
+    public ResponseEntity<MemberUpdateResDto> updateMember(@PathVariable("memberId") Long memberId,
+                                                           @Valid @ModelAttribute MemberUpdateReqDto memberUpdateReqDto,
+                                                           BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .build();
+        }
+
         MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)

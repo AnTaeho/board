@@ -1,5 +1,6 @@
 package hello.board.domain.member.repository.follow;
 
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.domain.member.entity.Follow;
 import hello.board.domain.member.entity.Member;
@@ -23,17 +24,21 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
     public void deleteByToMemberAndFromMember(Member toMember, Member fromMember) {
         queryFactory
                 .delete(follow)
-                .where(follow.toMember.id.eq(toMember.getId()), follow.fromMember.id.eq(fromMember.getId()))
+                .where(
+                        follow.toMember.id.eq(toMember.getId()),
+                        follow.fromMember.id.eq(fromMember.getId())
+                )
                 .execute();
     }
 
     @Override
     public List<Member> findAllByToMember(Member toMember) {
-        return queryFactory
+        JPAQuery<Follow> result = queryFactory
                 .selectFrom(follow)
                 .where(follow.toMember.id.eq(toMember.getId()))
-                .fetchAll()
-                .stream()
+                .fetchAll();
+
+        return result.stream()
                 .map(Follow::getFromMember)
                 .collect(Collectors.toList());
     }
