@@ -107,7 +107,7 @@ public class MemberService {
             return "자기 자신은 팔로우 할 수 없습니다.";
         }
         if (followRepository.isAlreadyFollow(toMember, fromMember)) {
-            followRepository.deleteByToMemberAndFromMember(toMember, fromMember);
+            followRepository.deleteByFromMemberAndToMember(fromMember, toMember);
             return "unfollow success";
         }
         followRepository.save(new Follow(fromMember, toMember));

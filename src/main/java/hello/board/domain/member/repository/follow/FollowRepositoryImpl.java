@@ -21,17 +21,6 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
     }
 
     @Override
-    public void deleteByToMemberAndFromMember(Member toMember, Member fromMember) {
-        queryFactory
-                .delete(follow)
-                .where(
-                        follow.toMember.id.eq(toMember.getId()),
-                        follow.fromMember.id.eq(fromMember.getId())
-                )
-                .execute();
-    }
-
-    @Override
     public List<Member> findAllByToMember(Member toMember) {
         JPAQuery<Follow> result = queryFactory
                 .selectFrom(follow)
