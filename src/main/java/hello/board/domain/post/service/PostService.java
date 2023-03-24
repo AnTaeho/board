@@ -38,7 +38,7 @@ public class PostService {
      * @return PostResDto
      */
     public PostResDto findSinglePost(Long postId) {
-        Post findPost = findPostWithMemberInfo(postId);
+        Post findPost = findWithMemberByPostId(postId);
         return new PostResDto(findPost);
     }
 
@@ -49,7 +49,7 @@ public class PostService {
      * @return List<PostResDto>
      */
     public List<PostResDto> findPostsOfMember(Long memberId) {
-        return postRepository.findPostsOfMember(memberId)
+        return postRepository.findPostsByMemberId(memberId)
                 .stream()
                 .map(PostResDto::new)
                 .collect(Collectors.toList());
@@ -113,7 +113,7 @@ public class PostService {
      */
     @Transactional
     public PostUpdateResDto updatePost(Long postId, PostUpdateReqDto postUpdateReqDto) {
-        Post findPost = findPostWithMemberInfo(postId);
+        Post findPost = findWithMemberByPostId(postId);
         findPost.updateInfo(postUpdateReqDto);
         return new PostUpdateResDto(findPost);
     }
@@ -146,8 +146,8 @@ public class PostService {
                 });
     }
 
-    private Post findPostWithMemberInfo(Long postId) {
-        return postRepository.findPostWithMemberInfo(postId)
+    private Post findWithMemberByPostId(Long postId) {
+        return postRepository.findWithMemberAndCommentByPostId(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });

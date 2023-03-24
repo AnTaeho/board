@@ -8,5 +8,4 @@ public interface CommentRepositoryCustom {
 
     Optional<Comment> findCommentWithMemberInfo(Long commentId);
 
-    Optional<Comment> findCommentWithPostInfo(Long commentId);
 }

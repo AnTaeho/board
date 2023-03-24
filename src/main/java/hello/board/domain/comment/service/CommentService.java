@@ -139,7 +139,7 @@ public class CommentService {
     }
 
     private CommentLike findLike(Long commentId, Long memberId) {
-        return commentLikeRepository.haveNoLike(commentId, memberId);
+        return commentLikeRepository.findByCommentIdAndMemberId(commentId, memberId);
     }
 
     private CommentLike pressCommentLike(Long memberId, Comment findComment) {
@@ -181,7 +181,7 @@ public class CommentService {
     }
 
     public Comment findCommentWithPostInfo(Long commentId) {
-        return commentRepository.findCommentWithPostInfo(commentId)
+        return commentRepository.findWithPostByCommentId(commentId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",commentId));
         });
@@ -195,14 +195,14 @@ public class CommentService {
     }
 
     private Post findPostWithCommentInfo(Long postId) {
-        return postRepository.findPostWithCommentInfo(postId)
+        return postRepository.findWithCommentByPostId(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
     private Post findPostWithMemberInfo(Long postId) {
-        return postRepository.findPostWithMemberInfo(postId)
+        return postRepository.findWithMemberAndCommentByPostId(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });

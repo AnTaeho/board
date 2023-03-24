@@ -132,7 +132,7 @@ public class MemberService {
     }
 
     private Member findMemberWithAllInfo(Long memberId) {
-        return memberRepository.findMemberWithAllInfo(memberId)
+        return memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",memberId));
                 });

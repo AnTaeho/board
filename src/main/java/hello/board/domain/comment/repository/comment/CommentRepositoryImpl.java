@@ -30,15 +30,4 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
         return Optional.ofNullable(findComment);
     }
 
-    @Override
-    public Optional<Comment> findCommentWithPostInfo(Long commentId) {
-        Comment findComment = queryFactory
-                .selectFrom(comment)
-                .join(comment.post, post).fetchJoin()
-                .where(comment.id.eq(commentId))
-                .fetchOne();
-
-        return Optional.ofNullable(findComment);
-    }
-
 }
