@@ -52,6 +52,10 @@ dependencies {
 	//테스트 코드용 db h2
 	runtimeOnly 'com.h2database:h2'
 
+	//스프링 시큐리티
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	testImplementation 'org.springframework.security:spring-security-test'
+
 }
 
 tasks.named('test') {
