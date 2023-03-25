@@ -21,7 +21,7 @@ public class ForbiddenWordService {
     private final ForbiddenWordRepository forbiddenWordRepository;
 
     @Transactional
-    public WordResDto save(AddWordDto addWordDto) {
+    public WordResDto save(final AddWordDto addWordDto) {
         ForbiddenWord saveWord = forbiddenWordRepository.save(ForbiddenWord.from(addWordDto.getWord()));
         ForbiddenWordCache.addForbiddenWord(saveWord);
         return new WordResDto(saveWord);
@@ -33,22 +33,22 @@ public class ForbiddenWordService {
                 .collect(Collectors.toList());
     }
 
-    public WordResDto findOne(Long wordId) {
+    public WordResDto findOne(final Long wordId) {
         return new WordResDto(findWord(wordId));
     }
 
     @Transactional
-    public void updateWord(Long wordId, UpdateWordDto updateWordDto) {
+    public void updateWord(final Long wordId, final UpdateWordDto updateWordDto) {
         ForbiddenWord findWord = findWord(wordId);
         findWord.updateWord(updateWordDto.getWord());
     }
 
     @Transactional
-    public void deleteWord(Long wordId) {
+    public void deleteWord(final Long wordId) {
         forbiddenWordRepository.deleteById(wordId);
     }
 
-    public ForbiddenWord findWord(Long wordId) {
+    public ForbiddenWord findWord(final Long wordId) {
         return forbiddenWordRepository.findById(wordId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",wordId));

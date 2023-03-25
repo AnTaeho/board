@@ -25,8 +25,9 @@ public class MemberApiController {
     private final MemberService memberService;
 
     @PostMapping("/{memberId}/follow")
-    public ResponseEntity<String> followMember(@PathVariable Long memberId, HttpServletRequest request) {
-        String result = memberService.followMember(memberId, findLoginMember(request));
+    public ResponseEntity<String> followMember(@PathVariable final Long memberId,
+                                               HttpServletRequest request) {
+        final String result = memberService.followMember(memberId, findLoginMember(request));
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(result);
@@ -34,30 +35,29 @@ public class MemberApiController {
 
     @GetMapping
     public ResponseEntity<MemberResDto> findById(@RequestParam Long id) {
-        MemberResDto findMember = memberService.findById(id);
+        final MemberResDto findMember = memberService.findById(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(findMember);
     }
 
     @PatchMapping("/edit/{memberId}")
-    public ResponseEntity<MemberUpdateResDto> updateMember(@PathVariable("memberId") Long memberId,
-                                                           @Valid @ModelAttribute MemberUpdateReqDto memberUpdateReqDto,
+    public ResponseEntity<MemberUpdateResDto> updateMember(@PathVariable("memberId") final Long memberId,
+                                                           @Valid @ModelAttribute final MemberUpdateReqDto memberUpdateReqDto,
                                                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
-
-        MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
+        final MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(memberUpdateResDto);
     }
 
     @DeleteMapping("/delete/{memberId}")
-    public ResponseEntity<String> deleteMember(@PathVariable("memberId") Long memberId) {
+    public ResponseEntity<String> deleteMember(@PathVariable("memberId") final Long memberId) {
         memberService.deleteMember(memberId);
         return ResponseEntity
                 .status(HttpStatus.OK)

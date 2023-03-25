@@ -21,7 +21,7 @@ public class NotificationService {
 
     private final NotificationRepository notificationRepository;
 
-    public NotificationResDto findById(Long id) {
+    public NotificationResDto findById(final Long id) {
         return new NotificationResDto(findNotification(id));
     }
 
@@ -32,23 +32,23 @@ public class NotificationService {
                 .collect(Collectors.toList());
     }
 
-    public List<Notification> findAllByMember(Member member) {
+    public List<Notification> findAllByMember(final Member member) {
         return notificationRepository.findAllByMemberId(member.getId());
     }
 
     @Transactional
-    public NotificationUpdateResDto updateNotification(Long noticeId, NotificationUpdateReqDto UpdateReqDto) {
+    public NotificationUpdateResDto updateNotification(final Long noticeId, final NotificationUpdateReqDto UpdateReqDto) {
         Notification updateNotification = findNotification(noticeId);
         updateNotification.updateInfo(UpdateReqDto);
         return new NotificationUpdateResDto(updateNotification);
     }
 
     @Transactional
-    public void deleteNotification(Long id) {
+    public void deleteNotification(final Long id) {
         notificationRepository.deleteById(id);
     }
 
-    private Notification findNotification(Long id) {
+    private Notification findNotification(final Long id) {
         return notificationRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",id));

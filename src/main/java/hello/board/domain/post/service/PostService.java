@@ -37,8 +37,8 @@ public class PostService {
      * 게시글 아이디를 받아서 게시글 폼을 반환
      * @return PostResDto
      */
-    public PostResDto findSinglePost(Long postId) {
-        Post findPost = findWithMemberByPostId(postId);
+    public PostResDto findSinglePost(final Long postId) {
+        final Post findPost = findWithMemberByPostId(postId);
         return new PostResDto(findPost);
     }
 
@@ -48,7 +48,7 @@ public class PostService {
      * 페이징 기능 추가 가능
      * @return List<PostResDto>
      */
-    public List<PostResDto> findPostsOfMember(Long memberId) {
+    public List<PostResDto> findPostsOfMember(final Long memberId) {
         return postRepository.findPostsByMemberId(memberId)
                 .stream()
                 .map(PostResDto::new)
@@ -60,14 +60,14 @@ public class PostService {
      * 모든 게시글을 찾아서 페이징해서 반환한다.
      * @return Page<PostResDto>
      */
-    public Page<PostResDto> findAllPostedPost(Pageable pageable) {
+    public Page<PostResDto> findAllPostedPost(final Pageable pageable) {
         return postRepository.findAllPostedPost(pageable);
     }
 
     /**
      * 등록 대기중인 모든 게시글 찾기
      */
-    public Page<PostResDto> findAllWaitingPost(Pageable pageable) {
+    public Page<PostResDto> findAllWaitingPost(final Pageable pageable) {
         return postRepository.findAllAllWaitingPost(pageable);
     }
 
@@ -78,8 +78,8 @@ public class PostService {
      * @return PostWriteResDto
      */
     @Transactional
-    public PostWriteResDto writePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
-        Post post = savePost(loginMember, postWriteReqDto);
+    public PostWriteResDto writePost(final Member loginMember, final PostWriteReqDto postWriteReqDto) {
+        final Post post = savePost(loginMember, postWriteReqDto);
         for (Member member : followRepository.findAllByToMember(loginMember)) {
             saveNotification(loginMember, post, member);
         }
@@ -87,7 +87,7 @@ public class PostService {
     }
 
     //입력 관련 메서드
-    private Post savePost(Member loginMember, PostWriteReqDto postWriteReqDto) {
+    private Post savePost(final Member loginMember, final PostWriteReqDto postWriteReqDto) {
         Post post = Post.createPost(loginMember, postWriteReqDto);
         checkForbiddenWord(post);
         return postRepository.save(post);
@@ -101,7 +101,7 @@ public class PostService {
         }
     }
 
-    private void saveNotification(Member loginMember, Post post, Member member) {
+    private void saveNotification(final Member loginMember, final Post post, final Member member) {
         notificationRepository.save(PostNotification.from(loginMember.getName(), member, post));
     }
 
@@ -112,7 +112,7 @@ public class PostService {
      * @return PostUpdateResDto
      */
     @Transactional
-    public PostUpdateResDto updatePost(Long postId, PostUpdateReqDto postUpdateReqDto) {
+    public PostUpdateResDto updatePost(final Long postId, final PostUpdateReqDto postUpdateReqDto) {
         Post findPost = findWithMemberByPostId(postId);
         findPost.updateInfo(postUpdateReqDto);
         return new PostUpdateResDto(findPost);
@@ -123,7 +123,7 @@ public class PostService {
      * @return PostResDto
      */
     @Transactional
-    public PostResDto updatePostToPosted(Long postId) {
+    public PostResDto updatePostToPosted(final Long postId) {
         Post findPost = findPost(postId);
         findPost.changeToPosted();
         return new PostResDto(findPost);
@@ -134,26 +134,26 @@ public class PostService {
      * 게시글 아이디를 받아서 삭제한다.
      */
     @Transactional
-    public void deletePost(Long postId) {
+    public void deletePost(final Long postId) {
         postRepository.deleteById(postId);
     }
 
     //공용 메서드
-    public Post findPost(Long postId) {
+    public Post findPost(final Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
-    private Post findWithMemberByPostId(Long postId) {
+    private Post findWithMemberByPostId(final Long postId) {
         return postRepository.findWithMemberAndCommentByPostId(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
-    public Page<PostResDto> searchPost(PostSearchCondition condition, Pageable pageable) {
+    public Page<PostResDto> searchPost(final PostSearchCondition condition, final Pageable pageable) {
         return postRepository.search(condition, pageable);
     }
 

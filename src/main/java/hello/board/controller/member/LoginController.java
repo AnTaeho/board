@@ -27,7 +27,7 @@ public class LoginController {
     private final MemberService memberService;
 
     @PostMapping("/login/join")
-    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @ModelAttribute MemberRegisterReqDto memberRegisterReqDto,
+    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @ModelAttribute final MemberRegisterReqDto memberRegisterReqDto,
                                                            BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
@@ -36,14 +36,15 @@ public class LoginController {
                     .build();
         }
 
-        MemberRegisterResDto memberRegisterResDto = memberService.joinMember(memberRegisterReqDto);
+        final MemberRegisterResDto memberRegisterResDto = memberService.joinMember(memberRegisterReqDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(memberRegisterResDto);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MemberRegisterResDto> login(@Valid @ModelAttribute LoginFormDto form, BindingResult bindingResult,
+    public ResponseEntity<MemberRegisterResDto> login(@Valid @ModelAttribute final LoginFormDto form,
+                                                      BindingResult bindingResult,
                                                       HttpServletRequest request) {
 
         if (!(request.getSession(false) == null)) {
@@ -58,7 +59,7 @@ public class LoginController {
                     .build();
         }
 
-        Member loginMember = memberService.login(form);
+        final Member loginMember = memberService.login(form);
 
         if (loginMember == null) {
             bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");

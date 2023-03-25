@@ -32,11 +32,11 @@ public class MemberService {
      * @return MemberRegisterResDto
      */
     @Transactional
-    public MemberRegisterResDto joinMember(MemberRegisterReqDto memberRegisterReqDto) {
+    public MemberRegisterResDto joinMember(final MemberRegisterReqDto memberRegisterReqDto) {
         return new MemberRegisterResDto(saveMember(memberRegisterReqDto));
     }
 
-    private Member saveMember(MemberRegisterReqDto memberRegisterReqDto) {
+    private Member saveMember(final MemberRegisterReqDto memberRegisterReqDto) {
         return memberRepository.save(Member.createMember(memberRegisterReqDto));
     }
 
@@ -45,7 +45,7 @@ public class MemberService {
      * 아이디 값을 받아서 회원을 찾는다.
      * @return MemberResDto
      */
-    public MemberResDto findById(Long memberId) {
+    public MemberResDto findById(final Long memberId) {
         return new MemberResDto(findMember(memberId));
     }
 
@@ -54,7 +54,7 @@ public class MemberService {
      * 전체 회원 목록을 페이징해서 반환한다.
      * @return Page<MemberResDto>
      */
-    public Page<MemberResDto> findAll(Pageable pageable) {
+    public Page<MemberResDto> findAll(final Pageable pageable) {
         return memberRepository.findAll(pageable)
                 .map(MemberResDto::new);
     }
@@ -66,7 +66,7 @@ public class MemberService {
      * @return MemberUpdateResDto
      */
     @Transactional
-    public MemberUpdateResDto updateMember(Long memberId, MemberUpdateReqDto MemberUpdateReqDto) {
+    public MemberUpdateResDto updateMember(final Long memberId, final MemberUpdateReqDto MemberUpdateReqDto) {
         Member findMember = findMember(memberId);
         findMember.updateInfo(MemberUpdateReqDto);
         return new MemberUpdateResDto(findMember);
@@ -77,7 +77,7 @@ public class MemberService {
      * 아이디 값을 받아서 회원을 삭제한다.
      */
     @Transactional
-    public void deleteMember(Long memberId) {
+    public void deleteMember(final Long memberId) {
         memberRepository.deleteById(memberId);
     }
 
@@ -88,7 +88,7 @@ public class MemberService {
      * @return Member
      */
     @Transactional
-    public Member login(LoginFormDto form) {
+    public Member login(final LoginFormDto form) {
         return memberRepository.findByLoginId(form.getLoginId())
                 .filter(m -> m.getPassword().equals(form.getPassword()))
                 .orElse(null);
@@ -101,8 +101,8 @@ public class MemberService {
      * @return String
      */
     @Transactional
-    public String followMember(Long memberId, Member fromMember) {
-        Member toMember = findMember(memberId);
+    public String followMember(final Long memberId, Member fromMember) {
+        final Member toMember = findMember(memberId);
         if (toMember.getId().equals(fromMember.getId())) {
             return "자기 자신은 팔로우 할 수 없습니다.";
         }
@@ -119,19 +119,19 @@ public class MemberService {
      * OneToMany 관계에서 페치 조인시 생기는 문제점을 확인하기 위해 구현한 메서드
      * @return AllMemberInfoDto
      */
-    public AllMemberInfoDto findAllInfo(Long memberId) {
+    public AllMemberInfoDto findAllInfo(final Long memberId) {
         return new AllMemberInfoDto(findMemberWithAllInfo(memberId));
     }
 
     //공용 메서드
-    public Member findMember(Long memberId) {
+    public Member findMember(final Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",memberId));
                 });
     }
 
-    private Member findMemberWithAllInfo(Long memberId) {
+    private Member findMemberWithAllInfo(final Long memberId) {
         return memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",memberId));

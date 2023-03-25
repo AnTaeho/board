@@ -32,63 +32,60 @@ public class PostApiController {
     private final PostService postService;
 
     @GetMapping("/search")
-    public ResponseEntity<Page<PostResDto>> searchPost(@ModelAttribute PostSearchCondition condition,
-                                                       @RequestParam("page") int page) {
-
-        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
-
-        Page<PostResDto> searchedPost = postService.searchPost(condition, pageRequest);
-
+    public ResponseEntity<Page<PostResDto>> searchPost(@ModelAttribute final PostSearchCondition condition,
+                                                       @RequestParam("page") final int page) {
+        final PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
+        final Page<PostResDto> searchedPost = postService.searchPost(condition, pageRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(searchedPost);
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<PostResDto> findSinglePost(@PathVariable Long postId) {
-        PostResDto findPost = postService.findSinglePost(postId);
+    public ResponseEntity<PostResDto> findSinglePost(@PathVariable final Long postId) {
+        final PostResDto findPost = postService.findSinglePost(postId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(findPost);
     }
 
     @GetMapping("/member")
-    public ResponseEntity<List<PostResDto>> findAllByMember(@RequestParam Long memberId) {
-        List<PostResDto> posts = findAllPostOfMember(memberId);
+    public ResponseEntity<List<PostResDto>> findAllByMember(@RequestParam final Long memberId) {
+        final List<PostResDto> posts = findAllPostOfMember(memberId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(posts);
     }
 
-    private List<PostResDto> findAllPostOfMember(Long memberId) {
+    private List<PostResDto> findAllPostOfMember(final Long memberId) {
         return postService.findPostsOfMember(memberId);
     }
 
     @PostMapping("/post")
-    public ResponseEntity<PostWriteResDto> writePost(HttpServletRequest request, @Valid @ModelAttribute PostWriteReqDto postWriteReqDto,
+    public ResponseEntity<PostWriteResDto> writePost(HttpServletRequest request,
+                                                     @Valid @ModelAttribute final PostWriteReqDto postWriteReqDto,
                                                      BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
-
-        PostWriteResDto writtenPost = postService.writePost(findLoginMember(request), postWriteReqDto);
+        final PostWriteResDto writtenPost = postService.writePost(findLoginMember(request), postWriteReqDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(writtenPost);
     }
 
     @PatchMapping("/edit/{postId}")
-    public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable Long postId, @Valid @ModelAttribute PostUpdateReqDto postUpdateReqDto,
+    public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable final Long postId,
+                                                       @Valid @ModelAttribute final PostUpdateReqDto postUpdateReqDto,
                                                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
-
-        PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);
+        final PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(updatedPost);
@@ -96,7 +93,7 @@ public class PostApiController {
     }
 
     @DeleteMapping("/delete/{postId}")
-    public ResponseEntity<String> deletePost(@PathVariable Long postId) {
+    public ResponseEntity<String> deletePost(@PathVariable final Long postId) {
         postService.deletePost(postId);
         return ResponseEntity
                 .status(HttpStatus.OK)

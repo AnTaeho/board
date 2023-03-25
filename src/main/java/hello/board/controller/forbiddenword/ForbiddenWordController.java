@@ -26,7 +26,7 @@ public class ForbiddenWordController {
     }
 
     @GetMapping("/{wordId}")
-    public WordResDto findOne(@PathVariable Long wordId) {
+    public WordResDto findOne(@PathVariable final Long wordId) {
         return forbiddenWordService.findOne(wordId);
     }
 
@@ -38,17 +38,18 @@ public class ForbiddenWordController {
     }
 
     @PostMapping
-    public WordResDto save(@Valid @ModelAttribute AddWordDto addWordDto) {
+    public WordResDto save(@Valid @ModelAttribute final AddWordDto addWordDto) {
         return forbiddenWordService.save(addWordDto);
     }
 
     @PatchMapping("/{wordId}")
-    public void updateWord(@PathVariable Long wordId, @Valid @ModelAttribute UpdateWordDto updateWordDto) {
+    public void updateWord(@PathVariable final Long wordId,
+                           @Valid @ModelAttribute final UpdateWordDto updateWordDto) {
         forbiddenWordService.updateWord(wordId, updateWordDto);
     }
 
     @DeleteMapping("/{wordId}")
-    public void deleteWord(@PathVariable Long wordId) {
+    public void deleteWord(@PathVariable final Long wordId) {
         forbiddenWordService.deleteWord(wordId);
     }
 }

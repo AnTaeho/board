@@ -23,7 +23,7 @@ public class AdminController {
 
     //멤버 전체 조회 화면 메서드
     @GetMapping("/members")
-    public ResponseEntity<Page<MemberResDto>> findAll(@RequestParam("page") int page) {
+    public ResponseEntity<Page<MemberResDto>> findAll(@RequestParam("page") final int page) {
         PageRequest pageRequest = PageRequest.of(page, 10);
         Page<MemberResDto> members = memberService.findAll(pageRequest);
         return ResponseEntity
@@ -33,7 +33,7 @@ public class AdminController {
 
     //어드민 컨트롤러로 옮길 예정
     @GetMapping("/all/{memberId}")
-    public ResponseEntity<AllMemberInfoDto> findAllInfoOfMember(@PathVariable Long memberId) {
+    public ResponseEntity<AllMemberInfoDto> findAllInfoOfMember(@PathVariable final Long memberId) {
         AllMemberInfoDto allInfo = memberService.findAllInfo(memberId);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -41,7 +41,7 @@ public class AdminController {
     }
 
     @GetMapping("/posts/waiting")
-    public ResponseEntity<Page<PostResDto>> findAllWaitingPost(@RequestParam("page") int page) {
+    public ResponseEntity<Page<PostResDto>> findAllWaitingPost(@RequestParam("page") final int page) {
         Pageable pageable = PageRequest.of(page, 10);
         Page<PostResDto> allWaitingPost = postService.findAllWaitingPost(pageable);
         return ResponseEntity
@@ -50,7 +50,7 @@ public class AdminController {
     }
 
     @PatchMapping("/posts/waiting/{postId}")
-    public ResponseEntity<PostResDto> updatePostToPosted(@PathVariable Long postId) {
+    public ResponseEntity<PostResDto> updatePostToPosted(@PathVariable final Long postId) {
         PostResDto postResDto = postService.updatePostToPosted(postId);
         return ResponseEntity
                 .status(HttpStatus.OK)

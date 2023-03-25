@@ -51,7 +51,7 @@ public class CommentService {
      * 게시글 아이디를 받아서 해당 게시글의 모든 댓글을 반환한다.
      * @return List<CommentResDto>
      */
-    public List<CommentResDto> findCommentsOfPost(Long postId) {
+    public List<CommentResDto> findCommentsOfPost(final Long postId) {
         return findPostWithCommentInfo(postId).getComments()
                 .stream()
                 .map(CommentResDto::new)
@@ -65,29 +65,29 @@ public class CommentService {
      * @return CommentResDto
      */
     @Transactional
-    public CommentResDto writeComment(Long postId, Member commentMember, CommentWriteDto writeDto) {
-        Post findPost = findPostWithMemberInfo(postId);
-        Comment newComment = Comment.makeComment(commentMember, writeDto.getContent(), findPost);
+    public CommentResDto writeComment(final Long postId, final Member commentMember, final CommentWriteDto writeDto) {
+        final Post findPost = findPostWithMemberInfo(postId);
+        final Comment newComment = Comment.makeComment(commentMember, writeDto.getContent(), findPost);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
         return new CommentResDto(commentRepository.save(newComment));
     }
 
-    private boolean isNotMyPost(Member commentMember, Post findPost) {
+    private boolean isNotMyPost(final Member commentMember, final Post findPost) {
         return !findPost.getMember().getId().equals(commentMember.getId());
     }
 
-    private Notification makeCommentNotification(Member commentMember, Post findPost, Comment newComment) {
-        Member notificatiedMember = findPost.getMember();
+    private Notification makeCommentNotification(final Member commentMember, final Post findPost, final Comment newComment) {
+        final Member notificatiedMember = findPost.getMember();
         return CommentNotification.from(commentMember.getName(), notificatiedMember, newComment);
     }
 
     @Transactional
-    public CommentResDto writeChildComment(Long postId, Long commentId, Member commentMember, CommentWriteDto writeDto) {
-        Post findPost = findPostWithCommentInfo(postId);
-        Comment findComment = findComment(commentId);
-        Comment newComment = Comment.makeChildComment(commentMember, writeDto.getContent(), findPost, findComment);
+    public CommentResDto writeChildComment(final Long postId, final Long commentId, final Member commentMember, final CommentWriteDto writeDto) {
+        final Post findPost = findPostWithCommentInfo(postId);
+        final Comment findComment = findComment(commentId);
+        final Comment newComment = Comment.makeChildComment(commentMember, writeDto.getContent(), findPost, findComment);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
@@ -101,7 +101,7 @@ public class CommentService {
      * @return CommentResDto
      */
     @Transactional
-    public CommentResDto updateComment(Long commentId, CommentUpdateDto commentUpdateDto) {
+    public CommentResDto updateComment(final Long commentId, final CommentUpdateDto commentUpdateDto) {
         Comment findComment = findComment(commentId);
         findComment.updateInfo(commentUpdateDto.getContent());
         return new CommentResDto(findComment);
@@ -112,7 +112,7 @@ public class CommentService {
      * 댓글의 아이디를 받아서 해당 댓글을 삭제한다.
      */
     @Transactional
-    public void deleteComment(Long commentId) {
+    public void deleteComment(final Long commentId) {
         commentRepository.deleteById(commentId);
     }
 
@@ -124,9 +124,9 @@ public class CommentService {
      * @return String
      */
     @Transactional
-    public String likeComment(Long commentId, Long memberId) {
+    public String likeComment(final Long commentId, final Long memberId) {
 
-        Comment findComment = findCommentWithMemberInfo(commentId);
+        final Comment findComment = findCommentWithMemberInfo(commentId);
         CommentLike notLiked = findLike(commentId, memberId);
 
         if (notLiked == null) {
@@ -138,14 +138,14 @@ public class CommentService {
         }
     }
 
-    private CommentLike findLike(Long commentId, Long memberId) {
+    private CommentLike findLike(final Long commentId, final Long memberId) {
         return commentLikeRepository.findByCommentIdAndMemberId(commentId, memberId);
     }
 
-    private CommentLike pressCommentLike(Long memberId, Comment findComment) {
+    private CommentLike pressCommentLike(final Long memberId, final Comment findComment) {
 
-        Member commentOwner = findCommentOwner(findComment);
-        Member loginMember = findMember(memberId);
+        final Member commentOwner = findCommentOwner(findComment);
+        final Member loginMember = findMember(memberId);
 
         if (commentOwner == loginMember) {
             return CommentLike.makeCommentLike(loginMember, findComment);
@@ -154,11 +154,11 @@ public class CommentService {
         return CommentLike.makeCommentLikeWithNotification(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner));
     }
 
-    private Member findCommentOwner(Comment findComment) {
+    private Member findCommentOwner(final Comment findComment) {
         return findComment.getPost().getMember();
     }
 
-    private CommentLikeNotification makeCommentLikeNotification(Member loginMember, Member commentOwner) {
+    private CommentLikeNotification makeCommentLikeNotification(final Member loginMember, final Member commentOwner) {
         return notificationRepository.save(CommentLikeNotification.from(loginMember, commentOwner));
     }
 
@@ -168,47 +168,47 @@ public class CommentService {
      * 해당 댓글의 상세 정보를 조회한다.
      * @return CommentResDto
      */
-    public CommentResDto findCommentDetail(Long commentId) {
+    public CommentResDto findCommentDetail(final Long commentId) {
         return new CommentResDto(findComment(commentId));
     }
 
     //공용 메서드
-    public Comment findComment(Long commentId) {
+    public Comment findComment(final Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",commentId));
                 });
     }
 
-    public Comment findCommentWithPostInfo(Long commentId) {
+    public Comment findCommentWithPostInfo(final Long commentId) {
         return commentRepository.findWithPostByCommentId(commentId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",commentId));
         });
     }
 
-    private Comment findCommentWithMemberInfo(Long commentId) {
+    private Comment findCommentWithMemberInfo(final Long commentId) {
         return commentRepository.findCommentWithMemberInfo(commentId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",commentId));
                 });
     }
 
-    private Post findPostWithCommentInfo(Long postId) {
+    private Post findPostWithCommentInfo(final Long postId) {
         return postRepository.findWithCommentByPostId(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
-    private Post findPostWithMemberInfo(Long postId) {
+    private Post findPostWithMemberInfo(final Long postId) {
         return postRepository.findWithMemberAndCommentByPostId(postId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
-    private Member findMember(Long memberId) {
+    private Member findMember(final Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
                     throw new CustomNotFoundException(String.format("id=%s not found",memberId));

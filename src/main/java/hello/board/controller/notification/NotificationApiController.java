@@ -26,8 +26,9 @@ public class NotificationApiController {
     private final NotificationService notificationService;
 
     @PatchMapping("/edit/{noticeId}")
-    public ResponseEntity<NotificationUpdateResDto> updateNotification(@PathVariable Long noticeId, @Valid @ModelAttribute NotificationUpdateReqDto updateReqDto) {
-        NotificationUpdateResDto notificationUpdateResDto = notificationService.updateNotification(noticeId, updateReqDto);
+    public ResponseEntity<NotificationUpdateResDto> updateNotification(@PathVariable final Long noticeId,
+                                                                       @Valid @ModelAttribute final NotificationUpdateReqDto updateReqDto) {
+        final NotificationUpdateResDto notificationUpdateResDto = notificationService.updateNotification(noticeId, updateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(notificationUpdateResDto);
@@ -35,8 +36,8 @@ public class NotificationApiController {
     }
 
     @GetMapping("/{noticeId}")
-    public ResponseEntity<NotificationResDto> findSingleNotification(@PathVariable Long noticeId) {
-        NotificationResDto findNotice = notificationService.findById(noticeId);
+    public ResponseEntity<NotificationResDto> findSingleNotification(@PathVariable final Long noticeId) {
+        final NotificationResDto findNotice = notificationService.findById(noticeId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(findNotice);
@@ -44,7 +45,7 @@ public class NotificationApiController {
 
     @GetMapping("/all")
     public ResponseEntity<List<NotificationResDto>> findAllNotification() {
-        List<NotificationResDto> allNotifications = notificationService.findAll();
+        final List<NotificationResDto> allNotifications = notificationService.findAll();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(allNotifications);
@@ -52,15 +53,15 @@ public class NotificationApiController {
 
     @GetMapping("/member")
     public ResponseEntity<List<Notification>> findAllByMemberId(HttpServletRequest request) {
-        Member loginMember = findLoginMember(request);
-        List<Notification> allByMember = notificationService.findAllByMember(loginMember);
+        final Member loginMember = findLoginMember(request);
+        final List<Notification> allByMember = notificationService.findAllByMember(loginMember);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(allByMember);
     }
 
     @DeleteMapping("/{noticeId}")
-    public ResponseEntity<String> deleteNotification(@PathVariable Long noticeId) {
+    public ResponseEntity<String> deleteNotification(@PathVariable final Long noticeId) {
         notificationService.deleteNotification(noticeId);
         return ResponseEntity
                 .status(HttpStatus.OK)

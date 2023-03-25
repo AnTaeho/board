@@ -23,7 +23,7 @@ public class HomeController {
 
     //홈 화면 메서드
     @GetMapping("/home")
-    public ResponseEntity homeLoginV3ArgumentResolver(@Login Member loginMember, Model model) {
+    public ResponseEntity<Void> homeLoginV3ArgumentResolver(@Login final Member loginMember, Model model) {
 
         //세션에 회원 데이터가 없으면 home
         if (loginMember == null) {
@@ -42,9 +42,9 @@ public class HomeController {
 
     //모든 게시글 화면 메서드
     @GetMapping("/home/posts")
-    public ResponseEntity<Page<PostResDto>> findAllPost(@RequestParam("page") int page) {
-        PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
-        Page<PostResDto> posts = postService.findAllPostedPost(pageRequest);
+    public ResponseEntity<Page<PostResDto>> findAllPost(@RequestParam("page") final int page) {
+        final PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
+        final Page<PostResDto> posts = postService.findAllPostedPost(pageRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(posts);

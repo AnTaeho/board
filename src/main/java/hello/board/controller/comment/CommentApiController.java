@@ -26,16 +26,16 @@ public class CommentApiController {
     private final CommentService commentService;
 
     @GetMapping("/post/{postId}")
-    public ResponseEntity<List<CommentResDto>> findCommentsByPost(@PathVariable Long postId) {
-        List<CommentResDto> comments = commentService.findCommentsOfPost(postId);
+    public ResponseEntity<List<CommentResDto>> findCommentsByPost(@PathVariable final Long postId) {
+        final List<CommentResDto> comments = commentService.findCommentsOfPost(postId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(comments);
     }
 
     @GetMapping("/info/{commentId}")
-    public ResponseEntity<CommentResDto> commentInfo(@PathVariable Long commentId) {
-        CommentResDto comment = commentService.findCommentDetail(commentId);
+    public ResponseEntity<CommentResDto> commentInfo(@PathVariable final Long commentId) {
+        final CommentResDto comment = commentService.findCommentDetail(commentId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(comment);
@@ -43,55 +43,57 @@ public class CommentApiController {
 
     @GetMapping
     public ResponseEntity<List<CommentResDto>> findAllComment() {
-        List<CommentResDto> comments = commentService.findAllComments();
+        final List<CommentResDto> comments = commentService.findAllComments();
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(comments);
     }
 
     @PostMapping("/post/{postId}")
-    public ResponseEntity<CommentResDto> writeComment(@PathVariable Long postId, @Valid @ModelAttribute CommentWriteDto writeDto,
-                                                      BindingResult bindingResult, HttpServletRequest request) {
+    public ResponseEntity<CommentResDto> writeComment(@PathVariable final Long postId,
+                                                      @Valid @ModelAttribute final CommentWriteDto writeDto,
+                                                      BindingResult bindingResult,
+                                                      HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
-
-        CommentResDto writtenComment = commentService.writeComment(postId, findLoginMember(request), writeDto);
+        final CommentResDto writtenComment = commentService.writeComment(postId, findLoginMember(request), writeDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(writtenComment);
     }
 
     @PostMapping("/post/{postId}/{commentId}")
-    public ResponseEntity<CommentResDto> writeChildComment(@PathVariable Long postId, @PathVariable Long commentId,
-                                                           @Valid @ModelAttribute CommentWriteDto writeDto, HttpServletRequest request) {
-        Member loginMember = findLoginMember(request);
-        CommentResDto comment = commentService.writeChildComment(postId, commentId, loginMember, writeDto);
-
+    public ResponseEntity<CommentResDto> writeChildComment(@PathVariable final Long postId,
+                                                           @PathVariable final Long commentId,
+                                                           @Valid @ModelAttribute final CommentWriteDto writeDto,
+                                                           HttpServletRequest request) {
+        final Member loginMember = findLoginMember(request);
+        final CommentResDto comment = commentService.writeChildComment(postId, commentId, loginMember, writeDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(comment);
     }
 
     @PatchMapping("/edit/{commentId}")
-    public ResponseEntity<CommentResDto> updateComment(@PathVariable Long commentId, @Valid @ModelAttribute CommentUpdateDto commentUpdateDto,
+    public ResponseEntity<CommentResDto> updateComment(@PathVariable final Long commentId,
+                                                       @Valid @ModelAttribute final CommentUpdateDto commentUpdateDto,
                                                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .build();
         }
-
-        CommentResDto updateComment = commentService.updateComment(commentId, commentUpdateDto);
+        final CommentResDto updateComment = commentService.updateComment(commentId, commentUpdateDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(updateComment);
     }
 
     @DeleteMapping("/delete/{commentId}")
-    public ResponseEntity<String> deleteComment(@PathVariable Long commentId) {
+    public ResponseEntity<String> deleteComment(@PathVariable final Long commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -99,8 +101,9 @@ public class CommentApiController {
     }
 
     @PatchMapping("/{commentId}/like")
-    public ResponseEntity<String> likeComment(@PathVariable Long commentId, HttpServletRequest request) {
-        String result = commentService.likeComment(commentId, findLoginMember(request).getId());
+    public ResponseEntity<String> likeComment(@PathVariable final Long commentId,
+                                              HttpServletRequest request) {
+        final String result = commentService.likeComment(commentId, findLoginMember(request).getId());
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(result);
