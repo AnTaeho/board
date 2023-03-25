@@ -1,15 +1,15 @@
 package hello.board.domain.member.entity;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
 public enum MemberRole {
-    ADMIN("관리자"), USER("회원");
 
-    private final String description;
+    ADMIN("ROLE_ADMIN", "관리자"),
+    USER("ROLE_USER", "사용자");
 
-    MemberRole(String description) {
-        this.description = description;
-    }
-
-    public String getDescription() {
-        return description;
-    }
+    private final String key;
+    private final String title;
 }
