@@ -1,0 +1,26 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/board
+    username: root
+    password: 140716
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    include: oauth
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        #        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000 #최적화 옵션
+
+  thymeleaf:
+    prefix: classpath:templates/
+    suffix: .html
+    cache: false
+
+logging:
+  level:
+    org.hibernate.SQL: debug

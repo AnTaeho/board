@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <link th:href="@{/css/bootstrap.min.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .container {
+            max-width: 560px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="py-4 text-center">
+        <h2 th:text="#{page.member}">회원 상세</h2>
+    </div>
+
+    <!--    &lt;!&ndash; 추가 &ndash;&gt;-->
+    <!--    <h2 th:if="${param.status}" th:text="'저장 완료'"></h2>-->
+
+    <div>
+        <label for="name" th:text="#{label.member.name}">상품명</label>
+        <input type="text" id="name" name="name" class="form-control" value="상품A" th:value="${member.name}" readonly>
+    </div>
+    <div>
+        <label for="age" th:text="#{label.member.age}">가격</label>
+        <input type="text" id="age" name="age" class="form-control" value="10000" th:value="${member.age}" readonly>
+    </div>
+    <div>
+        <label for="loginId" th:text="#{label.post.loginId}">가격</label>
+        <input type="text" id="loginId" name="loginId" class="form-control" value="10000" th:value="${member.loginId}" readonly>
+    </div>
+    <div>
+        <label for="role" th:text="#{label.member.role}">가격</label>
+        <input type="text" id="role" name="role" class="form-control" value="10000" th:value="${member.role}" readonly>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col">
+            <button class="w-100 btn btn-primary btn-lg"
+                    onclick="location.href='editMember.html'"
+                    th:onclick="|location.href='@{/member/edit(id=${member.id})}'|"
+                    type="button" th:text="#{page.updateMember}">회원 정보 수정</button>
+        </div>
+        <div class="col">
+            <button class="w-100 btn btn-secondary btn-lg"
+                    onclick="location.href='loginHome.html'"
+                    th:onclick="|location.href='@{/home}'|"
+                    type="button" th:text="#{button.cancel}">목록으로</button>
+        </div>
+    </div>
+
+</div> <!-- /container -->
+</body>
+</html>
