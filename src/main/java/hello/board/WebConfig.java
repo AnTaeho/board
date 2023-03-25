@@ -1,4 +1,4 @@
-package hello.board.config;
+package hello.board;
 
 import hello.board.argumentresolver.LoginMemberArgumentResolver;
 import hello.board.domain.comment.service.CommentService;

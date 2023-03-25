@@ -30,8 +30,6 @@ public class Member extends BaseTimeEntity {
     private String loginId;
     private String password;
 
-    private String email;
-
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
@@ -63,16 +61,6 @@ public class Member extends BaseTimeEntity {
         this.name = memberUpdateReqDto.getName();
         this.age = memberUpdateReqDto.getAge();
         this.loginId = memberUpdateReqDto.getLoginId();
-    }
-
-    public Member update(String name, int age) {
-        this.name = name;
-        this.age = age;
-        return this;
-    }
-
-    public String getRoleKey() {
-        return this.role.getKey();
     }
 
 }
