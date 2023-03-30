@@ -28,8 +28,9 @@ public class Post extends BaseTimeEntity {
     @Lob
     private String content;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private PostStatus status;
+    private PostStatus status = PostStatus.WRITING;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -46,7 +47,6 @@ public class Post extends BaseTimeEntity {
                 .title(postWriteReqDto.getTitle())
                 .content(postWriteReqDto.getContent())
                 .member(loginMember)
-                .status(PostStatus.WRITING)
                 .build();
     }
 

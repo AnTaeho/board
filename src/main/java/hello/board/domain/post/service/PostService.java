@@ -32,22 +32,11 @@ public class PostService {
     private final FollowRepository followRepository;
     private final NotificationRepository notificationRepository;
 
-    /**
-     * 단일 게시글 찾기 메서드
-     * 게시글 아이디를 받아서 게시글 폼을 반환
-     * @return PostResDto
-     */
     public PostResDto findSinglePost(final Long postId) {
         final Post findPost = findWithMemberByPostId(postId);
         return new PostResDto(findPost);
     }
 
-    /**
-     * 회원의 모든 게시글을 찾는 메서드
-     * 회원의 아이디를 받아서 모든 게시글을 리스트 형식으로 반환
-     * 페이징 기능 추가 가능
-     * @return List<PostResDto>
-     */
     public List<PostResDto> findPostsOfMember(final Long memberId) {
         return postRepository.findPostsByMemberId(memberId)
                 .stream()
@@ -55,28 +44,14 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 모든 게시글을 찾는 메서드
-     * 모든 게시글을 찾아서 페이징해서 반환한다.
-     * @return Page<PostResDto>
-     */
     public Page<PostResDto> findAllPostedPost(final Pageable pageable) {
         return postRepository.findAllPostedPost(pageable);
     }
 
-    /**
-     * 등록 대기중인 모든 게시글 찾기
-     */
     public Page<PostResDto> findAllWaitingPost(final Pageable pageable) {
         return postRepository.findAllAllWaitingPost(pageable);
     }
 
-    /**
-     * 게시글 작성 메서드
-     * 입력 폼과 로그인한 회원를 받아서
-     * 저장한 후에 로그인한 회원의 팔로워들에게 알람을 보낸다.
-     * @return PostWriteResDto
-     */
     @Transactional
     public PostWriteResDto writePost(final Member loginMember, final PostWriteReqDto postWriteReqDto) {
         final Post post = savePost(loginMember, postWriteReqDto);
@@ -86,7 +61,6 @@ public class PostService {
         return new PostWriteResDto(post);
     }
 
-    //입력 관련 메서드
     private Post savePost(final Member loginMember, final PostWriteReqDto postWriteReqDto) {
         Post post = Post.createPost(loginMember, postWriteReqDto);
         checkForbiddenWord(post);
@@ -105,23 +79,14 @@ public class PostService {
         notificationRepository.save(PostNotification.from(loginMember.getName(), member, post));
     }
 
-    /**
-     * 게시글 수정 메서드
-     * 수정 폼과 해당 게시글 아이디를 받아서
-     * 수정후 폼 반환
-     * @return PostUpdateResDto
-     */
     @Transactional
     public PostUpdateResDto updatePost(final Long postId, final PostUpdateReqDto postUpdateReqDto) {
         Post findPost = findWithMemberByPostId(postId);
         findPost.updateInfo(postUpdateReqDto);
+        checkForbiddenWord(findPost);
         return new PostUpdateResDto(findPost);
     }
 
-    /**
-     * 게시글을 등록 완료 상태로 바꾼다.
-     * @return PostResDto
-     */
     @Transactional
     public PostResDto updatePostToPosted(final Long postId) {
         Post findPost = findPost(postId);
@@ -129,16 +94,11 @@ public class PostService {
         return new PostResDto(findPost);
     }
 
-    /**
-     * 게시글 삭제 메서드
-     * 게시글 아이디를 받아서 삭제한다.
-     */
     @Transactional
     public void deletePost(final Long postId) {
         postRepository.deleteById(postId);
     }
 
-    //공용 메서드
     public Post findPost(final Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> {
