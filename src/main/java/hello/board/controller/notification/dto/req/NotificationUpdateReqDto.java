@@ -11,6 +11,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class NotificationUpdateReqDto {
 
-    @NotNull
+    @NotNull(message = "내용을 작성해 주세요.")
     private String content;
 }

@@ -38,13 +38,13 @@ public class ForbiddenWordController {
     }
 
     @PostMapping
-    public WordResDto save(@Valid @ModelAttribute final AddWordDto addWordDto) {
+    public WordResDto save(@Valid @RequestBody final AddWordDto addWordDto) {
         return forbiddenWordService.save(addWordDto);
     }
 
     @PatchMapping("/{wordId}")
     public void updateWord(@PathVariable final Long wordId,
-                           @Valid @ModelAttribute final UpdateWordDto updateWordDto) {
+                           @Valid @RequestBody final UpdateWordDto updateWordDto) {
         forbiddenWordService.updateWord(wordId, updateWordDto);
     }
 

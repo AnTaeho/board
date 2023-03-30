@@ -13,13 +13,13 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class MemberUpdateReqDto {
 
-    @NotNull
+    @NotNull(message = "수정할 이름을 입력해 주세요.")
     private String name;
 
-    @NotNull
+    @NotNull(message = "수정할 나이를 입력해 주세요.")
     private int age;
 
-    @NotNull
+    @NotNull(message = "수정할 ID를 입력해 주세요.")
     private String loginId;
 
 }

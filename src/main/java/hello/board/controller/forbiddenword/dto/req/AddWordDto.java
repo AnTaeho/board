@@ -13,6 +13,6 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class AddWordDto {
 
-    @NotEmpty
+    @NotEmpty(message = "추가할 단어를 입력해 주세요.")
     private String word;
 }

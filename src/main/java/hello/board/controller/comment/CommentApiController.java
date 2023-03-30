@@ -8,7 +8,6 @@ import hello.board.domain.member.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -52,13 +51,7 @@ public class CommentApiController {
     @PostMapping("/post/{postId}")
     public ResponseEntity<CommentResDto> writeComment(@PathVariable final Long postId,
                                                       @Valid @RequestBody final CommentWriteDto writeDto,
-                                                      BindingResult bindingResult,
                                                       HttpServletRequest request) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
         final CommentResDto writtenComment = commentService.writeComment(postId, findLoginMember(request), writeDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -79,13 +72,7 @@ public class CommentApiController {
 
     @PatchMapping("/edit/{commentId}")
     public ResponseEntity<CommentResDto> updateComment(@PathVariable final Long commentId,
-                                                       @Valid @RequestBody final CommentUpdateDto commentUpdateDto,
-                                                       BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
+                                                       @Valid @RequestBody final CommentUpdateDto commentUpdateDto) {
         final CommentResDto updateComment = commentService.updateComment(commentId, commentUpdateDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -109,7 +96,6 @@ public class CommentApiController {
                 .body(result);
     }
 
-    //세션에서 로그인 되어 있는 멤버 찾는 메서드
     private Member findLoginMember(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return (Member) session.getAttribute(LOGIN_MEMBER);

@@ -2,6 +2,7 @@ package hello.board.domain.forbiddenword.service;
 
 import hello.board.domain.forbiddenword.entity.ForbiddenWord;
 import hello.board.domain.post.entity.Post;
+import hello.board.exception.badrequest.AlreadyHaveWordBadRequestException;
 
 import java.util.Set;
 
@@ -19,6 +20,12 @@ public class ForbiddenWordCache {
 
     public static void addForbiddenWord(ForbiddenWord forbiddenWord) {
         forbiddenWords.add(forbiddenWord.getWord());
+    }
+
+    public static void checkAlreadyHave(String word) {
+        if (forbiddenWords.contains(word)) {
+            throw new AlreadyHaveWordBadRequestException();
+        }
     }
 
     public static boolean checkForbiddenWord(Post post) {

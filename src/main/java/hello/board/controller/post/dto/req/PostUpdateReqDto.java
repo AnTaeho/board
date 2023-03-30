@@ -14,10 +14,10 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class PostUpdateReqDto {
 
-    @NotEmpty
+    @NotEmpty(message = "수정할 제목을 입력해 주세요.")
     private String title;
 
-    @NotEmpty
+    @NotEmpty(message = "수정할 내용을 입력해 주세요.")
     @Lob
     private String content;
 }

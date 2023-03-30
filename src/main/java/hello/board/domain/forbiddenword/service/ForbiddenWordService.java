@@ -22,9 +22,14 @@ public class ForbiddenWordService {
 
     @Transactional
     public WordResDto save(final AddWordDto addWordDto) {
+        checkAlreadyHave(addWordDto.getWord());
         ForbiddenWord saveWord = forbiddenWordRepository.save(ForbiddenWord.from(addWordDto.getWord()));
         ForbiddenWordCache.addForbiddenWord(saveWord);
         return new WordResDto(saveWord);
+    }
+
+    private void checkAlreadyHave(String word) {
+        ForbiddenWordCache.checkAlreadyHave(word);
     }
 
     public List<WordResDto> findAll() {
@@ -39,6 +44,7 @@ public class ForbiddenWordService {
 
     @Transactional
     public void updateWord(final Long wordId, final UpdateWordDto updateWordDto) {
+        checkAlreadyHave(updateWordDto.getWord());
         ForbiddenWord findWord = findWord(wordId);
         findWord.updateWord(updateWordDto.getWord());
     }

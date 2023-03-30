@@ -8,7 +8,6 @@ import hello.board.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -43,13 +42,7 @@ public class MemberApiController {
 
     @PatchMapping("/edit/{memberId}")
     public ResponseEntity<MemberUpdateResDto> updateMember(@PathVariable("memberId") final Long memberId,
-                                                           @Valid @RequestBody final MemberUpdateReqDto memberUpdateReqDto,
-                                                           BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
+                                                           @Valid @RequestBody final MemberUpdateReqDto memberUpdateReqDto) {
         final MemberUpdateResDto memberUpdateResDto = memberService.updateMember(memberId, memberUpdateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -64,7 +57,6 @@ public class MemberApiController {
                 .body("member delete");
     }
 
-    //세션에서 로그인 되어 있는 멤버 찾는 메서드
     private Member findLoginMember(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return (Member) session.getAttribute(LOGIN_MEMBER);

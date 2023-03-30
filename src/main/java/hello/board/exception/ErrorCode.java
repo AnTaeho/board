@@ -15,7 +15,8 @@ public enum ErrorCode {
 
     INVALID_REQUEST_BODY_TYPE("400_01"),
     ALREADY_LOGIN_BAD_REQUEST("400_02"),
-    ALREADY_JOIN_BAD_REQUEST("400_03");
+    ALREADY_JOIN_BAD_REQUEST("400_03"),
+    ALREADY_HAVE_WORD_BAD_REQUEST("400_04");
 
     private final String value;
 

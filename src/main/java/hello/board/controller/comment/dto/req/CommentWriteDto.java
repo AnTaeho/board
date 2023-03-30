@@ -14,7 +14,7 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 public class CommentWriteDto {
 
-    @NotEmpty
+    @NotEmpty(message = "입력할 댓글 내용을 작성해 주세요.")
     @Lob
     private String content;
 

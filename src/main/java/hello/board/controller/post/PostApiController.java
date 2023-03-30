@@ -14,7 +14,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -51,25 +50,15 @@ public class PostApiController {
 
     @GetMapping("/member")
     public ResponseEntity<List<PostResDto>> findAllByMember(@RequestParam final Long memberId) {
-        final List<PostResDto> posts = findAllPostOfMember(memberId);
+        final List<PostResDto> posts = postService.findPostsOfMember(memberId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(posts);
     }
 
-    private List<PostResDto> findAllPostOfMember(final Long memberId) {
-        return postService.findPostsOfMember(memberId);
-    }
-
     @PostMapping("/post")
     public ResponseEntity<PostWriteResDto> writePost(HttpServletRequest request,
-                                                     @Valid @RequestBody final PostWriteReqDto postWriteReqDto,
-                                                     BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
+                                                     @Valid @RequestBody final PostWriteReqDto postWriteReqDto) {
         final PostWriteResDto writtenPost = postService.writePost(findLoginMember(request), postWriteReqDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -78,13 +67,7 @@ public class PostApiController {
 
     @PatchMapping("/edit/{postId}")
     public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable final Long postId,
-                                                       @Valid @RequestBody final PostUpdateReqDto postUpdateReqDto,
-                                                       BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
+                                                       @Valid @RequestBody final PostUpdateReqDto postUpdateReqDto) {
         final PostUpdateResDto updatedPost = postService.updatePost(postId, postUpdateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -100,7 +83,6 @@ public class PostApiController {
                 .body("post delete");
     }
 
-    //세션에서 로그인 되어 있는 멤버 찾는 메서드
     private Member findLoginMember(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return (Member) session.getAttribute(LOGIN_MEMBER);
