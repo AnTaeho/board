@@ -178,42 +178,42 @@ public class CommentService {
     public Comment findComment(final Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
-                    throw new CommentNotFoundException(String.format("id=%s not found",commentId));
+                    throw new CommentNotFoundException();
                 });
     }
 
     public Comment findCommentWithPostInfo(final Long commentId) {
         return commentRepository.findWithPostByCommentId(commentId)
                 .orElseThrow(() -> {
-                    throw new CommentNotFoundException(String.format("id=%s not found",commentId));
+                    throw new CommentNotFoundException();
         });
     }
 
     private Comment findCommentWithMemberInfo(final Long commentId) {
         return commentRepository.findCommentWithMemberInfo(commentId)
                 .orElseThrow(() -> {
-                    throw new CommentNotFoundException(String.format("id=%s not found",commentId));
+                    throw new CommentNotFoundException();
                 });
     }
 
     private Post findPostWithCommentInfo(final Long postId) {
         return postRepository.findWithCommentByPostId(postId)
                 .orElseThrow(() -> {
-                    throw new PostNotFoundException(String.format("id=%s not found",postId));
+                    throw new PostNotFoundException();
                 });
     }
 
     private Post findPostWithMemberInfo(final Long postId) {
         return postRepository.findWithMemberAndCommentByPostId(postId)
                 .orElseThrow(() -> {
-                    throw new PostNotFoundException(String.format("id=%s not found",postId));
+                    throw new PostNotFoundException();
                 });
     }
 
     private Member findMember(final Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
-                    throw new MemberNotFoundException(String.format("id=%s not found",memberId));
+                    throw new MemberNotFoundException();
                 });
     }
 

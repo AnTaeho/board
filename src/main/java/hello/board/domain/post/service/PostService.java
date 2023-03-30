@@ -142,14 +142,14 @@ public class PostService {
     public Post findPost(final Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> {
-                    throw new PostNotFoundException(String.format("id=%s not found",postId));
+                    throw new PostNotFoundException();
                 });
     }
 
     private Post findWithMemberByPostId(final Long postId) {
         return postRepository.findWithMemberAndCommentByPostId(postId)
                 .orElseThrow(() -> {
-                    throw new PostNotFoundException(String.format("id=%s not found",postId));
+                    throw new PostNotFoundException();
                 });
     }
 

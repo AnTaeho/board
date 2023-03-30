@@ -51,7 +51,7 @@ public class NotificationService {
     private Notification findNotification(final Long noticeId) {
         return notificationRepository.findById(noticeId)
                 .orElseThrow(() -> {
-                    throw new NotificationNotFoundException(String.format("id=%s not found",noticeId));
+                    throw new NotificationNotFoundException();
                 });
     }
 }

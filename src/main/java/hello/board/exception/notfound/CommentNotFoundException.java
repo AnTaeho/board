@@ -4,7 +4,7 @@ import static hello.board.exception.ErrorCode.*;
 
 public class CommentNotFoundException extends NotFoundException {
 
-    public CommentNotFoundException(String message) {
-        super(COMMENT_NOT_FOUND, message);
+    public CommentNotFoundException() {
+        super(COMMENT_NOT_FOUND, "해당 댓글을 찾을 수 없습니다.");
     }
 }

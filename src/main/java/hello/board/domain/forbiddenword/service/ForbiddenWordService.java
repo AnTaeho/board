@@ -57,7 +57,7 @@ public class ForbiddenWordService {
     public ForbiddenWord findWord(final Long wordId) {
         return forbiddenWordRepository.findById(wordId)
                 .orElseThrow(() -> {
-                    throw new ForbiddenWordNotFoundException(String.format("id=%s not found",wordId));
+                    throw new ForbiddenWordNotFoundException();
                 });
     }
 }

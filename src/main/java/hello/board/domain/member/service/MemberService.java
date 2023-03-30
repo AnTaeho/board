@@ -136,14 +136,14 @@ public class MemberService {
     public Member findMember(final Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
-                    throw new MemberNotFoundException(String.format("id=%s not found",memberId));
+                    throw new MemberNotFoundException();
                 });
     }
 
     private Member findMemberWithAllInfo(final Long memberId) {
         return memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> {
-                    throw new MemberNotFoundException(String.format("id=%s not found",memberId));
+                    throw new MemberNotFoundException();
                 });
     }
 }
