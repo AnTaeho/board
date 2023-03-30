@@ -5,7 +5,7 @@ import hello.board.controller.forbiddenword.dto.req.UpdateWordDto;
 import hello.board.controller.forbiddenword.dto.res.WordResDto;
 import hello.board.domain.forbiddenword.entity.ForbiddenWord;
 import hello.board.domain.forbiddenword.repository.ForbiddenWordRepository;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.notfound.ForbiddenWordNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +51,7 @@ public class ForbiddenWordService {
     public ForbiddenWord findWord(final Long wordId) {
         return forbiddenWordRepository.findById(wordId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",wordId));
+                    throw new ForbiddenWordNotFoundException(String.format("id=%s not found",wordId));
                 });
     }
 }

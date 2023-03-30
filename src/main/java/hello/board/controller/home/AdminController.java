@@ -21,7 +21,6 @@ public class AdminController {
     private final MemberService memberService;
     private final PostService postService;
 
-    //멤버 전체 조회 화면 메서드
     @GetMapping("/members")
     public ResponseEntity<Page<MemberResDto>> findAll(@RequestParam("page") final int page) {
         PageRequest pageRequest = PageRequest.of(page, 10);
@@ -31,7 +30,6 @@ public class AdminController {
                 .body(members);
     }
 
-    //어드민 컨트롤러로 옮길 예정
     @GetMapping("/all/{memberId}")
     public ResponseEntity<AllMemberInfoDto> findAllInfoOfMember(@PathVariable final Long memberId) {
         AllMemberInfoDto allInfo = memberService.findAllInfo(memberId);

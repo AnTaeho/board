@@ -27,7 +27,7 @@ public class NotificationApiController {
 
     @PatchMapping("/edit/{noticeId}")
     public ResponseEntity<NotificationUpdateResDto> updateNotification(@PathVariable final Long noticeId,
-                                                                       @Valid @ModelAttribute final NotificationUpdateReqDto updateReqDto) {
+                                                                       @Valid @RequestBody final NotificationUpdateReqDto updateReqDto) {
         final NotificationUpdateResDto notificationUpdateResDto = notificationService.updateNotification(noticeId, updateReqDto);
         return ResponseEntity
                 .status(HttpStatus.OK)

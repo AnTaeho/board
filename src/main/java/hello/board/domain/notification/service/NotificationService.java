@@ -6,7 +6,7 @@ import hello.board.controller.notification.dto.res.NotificationUpdateResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.notification.repository.NotificationRepository;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.notfound.NotificationNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,10 +48,10 @@ public class NotificationService {
         notificationRepository.deleteById(id);
     }
 
-    private Notification findNotification(final Long id) {
-        return notificationRepository.findById(id)
+    private Notification findNotification(final Long noticeId) {
+        return notificationRepository.findById(noticeId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",id));
+                    throw new NotificationNotFoundException(String.format("id=%s not found",noticeId));
                 });
     }
 }

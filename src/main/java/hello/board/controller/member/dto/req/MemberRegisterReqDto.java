@@ -15,19 +15,19 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class MemberRegisterReqDto {
 
-    @NotBlank
+    @NotBlank(message = "이름은 필수 입니다.")
     private String name;
 
-    @NotNull
+    @NotNull(message = "나이는 필수 입니다.")
     private int age;
 
-    @NotBlank
+    @NotBlank(message = "로그인 ID는 필수 입니다.")
     private String loginId;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호는 필수 입니다.")
     private String password;
 
-    @NotNull
+    @NotNull(message = "권한은 필수 입니다.")
     private MemberRole role;
 
 }

@@ -13,7 +13,7 @@ import hello.board.domain.member.entity.MemberRole;
 import hello.board.domain.member.service.MemberService;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.service.PostService;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.notfound.CommentNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,7 +121,7 @@ public class CommentServiceTest {
 
         //then
         assertThatThrownBy(() -> commentService.findComment(commentResDto.getId()))
-                .isInstanceOf(CustomNotFoundException.class);
+                .isInstanceOf(CommentNotFoundException.class);
     }
 
     @Test

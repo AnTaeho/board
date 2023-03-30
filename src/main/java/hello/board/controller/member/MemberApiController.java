@@ -43,7 +43,7 @@ public class MemberApiController {
 
     @PatchMapping("/edit/{memberId}")
     public ResponseEntity<MemberUpdateResDto> updateMember(@PathVariable("memberId") final Long memberId,
-                                                           @Valid @ModelAttribute final MemberUpdateReqDto memberUpdateReqDto,
+                                                           @Valid @RequestBody final MemberUpdateReqDto memberUpdateReqDto,
                                                            BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity

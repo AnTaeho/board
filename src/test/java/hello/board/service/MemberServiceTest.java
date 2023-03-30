@@ -10,7 +10,7 @@ import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
 import hello.board.domain.member.repository.member.MemberRepository;
 import hello.board.domain.member.service.MemberService;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.notfound.MemberNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -114,7 +114,7 @@ public class MemberServiceTest {
 
         //then
         assertThatThrownBy(() -> memberService.findById(1L))
-                .isInstanceOf(CustomNotFoundException.class);
+                .isInstanceOf(MemberNotFoundException.class);
     }
 
     @Test

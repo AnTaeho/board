@@ -15,7 +15,9 @@ import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.notfound.CommentNotFoundException;
+import hello.board.exception.notfound.MemberNotFoundException;
+import hello.board.exception.notfound.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -176,42 +178,42 @@ public class CommentService {
     public Comment findComment(final Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",commentId));
+                    throw new CommentNotFoundException(String.format("id=%s not found",commentId));
                 });
     }
 
     public Comment findCommentWithPostInfo(final Long commentId) {
         return commentRepository.findWithPostByCommentId(commentId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",commentId));
+                    throw new CommentNotFoundException(String.format("id=%s not found",commentId));
         });
     }
 
     private Comment findCommentWithMemberInfo(final Long commentId) {
         return commentRepository.findCommentWithMemberInfo(commentId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",commentId));
+                    throw new CommentNotFoundException(String.format("id=%s not found",commentId));
                 });
     }
 
     private Post findPostWithCommentInfo(final Long postId) {
         return postRepository.findWithCommentByPostId(postId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",postId));
+                    throw new PostNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
     private Post findPostWithMemberInfo(final Long postId) {
         return postRepository.findWithMemberAndCommentByPostId(postId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",postId));
+                    throw new PostNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
     private Member findMember(final Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",memberId));
+                    throw new MemberNotFoundException(String.format("id=%s not found",memberId));
                 });
     }
 

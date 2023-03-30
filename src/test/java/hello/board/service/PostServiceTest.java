@@ -16,7 +16,7 @@ import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.entity.PostStatus;
 import hello.board.domain.post.repository.PostRepository;
 import hello.board.domain.post.service.PostService;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.notfound.PostNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -151,7 +151,7 @@ public class PostServiceTest {
 
         //then
         assertThatThrownBy(() -> postService.findPost(postWriteResDto.getId()))
-                .isInstanceOf(CustomNotFoundException.class);
+                .isInstanceOf(PostNotFoundException.class);
     }
 
     @Test

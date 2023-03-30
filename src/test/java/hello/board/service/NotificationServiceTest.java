@@ -21,7 +21,7 @@ import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.notification.service.NotificationService;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.service.PostService;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.notfound.NotificationNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,7 +88,7 @@ public class NotificationServiceTest {
 
         //then
         assertThatThrownBy(() -> notificationService.findById(notification.getId()))
-                .isInstanceOf(CustomNotFoundException.class);
+                .isInstanceOf(NotificationNotFoundException.class);
     }
 
     @Test

@@ -6,12 +6,12 @@ import hello.board.controller.member.dto.res.MemberRegisterResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
 import hello.board.domain.member.service.MemberService;
+import hello.board.exception.badrequest.AlreadyLoginBadRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,15 +27,7 @@ public class LoginController {
     private final MemberService memberService;
 
     @PostMapping("/login/join")
-    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @ModelAttribute final MemberRegisterReqDto memberRegisterReqDto,
-                                                           BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
-        }
-
+    public ResponseEntity<MemberRegisterResDto> joinMember(@Valid @RequestBody final MemberRegisterReqDto memberRegisterReqDto) {
         final MemberRegisterResDto memberRegisterResDto = memberService.joinMember(memberRegisterReqDto);
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -43,43 +35,31 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<MemberRegisterResDto> login(@Valid @ModelAttribute final LoginFormDto form,
-                                                      BindingResult bindingResult,
+    public ResponseEntity<MemberRegisterResDto> login(@Valid @RequestBody final LoginFormDto form,
                                                       HttpServletRequest request) {
-
         if (!(request.getSession(false) == null)) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .build();
+            throw new AlreadyLoginBadRequest();
         }
-
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .build();
-        }
-
         final Member loginMember = memberService.login(form);
+        HttpSession session = addMemberInSession(request, loginMember);
+        checkAdmin(loginMember, session);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(new MemberRegisterResDto(loginMember));
+    }
 
-        if (loginMember == null) {
-            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
-            return ResponseEntity
-                    .status(HttpStatus.UNAUTHORIZED)
-                    .build();
-        }
-
+    private static HttpSession addMemberInSession(HttpServletRequest request, Member loginMember) {
         HttpSession session = request.getSession();
         session.setAttribute(LOGIN_MEMBER, loginMember);
+        return session;
+    }
 
+    private void checkAdmin(Member loginMember, HttpSession session) {
         if (loginMember.getRole() == MemberRole.ADMIN) {
             session.setAttribute("admin", "관리자");
         } else {
             session.setAttribute("user", "일반 회원");
         }
-
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(new MemberRegisterResDto(loginMember));
     }
 
     @PostMapping("/logout")

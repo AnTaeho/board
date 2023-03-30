@@ -13,7 +13,7 @@ import hello.board.domain.notification.entity.PostNotification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.notfound.PostNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -142,14 +142,14 @@ public class PostService {
     public Post findPost(final Long postId) {
         return postRepository.findById(postId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",postId));
+                    throw new PostNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 
     private Post findWithMemberByPostId(final Long postId) {
         return postRepository.findWithMemberAndCommentByPostId(postId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",postId));
+                    throw new PostNotFoundException(String.format("id=%s not found",postId));
                 });
     }
 

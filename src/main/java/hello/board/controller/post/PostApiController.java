@@ -63,7 +63,7 @@ public class PostApiController {
 
     @PostMapping("/post")
     public ResponseEntity<PostWriteResDto> writePost(HttpServletRequest request,
-                                                     @Valid @ModelAttribute final PostWriteReqDto postWriteReqDto,
+                                                     @Valid @RequestBody final PostWriteReqDto postWriteReqDto,
                                                      BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity
@@ -78,7 +78,7 @@ public class PostApiController {
 
     @PatchMapping("/edit/{postId}")
     public ResponseEntity<PostUpdateResDto> updatePost(@PathVariable final Long postId,
-                                                       @Valid @ModelAttribute final PostUpdateReqDto postUpdateReqDto,
+                                                       @Valid @RequestBody final PostUpdateReqDto postUpdateReqDto,
                                                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity

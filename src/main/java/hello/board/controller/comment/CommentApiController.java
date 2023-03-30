@@ -51,7 +51,7 @@ public class CommentApiController {
 
     @PostMapping("/post/{postId}")
     public ResponseEntity<CommentResDto> writeComment(@PathVariable final Long postId,
-                                                      @Valid @ModelAttribute final CommentWriteDto writeDto,
+                                                      @Valid @RequestBody final CommentWriteDto writeDto,
                                                       BindingResult bindingResult,
                                                       HttpServletRequest request) {
         if (bindingResult.hasErrors()) {
@@ -68,7 +68,7 @@ public class CommentApiController {
     @PostMapping("/post/{postId}/{commentId}")
     public ResponseEntity<CommentResDto> writeChildComment(@PathVariable final Long postId,
                                                            @PathVariable final Long commentId,
-                                                           @Valid @ModelAttribute final CommentWriteDto writeDto,
+                                                           @Valid @RequestBody final CommentWriteDto writeDto,
                                                            HttpServletRequest request) {
         final Member loginMember = findLoginMember(request);
         final CommentResDto comment = commentService.writeChildComment(postId, commentId, loginMember, writeDto);
@@ -79,7 +79,7 @@ public class CommentApiController {
 
     @PatchMapping("/edit/{commentId}")
     public ResponseEntity<CommentResDto> updateComment(@PathVariable final Long commentId,
-                                                       @Valid @ModelAttribute final CommentUpdateDto commentUpdateDto,
+                                                       @Valid @RequestBody final CommentUpdateDto commentUpdateDto,
                                                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return ResponseEntity

@@ -4,7 +4,7 @@ import hello.board.controller.forbiddenword.dto.req.AddWordDto;
 import hello.board.controller.forbiddenword.dto.req.UpdateWordDto;
 import hello.board.controller.forbiddenword.dto.res.WordResDto;
 import hello.board.domain.forbiddenword.service.ForbiddenWordService;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.notfound.ForbiddenWordNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +103,7 @@ public class ForbiddenWordServiceTest {
 
         //then
         assertThatThrownBy(() -> forbiddenWordService.findOne(resDto.getId()))
-                .isInstanceOf(CustomNotFoundException.class);
+                .isInstanceOf(ForbiddenWordNotFoundException.class);
     }
 
 }

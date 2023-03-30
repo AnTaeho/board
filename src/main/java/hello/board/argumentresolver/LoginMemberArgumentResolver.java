@@ -2,6 +2,7 @@ package hello.board.argumentresolver;
 
 import hello.board.controller.member.session.SessionConst;
 import hello.board.domain.member.entity.Member;
+import hello.board.exception.unauthorized.NotLoginUnauthorizedException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -33,9 +34,12 @@ public class LoginMemberArgumentResolver implements HandlerMethodArgumentResolve
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = request.getSession(false);
         if (session == null) {
-            return null;
+            throw new NotLoginUnauthorizedException("로그인이 필요합니다.");
         }
-
-        return session.getAttribute(SessionConst.LOGIN_MEMBER);
+        Object attribute = session.getAttribute(SessionConst.LOGIN_MEMBER);
+        if (attribute == null) {
+            throw new NotLoginUnauthorizedException("로그인이 필요합니다.");
+        }
+        return attribute;
     }
 }

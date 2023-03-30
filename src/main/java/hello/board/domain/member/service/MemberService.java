@@ -11,7 +11,9 @@ import hello.board.domain.member.entity.Follow;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.follow.FollowRepository;
 import hello.board.domain.member.repository.member.MemberRepository;
-import hello.board.exception.CustomNotFoundException;
+import hello.board.exception.badrequest.AlreadyJoinBadRequestException;
+import hello.board.exception.notfound.MemberNotFoundException;
+import hello.board.exception.notfound.NotMemberNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +35,14 @@ public class MemberService {
      */
     @Transactional
     public MemberRegisterResDto joinMember(final MemberRegisterReqDto memberRegisterReqDto) {
+        checkAlreadyJoin(memberRegisterReqDto.getLoginId());
         return new MemberRegisterResDto(saveMember(memberRegisterReqDto));
+    }
+
+    private void checkAlreadyJoin(String loginId) {
+        if (memberRepository.existsByLoginId(loginId)){
+            throw new AlreadyJoinBadRequestException();
+        }
     }
 
     private Member saveMember(final MemberRegisterReqDto memberRegisterReqDto) {
@@ -91,7 +100,7 @@ public class MemberService {
     public Member login(final LoginFormDto form) {
         return memberRepository.findByLoginId(form.getLoginId())
                 .filter(m -> m.getPassword().equals(form.getPassword()))
-                .orElse(null);
+                .orElseThrow(NotMemberNotFoundException::new);
     }
 
     /**
@@ -127,14 +136,14 @@ public class MemberService {
     public Member findMember(final Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",memberId));
+                    throw new MemberNotFoundException(String.format("id=%s not found",memberId));
                 });
     }
 
     private Member findMemberWithAllInfo(final Long memberId) {
         return memberRepository.findMemberById(memberId)
                 .orElseThrow(() -> {
-                    throw new CustomNotFoundException(String.format("id=%s not found",memberId));
+                    throw new MemberNotFoundException(String.format("id=%s not found",memberId));
                 });
     }
 }
