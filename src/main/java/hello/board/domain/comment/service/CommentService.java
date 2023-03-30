@@ -7,6 +7,7 @@ import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.entity.CommentLike;
 import hello.board.domain.comment.repository.commentlike.CommentLikeRepository;
 import hello.board.domain.comment.repository.comment.CommentRepository;
+import hello.board.domain.forbiddenword.service.ForbiddenWordCache;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.member.MemberRepository;
 import hello.board.domain.notification.entity.CommentLikeNotification;
@@ -36,11 +37,6 @@ public class CommentService {
     private final CommentLikeRepository commentLikeRepository;
     private final NotificationRepository notificationRepository;
 
-    /**
-     * 모든 댓글 조회 메서드
-     * 모든 댓글을 찾아서 반환한다.
-     * @return List<CommentResDto>
-     */
     public List<CommentResDto> findAllComments() {
         return commentRepository.findAll()
                 .stream()
@@ -48,11 +44,6 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 게시글의 모든 댓글 조회 메서드
-     * 게시글 아이디를 받아서 해당 게시글의 모든 댓글을 반환한다.
-     * @return List<CommentResDto>
-     */
     public List<CommentResDto> findCommentsOfPost(final Long postId) {
         return findPostWithCommentInfo(postId).getComments()
                 .stream()
@@ -60,16 +51,11 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * 댓글 작성 메서드
-     * 게시글 아이디, 로그인한 회원, 작성 폼을받아서
-     * 댓글을 작성하고, 본인의 게시글이 아닌경우 알람 발생
-     * @return CommentResDto
-     */
     @Transactional
     public CommentResDto writeComment(final Long postId, final Member commentMember, final CommentWriteDto writeDto) {
         final Post findPost = findPostWithMemberInfo(postId);
         final Comment newComment = Comment.makeComment(commentMember, writeDto.getContent(), findPost);
+        ForbiddenWordCache.checkCommentForbiddenWord(newComment);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
@@ -90,41 +76,26 @@ public class CommentService {
         final Post findPost = findPostWithCommentInfo(postId);
         final Comment findComment = findComment(commentId);
         final Comment newComment = Comment.makeChildComment(commentMember, writeDto.getContent(), findPost, findComment);
+        ForbiddenWordCache.checkCommentForbiddenWord(newComment);
         if (isNotMyPost(commentMember, findPost)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
         return new CommentResDto(commentRepository.save(newComment));
     }
 
-    /**
-     * 댓글 수정 메서드
-     * 댓글 아이디와 수정 폼을 받아서
-     * 해당 댓글의 내용을 수정한다.
-     * @return CommentResDto
-     */
     @Transactional
     public CommentResDto updateComment(final Long commentId, final CommentUpdateDto commentUpdateDto) {
         Comment findComment = findComment(commentId);
         findComment.updateInfo(commentUpdateDto.getContent());
+        ForbiddenWordCache.checkCommentForbiddenWord(findComment);
         return new CommentResDto(findComment);
     }
 
-    /**
-     * 댓글 삭제 메서드
-     * 댓글의 아이디를 받아서 해당 댓글을 삭제한다.
-     */
     @Transactional
     public void deleteComment(final Long commentId) {
         commentRepository.deleteById(commentId);
     }
 
-    /**
-     * 댓글 좋아요 메서드
-     * 댓글 아이디와 회원 아이디를 받아서
-     * 이미 남겨져 있지 않다면 해당 댓글의 좋아요를 남기고, 있다면 좋아요를 취소한다.
-     * 자신의 댓글도 좋아요를 누를 수 있고, 자신의 댓글이 아니면 알람을 보낸다.
-     * @return String
-     */
     @Transactional
     public String likeComment(final Long commentId, final Long memberId) {
 
@@ -164,17 +135,10 @@ public class CommentService {
         return notificationRepository.save(CommentLikeNotification.from(loginMember, commentOwner));
     }
 
-    /**
-     * 댓글 상세 조회 메서드
-     * 댓글 아이디를 받아서
-     * 해당 댓글의 상세 정보를 조회한다.
-     * @return CommentResDto
-     */
     public CommentResDto findCommentDetail(final Long commentId) {
         return new CommentResDto(findComment(commentId));
     }
 
-    //공용 메서드
     public Comment findComment(final Long commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> {

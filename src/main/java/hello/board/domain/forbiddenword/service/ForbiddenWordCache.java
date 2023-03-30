@@ -1,8 +1,10 @@
 package hello.board.domain.forbiddenword.service;
 
+import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.forbiddenword.entity.ForbiddenWord;
 import hello.board.domain.post.entity.Post;
 import hello.board.exception.badrequest.AlreadyHaveWordBadRequestException;
+import hello.board.exception.badrequest.ContainForbiddenWordBadRequestException;
 
 import java.util.Set;
 
@@ -28,7 +30,7 @@ public class ForbiddenWordCache {
         }
     }
 
-    public static boolean checkForbiddenWord(Post post) {
+    public static boolean checkPostForbiddenWord(Post post) {
         String postTitle = post.getTitle();
         String postContent = post.getContent();
 
@@ -39,5 +41,13 @@ public class ForbiddenWordCache {
                 return true;
         }
         return false;
+    }
+
+    public static void checkCommentForbiddenWord(Comment comment) {
+        String commentContent = comment.getContent();
+        for (String forbiddenWord : forbiddenWords) {
+            if (commentContent.contains(forbiddenWord))
+                throw new ContainForbiddenWordBadRequestException();
+        }
     }
 }

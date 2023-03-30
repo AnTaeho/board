@@ -68,7 +68,7 @@ public class PostService {
     }
 
     private void checkForbiddenWord(Post post) {
-        if(ForbiddenWordCache.checkForbiddenWord(post)) {
+        if(ForbiddenWordCache.checkPostForbiddenWord(post)) {
             post.changeToWaitingPost();
         } else {
             post.changeToPosted();
