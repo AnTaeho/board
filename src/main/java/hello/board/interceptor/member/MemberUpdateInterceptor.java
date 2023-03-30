@@ -2,6 +2,7 @@ package hello.board.interceptor.member;
 
 import hello.board.controller.member.session.SessionConst;
 import hello.board.domain.member.entity.Member;
+import hello.board.exception.unauthorized.UpdateUnauthorizedException;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
@@ -15,13 +16,10 @@ public class MemberUpdateInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Member loginMember = findLoginMember(request);
         Long id = findIdFromPathVariables(request);
-
         if (isMe(loginMember, id)) {
             return true;
         }
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return false;
+        throw new UpdateUnauthorizedException();
     }
 
     private Member findLoginMember(HttpServletRequest request) {

@@ -4,6 +4,7 @@ import hello.board.controller.member.session.SessionConst;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.service.PostService;
+import hello.board.exception.unauthorized.UpdateUnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -22,13 +23,10 @@ public class PostUpdateInterceptor implements HandlerInterceptor {
         Member loginMember = findLoginMember(request);
         Long id = findIdFromPathVariables(request);
         Post post = postService.findPost(id);
-
         if (isMyPost(loginMember, post)) {
             return true;
         }
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return false;
+        throw new UpdateUnauthorizedException();
     }
 
     private Member findLoginMember(HttpServletRequest request) {

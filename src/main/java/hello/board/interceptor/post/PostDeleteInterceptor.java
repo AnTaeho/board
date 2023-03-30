@@ -5,6 +5,7 @@ import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.service.PostService;
+import hello.board.exception.unauthorized.DeleteUnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -23,13 +24,10 @@ public class PostDeleteInterceptor implements HandlerInterceptor {
         Member loginMember = findLoginMember(request);
         Long id = findIdFromPathVariables(request);
         Post post = postService.findPost(id);
-
         if (isMyPost(loginMember, post) || isAdmin(loginMember)) {
             return true;
         }
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return false;
+        throw new DeleteUnauthorizedException();
     }
 
     private Member findLoginMember(HttpServletRequest request) {

@@ -3,6 +3,7 @@ package hello.board.interceptor.member;
 import hello.board.controller.member.session.SessionConst;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
+import hello.board.exception.unauthorized.DeleteUnauthorizedException;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
 
@@ -16,13 +17,10 @@ public class MemberDeleteInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Member loginMember = findLoginMember(request);
         Long id = findIdFromPathVariables(request);
-
         if(isMe(loginMember, id) || isAdmin(loginMember)) {
             return true;
         }
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return false;
+        throw new DeleteUnauthorizedException();
     }
 
     private Member findLoginMember(HttpServletRequest request) {

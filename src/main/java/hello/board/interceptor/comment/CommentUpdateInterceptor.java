@@ -4,6 +4,7 @@ import hello.board.controller.member.session.SessionConst;
 import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.service.CommentService;
 import hello.board.domain.member.entity.Member;
+import hello.board.exception.unauthorized.UpdateUnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -22,13 +23,10 @@ public class CommentUpdateInterceptor implements HandlerInterceptor {
         Member loginMember = findLoginMember(request);
         Long id = findIdFromPathVariables(request);
         Comment comment = commentService.findCommentWithPostInfo(id);
-
         if (isMyComment(loginMember, comment)) {
             return true;
         }
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return false;
+        throw new UpdateUnauthorizedException();
     }
 
     private Member findLoginMember(HttpServletRequest request) {

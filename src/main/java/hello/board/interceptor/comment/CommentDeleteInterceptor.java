@@ -5,6 +5,7 @@ import hello.board.domain.comment.entity.Comment;
 import hello.board.domain.comment.service.CommentService;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.entity.MemberRole;
+import hello.board.exception.unauthorized.DeleteUnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
@@ -23,13 +24,10 @@ public class CommentDeleteInterceptor implements HandlerInterceptor {
         Member loginMember = findLoginMember(request);
         Long id = findIdFromPathVariables(request);
         Comment comment = commentService.findCommentWithPostInfo(id);
-
         if(isMyComment(loginMember, comment) || isAdmin(loginMember)) {
             return true;
         }
-
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        return false;
+        throw new DeleteUnauthorizedException();
     }
 
     private Member findLoginMember(HttpServletRequest request) {
