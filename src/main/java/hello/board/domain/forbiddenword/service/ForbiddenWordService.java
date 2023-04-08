@@ -6,6 +6,7 @@ import hello.board.controller.forbiddenword.dto.res.WordResDto;
 import hello.board.domain.forbiddenword.entity.ForbiddenWord;
 import hello.board.domain.forbiddenword.repository.ForbiddenWordRepository;
 import hello.board.exception.notfound.ForbiddenWordNotFoundException;
+import hello.board.support.annotation.CreateTransactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +21,7 @@ public class ForbiddenWordService {
 
     private final ForbiddenWordRepository forbiddenWordRepository;
 
-    @Transactional
+    @CreateTransactional
     public WordResDto save(final AddWordDto addWordDto) {
         checkAlreadyHave(addWordDto.getWord());
         ForbiddenWord saveWord = forbiddenWordRepository.save(ForbiddenWord.from(addWordDto.getWord()));

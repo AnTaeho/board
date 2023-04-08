@@ -15,6 +15,7 @@ import hello.board.exception.badrequest.AlreadyJoinBadRequestException;
 import hello.board.exception.badrequest.SelfFollowBadRequestException;
 import hello.board.exception.notfound.MemberNotFoundException;
 import hello.board.exception.notfound.NotMemberNotFoundException;
+import hello.board.support.annotation.CreateTransactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,7 +30,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final FollowRepository followRepository;
 
-    @Transactional
+    @CreateTransactional
     public MemberRegisterResDto joinMember(final MemberRegisterReqDto memberRegisterReqDto) {
         checkAlreadyJoin(memberRegisterReqDto.getLoginId());
         return new MemberRegisterResDto(saveMember(memberRegisterReqDto));
@@ -74,7 +75,7 @@ public class MemberService {
                 .orElseThrow(NotMemberNotFoundException::new);
     }
 
-    @Transactional
+    @CreateTransactional
     public String followMember(final Long memberId, Member fromMember) {
         final Member toMember = findMember(memberId);
         if (toMember.getId().equals(fromMember.getId())) {

@@ -14,6 +14,7 @@ import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
 import hello.board.exception.notfound.PostNotFoundException;
+import hello.board.support.annotation.CreateTransactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,7 +53,7 @@ public class PostService {
         return postRepository.findAllAllWaitingPost(pageable);
     }
 
-    @Transactional
+    @CreateTransactional
     public PostWriteResDto writePost(final Member loginMember, final PostWriteReqDto postWriteReqDto) {
         final Post post = savePost(loginMember, postWriteReqDto);
         for (Member member : followRepository.findAllByToMember(loginMember)) {

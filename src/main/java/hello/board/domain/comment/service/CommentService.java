@@ -19,6 +19,7 @@ import hello.board.domain.post.repository.PostRepository;
 import hello.board.exception.notfound.CommentNotFoundException;
 import hello.board.exception.notfound.MemberNotFoundException;
 import hello.board.exception.notfound.PostNotFoundException;
+import hello.board.support.annotation.CreateTransactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +52,7 @@ public class CommentService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional
+    @CreateTransactional
     public CommentResDto writeComment(final Long postId, final Member commentMember, final CommentWriteDto writeDto) {
         final Post findPost = findPostWithMemberInfo(postId);
         final Comment newComment = Comment.makeComment(commentMember, writeDto.getContent(), findPost);
@@ -71,7 +72,7 @@ public class CommentService {
         return CommentNotification.from(commentMember.getName(), notificatiedMember, newComment);
     }
 
-    @Transactional
+    @CreateTransactional
     public CommentResDto writeChildComment(final Long postId, final Long commentId, final Member commentMember, final CommentWriteDto writeDto) {
         final Post findPost = findPostWithCommentInfo(postId);
         final Comment findComment = findComment(commentId);
