@@ -77,10 +77,14 @@ public class CommentService {
         final Comment findComment = findComment(commentId);
         final Comment newComment = Comment.makeChildComment(commentMember, writeDto.getContent(), findPost, findComment);
         ForbiddenWordCache.checkCommentForbiddenWord(newComment);
-        if (isNotMyPost(commentMember, findPost)) {
+        if (isNotMyParentComment(commentMember, findComment)) {
             notificationRepository.save(makeCommentNotification(commentMember, findPost, newComment));
         }
         return new CommentResDto(commentRepository.save(newComment));
+    }
+
+    private boolean isNotMyParentComment(Member commentMember, Comment findComment) {
+        return !commentMember.getId().equals(findComment.getCommentMember().getId());
     }
 
     @Transactional
