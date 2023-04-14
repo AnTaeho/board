@@ -10,6 +10,7 @@ import hello.board.domain.forbiddenword.service.ForbiddenWordCache;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.member.repository.follow.FollowRepository;
 import hello.board.domain.notification.entity.PostNotification;
+import hello.board.domain.notification.entity.WaitingPostNotification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
@@ -71,6 +72,7 @@ public class PostService {
     private void checkForbiddenWord(Post post) {
         if(ForbiddenWordCache.checkPostForbiddenWord(post)) {
             post.changeToWaitingPost();
+            notificationRepository.save(WaitingPostNotification.from(post));
         } else {
             post.changeToPosted();
         }
