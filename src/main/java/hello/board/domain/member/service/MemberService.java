@@ -22,6 +22,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -53,6 +55,12 @@ public class MemberService {
     public Page<MemberResDto> findAll(final Pageable pageable) {
         return memberRepository.findAll(pageable)
                 .map(MemberResDto::new);
+    }
+
+    public double findFollowerAgeAverage(final Long memberId) {
+        final Member toMember = findMember(memberId);
+        final Optional<Double> average = followRepository.findAverageFollowerAge(toMember);
+        return average.isEmpty() ? 0 : average.get();
     }
 
     @Transactional

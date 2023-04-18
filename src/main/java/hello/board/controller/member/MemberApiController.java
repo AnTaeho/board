@@ -57,6 +57,14 @@ public class MemberApiController {
                 .body("member delete");
     }
 
+    @GetMapping("/{memberId}/follow/average")
+    public ResponseEntity<Double> findFollowerAgeAverage(@PathVariable Long memberId) {
+        final double ageAverage = memberService.findFollowerAgeAverage(memberId);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ageAverage);
+    }
+
     private Member findLoginMember(HttpServletRequest request) {
         HttpSession session = request.getSession();
         return (Member) session.getAttribute(LOGIN_MEMBER);

@@ -7,6 +7,7 @@ import hello.board.domain.member.entity.Member;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static hello.board.domain.member.entity.QFollow.*;
@@ -41,5 +42,17 @@ public class FollowRepositoryImpl implements FollowRepositoryCustom{
                 .where(follow.toMember.id.eq(toMember.getId()), follow.fromMember.id.eq(fromMember.getId()))
                 .fetchOne();
         return findFollow != null;
+    }
+
+    @Override
+    public Optional<Double> findAverageFollowerAge(Member toMember) {
+        Double ageAverage = queryFactory
+                .select(
+                        follow.fromMember.age.avg()
+                )
+                .from(follow)
+                .where(follow.toMember.id.eq(toMember.getId()))
+                .fetchOne();
+        return Optional.ofNullable(ageAverage);
     }
 }
