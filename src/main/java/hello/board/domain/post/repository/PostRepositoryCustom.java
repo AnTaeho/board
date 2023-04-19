@@ -4,6 +4,7 @@ import hello.board.controller.post.dto.req.PostSearchCondition;
 import hello.board.controller.post.dto.res.PostResDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 
 public interface PostRepositoryCustom {
 
@@ -12,4 +13,6 @@ public interface PostRepositoryCustom {
     Page<PostResDto> findAllPostedPost(Pageable pageable);
 
     Page<PostResDto> findAllAllWaitingPost(Pageable pageable);
+
+    Slice<PostResDto> searchSlice(PostSearchCondition condition, Pageable pageable);
 }

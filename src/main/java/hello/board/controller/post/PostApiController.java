@@ -9,9 +9,7 @@ import hello.board.controller.post.dto.res.PostWriteResDto;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +27,15 @@ import static hello.board.controller.member.session.SessionConst.LOGIN_MEMBER;
 public class PostApiController {
 
     private final PostService postService;
+
+    @GetMapping("/search/slice")
+    public ResponseEntity<Slice<PostResDto>> searchPostSlice(@ModelAttribute final PostSearchCondition condition,
+                                                             Pageable pageable) {
+        final Slice<PostResDto> postSlice = postService.searchPostSlice(condition, pageable);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(postSlice);
+    }
 
     @GetMapping("/search")
     public ResponseEntity<Page<PostResDto>> searchPost(@ModelAttribute final PostSearchCondition condition,

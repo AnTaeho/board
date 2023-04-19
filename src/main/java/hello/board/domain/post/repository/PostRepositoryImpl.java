@@ -1,17 +1,17 @@
 package hello.board.domain.post.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.controller.post.dto.req.PostSearchCondition;
 import hello.board.controller.post.dto.res.PostResDto;
 import hello.board.controller.post.dto.res.QPostResDto;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+import static hello.board.domain.comment.entity.QComment.*;
 import static hello.board.domain.member.entity.QMember.*;
 import static hello.board.domain.post.entity.PostStatus.*;
 import static hello.board.domain.post.entity.QPost.*;
@@ -32,7 +32,8 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                         post
                 ))
                 .from(post)
-                .leftJoin(post.member, member)
+                .join(post.member, member).fetchJoin()
+                .join(post.comments, comment).fetchJoin()
                 .where(
                         checkTitle(condition.getTitle()),
                         checkContent(condition.getContent()),
@@ -73,6 +74,32 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .fetch();
 
         return new PageImpl<>(result, pageable, result.size());
+    }
+
+    @Override
+    public Slice<PostResDto> searchSlice(PostSearchCondition condition, Pageable pageable) {
+        JPAQuery<PostResDto> jpaQuery = queryFactory
+                .select(new QPostResDto(
+                        post
+                ))
+                .from(post)
+                .leftJoin(post.member, member)
+                .where(
+                        checkTitle(condition.getTitle()),
+                        checkContent(condition.getContent()),
+                        checkWriter(condition.getWriter())
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1);
+        return toSlice(pageable, jpaQuery.fetch());
+    }
+
+    private Slice<PostResDto> toSlice(Pageable pageable, List<PostResDto> posts) {
+        if (posts.size() > pageable.getPageSize()) {
+            posts.remove(posts.size() - 1);
+            return new SliceImpl<>(posts, pageable, true);
+        }
+        return new SliceImpl<>(posts, pageable, false);
     }
 
     private BooleanExpression checkTitle(String title) {
