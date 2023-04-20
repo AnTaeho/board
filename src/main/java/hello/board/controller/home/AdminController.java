@@ -6,9 +6,9 @@ import hello.board.controller.post.dto.res.PostResDto;
 import hello.board.domain.member.service.MemberService;
 import hello.board.domain.post.service.PostService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,9 +22,9 @@ public class AdminController {
     private final PostService postService;
 
     @GetMapping("/members")
-    public ResponseEntity<Page<MemberResDto>> findAll(@RequestParam("page") final int page) {
-        PageRequest pageRequest = PageRequest.of(page, 10);
-        Page<MemberResDto> members = memberService.findAll(pageRequest);
+    public ResponseEntity<Slice<MemberResDto>> findAll(@RequestParam("page") final int page) {
+        final PageRequest pageRequest = PageRequest.of(page, 10);
+        final Slice<MemberResDto> members = memberService.findAll(pageRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(members);
@@ -32,16 +32,16 @@ public class AdminController {
 
     @GetMapping("/all/{memberId}")
     public ResponseEntity<AllMemberInfoDto> findAllInfoOfMember(@PathVariable final Long memberId) {
-        AllMemberInfoDto allInfo = memberService.findAllInfo(memberId);
+        final AllMemberInfoDto allInfo = memberService.findAllInfo(memberId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(allInfo);
     }
 
     @GetMapping("/posts/waiting")
-    public ResponseEntity<Page<PostResDto>> findAllWaitingPost(@RequestParam("page") final int page) {
-        Pageable pageable = PageRequest.of(page, 10);
-        Page<PostResDto> allWaitingPost = postService.findAllWaitingPost(pageable);
+    public ResponseEntity<Slice<PostResDto>> findAllWaitingPost(@RequestParam("page") final int page) {
+        final Pageable pageable = PageRequest.of(page, 10);
+        final Slice<PostResDto> allWaitingPost = postService.findAllWaitingPost(pageable);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(allWaitingPost);
@@ -49,7 +49,7 @@ public class AdminController {
 
     @PatchMapping("/posts/waiting/{postId}")
     public ResponseEntity<PostResDto> updatePostToPosted(@PathVariable final Long postId) {
-        PostResDto postResDto = postService.updatePostToPosted(postId);
+        final PostResDto postResDto = postService.updatePostToPosted(postId);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(postResDto);

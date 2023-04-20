@@ -15,8 +15,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -73,7 +73,7 @@ public class MemberServiceTest {
         memberRepository.save(member3);
 
         //when
-        Page<MemberResDto> all = memberService.findAll(Pageable.unpaged());
+        Slice<MemberResDto> all = memberService.findAll(Pageable.unpaged());
 
         //then
         assertThat(all.getSize()).isEqualTo(3);

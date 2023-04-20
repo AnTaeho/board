@@ -1,7 +1,6 @@
 package hello.board.domain.post.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.controller.post.dto.req.PostSearchCondition;
 import hello.board.controller.post.dto.res.PostResDto;
@@ -26,7 +25,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
     }
 
     @Override
-    public Page<PostResDto> search(PostSearchCondition condition, Pageable pageable) {
+    public Slice<PostResDto> search(PostSearchCondition condition, Pageable pageable) {
         List<PostResDto> result = queryFactory
                 .select(new QPostResDto(
                         post
@@ -43,11 +42,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(result, pageable, result.size());
+        return toSlice(pageable, result);
     }
 
     @Override
-    public Page<PostResDto> findAllPostedPost(Pageable pageable) {
+    public Slice<PostResDto> findAllPostedPost(Pageable pageable) {
         List<PostResDto> result = queryFactory
                 .select(new QPostResDto(
                         post
@@ -58,11 +57,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(result, pageable, result.size());
+        return toSlice(pageable, result);
     }
 
     @Override
-    public Page<PostResDto> findAllAllWaitingPost(Pageable pageable) {
+    public Slice<PostResDto> findAllAllWaitingPost(Pageable pageable) {
         List<PostResDto> result = queryFactory
                 .select(new QPostResDto(
                         post
@@ -73,25 +72,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom{
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        return new PageImpl<>(result, pageable, result.size());
-    }
-
-    @Override
-    public Slice<PostResDto> searchSlice(PostSearchCondition condition, Pageable pageable) {
-        JPAQuery<PostResDto> jpaQuery = queryFactory
-                .select(new QPostResDto(
-                        post
-                ))
-                .from(post)
-                .leftJoin(post.member, member)
-                .where(
-                        checkTitle(condition.getTitle()),
-                        checkContent(condition.getContent()),
-                        checkWriter(condition.getWriter())
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize() + 1);
-        return toSlice(pageable, jpaQuery.fetch());
+        return toSlice(pageable, result);
     }
 
     private Slice<PostResDto> toSlice(Pageable pageable, List<PostResDto> posts) {

@@ -17,7 +17,6 @@ import hello.board.domain.post.repository.PostRepository;
 import hello.board.exception.notfound.PostNotFoundException;
 import hello.board.support.annotation.CreateTransactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -47,11 +46,11 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
-    public Page<PostResDto> findAllPostedPost(final Pageable pageable) {
+    public Slice<PostResDto> findAllPostedPost(final Pageable pageable) {
         return postRepository.findAllPostedPost(pageable);
     }
 
-    public Page<PostResDto> findAllWaitingPost(final Pageable pageable) {
+    public Slice<PostResDto> findAllWaitingPost(final Pageable pageable) {
         return postRepository.findAllAllWaitingPost(pageable);
     }
 
@@ -117,12 +116,8 @@ public class PostService {
                 });
     }
 
-    public Page<PostResDto> searchPost(final PostSearchCondition condition, final Pageable pageable) {
+    public Slice<PostResDto> searchPost(final PostSearchCondition condition, final Pageable pageable) {
         return postRepository.search(condition, pageable);
-    }
-
-    public Slice<PostResDto> searchPostSlice(final PostSearchCondition condition, final Pageable pageable) {
-        return postRepository.searchSlice(condition, pageable);
     }
 
 }

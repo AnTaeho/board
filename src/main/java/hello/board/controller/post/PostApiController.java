@@ -28,20 +28,11 @@ public class PostApiController {
 
     private final PostService postService;
 
-    @GetMapping("/search/slice")
-    public ResponseEntity<Slice<PostResDto>> searchPostSlice(@ModelAttribute final PostSearchCondition condition,
-                                                             Pageable pageable) {
-        final Slice<PostResDto> postSlice = postService.searchPostSlice(condition, pageable);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(postSlice);
-    }
-
     @GetMapping("/search")
-    public ResponseEntity<Page<PostResDto>> searchPost(@ModelAttribute final PostSearchCondition condition,
+    public ResponseEntity<Slice<PostResDto>> searchPost(@ModelAttribute final PostSearchCondition condition,
                                                        @RequestParam("page") final int page) {
         final PageRequest pageRequest = PageRequest.of(page, 10, Sort.by("id").descending());
-        final Page<PostResDto> searchedPost = postService.searchPost(condition, pageRequest);
+        final Slice<PostResDto> searchedPost = postService.searchPost(condition, pageRequest);
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(searchedPost);

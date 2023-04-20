@@ -17,8 +17,8 @@ import hello.board.exception.notfound.MemberNotFoundException;
 import hello.board.exception.notfound.NotMemberNotFoundException;
 import hello.board.support.annotation.CreateTransactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,7 +52,7 @@ public class MemberService {
         return new MemberResDto(findMember(memberId));
     }
 
-    public Page<MemberResDto> findAll(final Pageable pageable) {
+    public Slice<MemberResDto> findAll(final Pageable pageable) {
         return memberRepository.findAll(pageable)
                 .map(MemberResDto::new);
     }
