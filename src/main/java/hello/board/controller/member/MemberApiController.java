@@ -33,7 +33,7 @@ public class MemberApiController {
     }
 
     @GetMapping
-    public ResponseEntity<MemberResDto> findById(@RequestParam Long id) {
+    public ResponseEntity<MemberResDto> findById(@RequestParam final Long id) {
         final MemberResDto findMember = memberService.findById(id);
         return ResponseEntity
                 .status(HttpStatus.OK)
@@ -58,7 +58,7 @@ public class MemberApiController {
     }
 
     @GetMapping("/{memberId}/follow/average")
-    public ResponseEntity<Double> findFollowerAgeAverage(@PathVariable Long memberId) {
+    public ResponseEntity<Double> findFollowerAgeAverage(@PathVariable final Long memberId) {
         final double ageAverage = memberService.findFollowerAgeAverage(memberId);
         return ResponseEntity
                 .status(HttpStatus.OK)
