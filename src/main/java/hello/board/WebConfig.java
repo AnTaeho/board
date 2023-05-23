@@ -2,12 +2,15 @@ package hello.board;
 
 import hello.board.argumentresolver.LoginMemberArgumentResolver;
 import hello.board.domain.comment.repository.comment.CommentRepository;
+import hello.board.domain.post.repository.PostRepository;
 import hello.board.filter.LoginCheckFilter;
 import hello.board.interceptor.AdminCheckInterceptor;
 import hello.board.interceptor.comment.CommentDeleteInterceptor;
 import hello.board.interceptor.comment.CommentUpdateInterceptor;
 import hello.board.interceptor.member.MemberDeleteInterceptor;
 import hello.board.interceptor.member.MemberUpdateInterceptor;
+import hello.board.interceptor.post.PostDeleteInterceptor;
+import hello.board.interceptor.post.PostUpdateInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -23,6 +26,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
+    private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
     @Override
@@ -43,10 +47,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/member/delete/**")
                 .excludePathPatterns("/css/**", "/*.ico", "/error");
 
-//        registry.addInterceptor(new PostDeleteInterceptor(postService))
-//                .order(3)
-//                .addPathPatterns("/posts/delete/**")
-//                .excludePathPatterns("/css/**", "/*.ico", "/error");
+        registry.addInterceptor(new PostDeleteInterceptor(postRepository))
+                .order(3)
+                .addPathPatterns("/posts/delete/**")
+                .excludePathPatterns("/css/**", "/*.ico", "/error");
 
         registry.addInterceptor(new CommentDeleteInterceptor(commentRepository))
                 .order(4)
@@ -59,10 +63,10 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/member/edit/**")
                 .excludePathPatterns("/css/**", "/*.ico", "/error");
 
-//        registry.addInterceptor(new PostUpdateInterceptor(postService))
-//                .order(6)
-//                .addPathPatterns("/posts/edit/**")
-//                .excludePathPatterns("/css/**", "/*.ico", "/error");
+        registry.addInterceptor(new PostUpdateInterceptor(postRepository))
+                .order(6)
+                .addPathPatterns("/posts/edit/**")
+                .excludePathPatterns("/css/**", "/*.ico", "/error");
 
         registry.addInterceptor(new CommentUpdateInterceptor(commentRepository))
                 .order(7)
