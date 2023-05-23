@@ -2,9 +2,9 @@ package hello.board.domain.comment.repository.comment;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import hello.board.domain.comment.entity.Comment;
+import hello.board.exception.notfound.CommentNotFoundException;
 
 import javax.persistence.EntityManager;
-import java.util.Optional;
 
 import static hello.board.domain.comment.entity.QComment.*;
 import static hello.board.domain.member.entity.QMember.*;
@@ -19,15 +19,18 @@ public class CommentRepositoryImpl implements CommentRepositoryCustom{
     }
 
     @Override
-    public Optional<Comment> findCommentWithMemberInfo(Long commentId) {
+    public Comment findCommentWithMemberInfo(Long commentId) {
         Comment findComment = queryFactory
                 .selectFrom(comment)
                 .join(comment.post, post).fetchJoin()
                 .join(post.member, member).fetchJoin()
                 .where(comment.id.eq(commentId))
                 .fetchOne();
+        if (findComment == null) {
+            throw new CommentNotFoundException();
+        }
 
-        return Optional.ofNullable(findComment);
+        return findComment;
     }
 
 }

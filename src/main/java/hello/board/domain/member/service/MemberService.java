@@ -13,7 +13,6 @@ import hello.board.domain.member.repository.follow.FollowRepository;
 import hello.board.domain.member.repository.member.MemberRepository;
 import hello.board.exception.badrequest.AlreadyJoinBadRequestException;
 import hello.board.exception.badrequest.SelfFollowBadRequestException;
-import hello.board.exception.notfound.MemberNotFoundException;
 import hello.board.exception.notfound.NotMemberNotFoundException;
 import hello.board.support.annotation.CreateTransactional;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +48,7 @@ public class MemberService {
     }
 
     public MemberResDto findById(final Long memberId) {
-        return new MemberResDto(findMember(memberId));
+        return new MemberResDto(memberRepository.findMember(memberId));
     }
 
     public Slice<MemberResDto> findAll(final Pageable pageable) {
@@ -58,7 +57,7 @@ public class MemberService {
     }
 
     public double findFollowerAgeAverage(final Long memberId) {
-        final Member toMember = findMember(memberId);
+        final Member toMember = memberRepository.findMember(memberId);
         final Optional<Double> average = followRepository.findAverageFollowerAge(toMember);
         return average.isEmpty() ? 0 : average.get();
     }
@@ -66,7 +65,7 @@ public class MemberService {
     @Transactional
     public MemberUpdateResDto updateMember(final Long memberId, final MemberUpdateReqDto memberUpdateReqDto) {
         checkAlreadyJoin(memberUpdateReqDto.getLoginId());
-        Member findMember = findMember(memberId);
+        Member findMember = memberRepository.findMember(memberId);
         findMember.updateInfo(memberUpdateReqDto);
         return new MemberUpdateResDto(findMember);
     }
@@ -85,7 +84,7 @@ public class MemberService {
 
     @CreateTransactional
     public String followMember(final Long memberId, Member fromMember) {
-        final Member toMember = findMember(memberId);
+        final Member toMember = memberRepository.findMember(memberId);
         if (toMember.getId().equals(fromMember.getId())) {
             throw new SelfFollowBadRequestException();
         }
@@ -98,20 +97,7 @@ public class MemberService {
     }
 
     public AllMemberInfoDto findAllInfo(final Long memberId) {
-        return new AllMemberInfoDto(findMemberWithAllInfo(memberId));
+        return new AllMemberInfoDto(memberRepository.findMemberWithAllInfo(memberId));
     }
 
-    public Member findMember(final Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> {
-                    throw new MemberNotFoundException();
-                });
-    }
-
-    private Member findMemberWithAllInfo(final Long memberId) {
-        return memberRepository.findMemberById(memberId)
-                .orElseThrow(() -> {
-                    throw new MemberNotFoundException();
-                });
-    }
 }

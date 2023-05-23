@@ -1,6 +1,7 @@
 package hello.board.domain.member.repository.member;
 
 import hello.board.domain.member.entity.Member;
+import hello.board.exception.notfound.MemberNotFoundException;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -14,4 +15,14 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @EntityGraph(attributePaths = {"posts"})
     Optional<Member> findMemberById(Long id);
+
+    default Member findMember(Long memberId) {
+        return findById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+    }
+
+    default Member findMemberWithAllInfo(Long memberId) {
+        return findMemberById(memberId)
+                .orElseThrow(MemberNotFoundException::new);
+    }
 }

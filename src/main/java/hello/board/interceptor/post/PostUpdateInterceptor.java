@@ -3,7 +3,7 @@ package hello.board.interceptor.post;
 import hello.board.controller.member.session.SessionConst;
 import hello.board.domain.member.entity.Member;
 import hello.board.domain.post.entity.Post;
-import hello.board.domain.post.service.PostService;
+import hello.board.domain.post.repository.PostRepository;
 import hello.board.exception.unauthorized.UpdateUnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,13 +16,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class PostUpdateInterceptor implements HandlerInterceptor {
 
-    private final PostService postService;
+    private final PostRepository postRepository;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         Member loginMember = findLoginMember(request);
         Long id = findIdFromPathVariables(request);
-        Post post = postService.findPost(id);
+        Post post = postRepository.findPost(id);
         if (isMyPost(loginMember, post)) {
             return true;
         }

@@ -16,9 +16,6 @@ import hello.board.domain.notification.entity.Notification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
-import hello.board.exception.notfound.CommentNotFoundException;
-import hello.board.exception.notfound.MemberNotFoundException;
-import hello.board.exception.notfound.PostNotFoundException;
 import hello.board.support.annotation.CreateTransactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -46,15 +43,16 @@ public class CommentService {
     }
 
     public List<CommentResDto> findCommentsOfPost(final Long postId) {
-        return findPostWithCommentInfo(postId).getComments()
+        return postRepository.findPostWithCommentInfo(postId).getComments()
                 .stream()
                 .map(CommentResDto::new)
                 .collect(Collectors.toList());
     }
 
     @CreateTransactional
-    public CommentResDto writeComment(final Long postId, final Member commentMember, final CommentWriteDto writeDto) {
-        final Post findPost = findPostWithMemberInfo(postId);
+    public CommentResDto writeComment(final Long postId, final Member commentMember,
+                                      final CommentWriteDto writeDto) {
+        final Post findPost = postRepository.findWithMemberByPostId(postId);
         final Comment newComment = Comment.makeComment(commentMember, writeDto.getContent(), findPost);
         ForbiddenWordCache.checkCommentForbiddenWord(newComment);
         if (isNotMyPost(commentMember, findPost)) {
@@ -67,15 +65,17 @@ public class CommentService {
         return !findPost.getMember().getId().equals(commentMember.getId());
     }
 
-    private Notification makeCommentNotification(final Member commentMember, final Post findPost, final Comment newComment) {
+    private Notification makeCommentNotification(final Member commentMember, final Post findPost,
+                                                 final Comment newComment) {
         final Member notificatiedMember = findPost.getMember();
         return CommentNotification.from(commentMember.getName(), notificatiedMember, newComment);
     }
 
     @CreateTransactional
-    public CommentResDto writeChildComment(final Long postId, final Long commentId, final Member commentMember, final CommentWriteDto writeDto) {
-        final Post findPost = findPostWithCommentInfo(postId);
-        final Comment findComment = findComment(commentId);
+    public CommentResDto writeChildComment(final Long postId, final Long commentId,
+                                           final Member commentMember, final CommentWriteDto writeDto) {
+        final Post findPost = postRepository.findPostWithCommentInfo(postId);
+        final Comment findComment = commentRepository.findComment(commentId);
         final Comment newComment = Comment.makeChildComment(commentMember, writeDto.getContent(), findPost, findComment);
         ForbiddenWordCache.checkCommentForbiddenWord(newComment);
         if (isNotMyParentComment(commentMember, findComment)) {
@@ -90,7 +90,7 @@ public class CommentService {
 
     @Transactional
     public CommentResDto updateComment(final Long commentId, final CommentUpdateDto commentUpdateDto) {
-        Comment findComment = findComment(commentId);
+        Comment findComment = commentRepository.findComment(commentId);
         findComment.updateInfo(commentUpdateDto.getContent());
         ForbiddenWordCache.checkCommentForbiddenWord(findComment);
         return new CommentResDto(findComment);
@@ -104,7 +104,7 @@ public class CommentService {
     @Transactional
     public String likeComment(final Long commentId, final Long memberId) {
 
-        final Comment findComment = findCommentWithMemberInfo(commentId);
+        final Comment findComment = commentRepository.findCommentWithMemberInfo(commentId);
         CommentLike notLiked = findLike(commentId, memberId);
 
         if (notLiked == null) {
@@ -123,13 +123,14 @@ public class CommentService {
     private CommentLike pressCommentLike(final Long memberId, final Comment findComment) {
 
         final Member commentOwner = findCommentOwner(findComment);
-        final Member loginMember = findMember(memberId);
+        final Member loginMember = memberRepository.findMember(memberId);
 
         if (commentOwner == loginMember) {
             return CommentLike.makeCommentLike(loginMember, findComment);
         }
 
-        return CommentLike.makeCommentLikeWithNotification(loginMember, findComment, makeCommentLikeNotification(loginMember, commentOwner));
+        return CommentLike.makeCommentLikeWithNotification(loginMember, findComment,
+                makeCommentLikeNotification(loginMember, commentOwner));
     }
 
     private Member findCommentOwner(final Comment findComment) {
@@ -141,49 +142,7 @@ public class CommentService {
     }
 
     public CommentResDto findCommentDetail(final Long commentId) {
-        return new CommentResDto(findComment(commentId));
-    }
-
-    public Comment findComment(final Long commentId) {
-        return commentRepository.findById(commentId)
-                .orElseThrow(() -> {
-                    throw new CommentNotFoundException();
-                });
-    }
-
-    public Comment findCommentWithPostInfo(final Long commentId) {
-        return commentRepository.findWithPostByCommentId(commentId)
-                .orElseThrow(() -> {
-                    throw new CommentNotFoundException();
-        });
-    }
-
-    private Comment findCommentWithMemberInfo(final Long commentId) {
-        return commentRepository.findCommentWithMemberInfo(commentId)
-                .orElseThrow(() -> {
-                    throw new CommentNotFoundException();
-                });
-    }
-
-    private Post findPostWithCommentInfo(final Long postId) {
-        return postRepository.findWithCommentByPostId(postId)
-                .orElseThrow(() -> {
-                    throw new PostNotFoundException();
-                });
-    }
-
-    private Post findPostWithMemberInfo(final Long postId) {
-        return postRepository.findWithMemberAndCommentByPostId(postId)
-                .orElseThrow(() -> {
-                    throw new PostNotFoundException();
-                });
-    }
-
-    private Member findMember(final Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> {
-                    throw new MemberNotFoundException();
-                });
+        return new CommentResDto(commentRepository.findComment(commentId));
     }
 
 }

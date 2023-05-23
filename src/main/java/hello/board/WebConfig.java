@@ -1,16 +1,8 @@
 package hello.board;
 
 import hello.board.argumentresolver.LoginMemberArgumentResolver;
-import hello.board.domain.comment.service.CommentService;
-import hello.board.domain.post.service.PostService;
 import hello.board.filter.LoginCheckFilter;
 import hello.board.interceptor.AdminCheckInterceptor;
-import hello.board.interceptor.comment.CommentDeleteInterceptor;
-import hello.board.interceptor.comment.CommentUpdateInterceptor;
-import hello.board.interceptor.member.MemberDeleteInterceptor;
-import hello.board.interceptor.member.MemberUpdateInterceptor;
-import hello.board.interceptor.post.PostDeleteInterceptor;
-import hello.board.interceptor.post.PostUpdateInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -26,9 +18,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebConfig implements WebMvcConfigurer {
 
-    private final PostService postService;
-    private final CommentService commentService;
-
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new LoginMemberArgumentResolver());
@@ -41,37 +30,37 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/admin/**")
                 .excludePathPatterns("/css/**", "/*.ico", "/error");
 
-        //삭제 권한 인터셉터
-        registry.addInterceptor(new MemberDeleteInterceptor())
-                .order(2)
-                .addPathPatterns("/member/delete/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error");
-
-        registry.addInterceptor(new PostDeleteInterceptor(postService))
-                .order(3)
-                .addPathPatterns("/posts/delete/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error");
-
-        registry.addInterceptor(new CommentDeleteInterceptor(commentService))
-                .order(4)
-                .addPathPatterns("/comment/delete/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error");
-
-        //수정 권한 인터셉터
-        registry.addInterceptor(new MemberUpdateInterceptor())
-                .order(5)
-                .addPathPatterns("/member/edit/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error");
-
-        registry.addInterceptor(new PostUpdateInterceptor(postService))
-                .order(6)
-                .addPathPatterns("/posts/edit/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error");
-
-        registry.addInterceptor(new CommentUpdateInterceptor(commentService))
-                .order(7)
-                .addPathPatterns("/comment/edit/**")
-                .excludePathPatterns("/css/**", "/*.ico", "/error");
+//        //삭제 권한 인터셉터
+//        registry.addInterceptor(new MemberDeleteInterceptor())
+//                .order(2)
+//                .addPathPatterns("/member/delete/**")
+//                .excludePathPatterns("/css/**", "/*.ico", "/error");
+//
+////        registry.addInterceptor(new PostDeleteInterceptor(postService))
+////                .order(3)
+////                .addPathPatterns("/posts/delete/**")
+////                .excludePathPatterns("/css/**", "/*.ico", "/error");
+//
+//        registry.addInterceptor(new CommentDeleteInterceptor(commentService))
+//                .order(4)
+//                .addPathPatterns("/comment/delete/**")
+//                .excludePathPatterns("/css/**", "/*.ico", "/error");
+//
+//        //수정 권한 인터셉터
+//        registry.addInterceptor(new MemberUpdateInterceptor())
+//                .order(5)
+//                .addPathPatterns("/member/edit/**")
+//                .excludePathPatterns("/css/**", "/*.ico", "/error");
+//
+////        registry.addInterceptor(new PostUpdateInterceptor(postService))
+////                .order(6)
+////                .addPathPatterns("/posts/edit/**")
+////                .excludePathPatterns("/css/**", "/*.ico", "/error");
+//
+//        registry.addInterceptor(new CommentUpdateInterceptor(commentService))
+//                .order(7)
+//                .addPathPatterns("/comment/edit/**")
+//                .excludePathPatterns("/css/**", "/*.ico", "/error");
     }
 
     @Bean

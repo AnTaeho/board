@@ -14,7 +14,6 @@ import hello.board.domain.notification.entity.WaitingPostNotification;
 import hello.board.domain.notification.repository.NotificationRepository;
 import hello.board.domain.post.entity.Post;
 import hello.board.domain.post.repository.PostRepository;
-import hello.board.exception.notfound.PostNotFoundException;
 import hello.board.support.annotation.CreateTransactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -35,7 +34,7 @@ public class PostService {
     private final NotificationRepository notificationRepository;
 
     public PostResDto findSinglePost(final Long postId) {
-        final Post findPost = findWithMemberByPostId(postId);
+        final Post findPost = postRepository.findWithMemberByPostId(postId);
         return new PostResDto(findPost);
     }
 
@@ -84,7 +83,7 @@ public class PostService {
 
     @Transactional
     public PostUpdateResDto updatePost(final Long postId, final PostUpdateReqDto postUpdateReqDto) {
-        Post findPost = findWithMemberByPostId(postId);
+        Post findPost = postRepository.findWithMemberByPostId(postId);
         findPost.updateInfo(postUpdateReqDto);
         checkForbiddenWord(findPost);
         return new PostUpdateResDto(findPost);
@@ -92,7 +91,7 @@ public class PostService {
 
     @Transactional
     public PostResDto updatePostToPosted(final Long postId) {
-        Post findPost = findPost(postId);
+        Post findPost = postRepository.findPost(postId);
         findPost.changeToPosted();
         return new PostResDto(findPost);
     }
@@ -100,20 +99,6 @@ public class PostService {
     @Transactional
     public void deletePost(final Long postId) {
         postRepository.deleteById(postId);
-    }
-
-    public Post findPost(final Long postId) {
-        return postRepository.findById(postId)
-                .orElseThrow(() -> {
-                    throw new PostNotFoundException();
-                });
-    }
-
-    private Post findWithMemberByPostId(final Long postId) {
-        return postRepository.findWithMemberAndCommentByPostId(postId)
-                .orElseThrow(() -> {
-                    throw new PostNotFoundException();
-                });
     }
 
     public Slice<PostResDto> searchPost(final PostSearchCondition condition, final Pageable pageable) {
