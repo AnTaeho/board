@@ -21,12 +21,15 @@ public class CommentResDto {
     @Lob
     private String Content;
 
+    private boolean isChild;
+
     private List<ChildCommentResDto> childComment = new ArrayList<>();
 
     public CommentResDto(Comment comment) {
         this.id = comment.getId();
         this.writer = comment.getWriter();
         this.Content = comment.getContent();
+        this.isChild = comment.isChild();
         List<Comment> child = comment.getChild();
         for (Comment comment1 : child) {
             childComment.add(new ChildCommentResDto(comment1));

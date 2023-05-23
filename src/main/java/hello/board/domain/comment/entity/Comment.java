@@ -24,6 +24,8 @@ public class Comment extends BaseTimeEntity {
     @Lob
     private String content;
 
+    private boolean isChild = false;
+
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -59,6 +61,7 @@ public class Comment extends BaseTimeEntity {
     public static Comment makeChildComment(Member commentMember, String content, Post post, Comment comment) {
         Comment childComment = new Comment(commentMember, content, post);
         childComment.parent = comment;
+        childComment.isChild = true;
         return childComment;
     }
 
@@ -73,4 +76,7 @@ public class Comment extends BaseTimeEntity {
         this.content = content;
     }
 
+    public boolean isChild() {
+        return isChild;
+    }
 }

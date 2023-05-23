@@ -19,9 +19,12 @@ public class ChildCommentResDto {
     @Lob
     private String Content;
 
+    private boolean isChild;
+
     public ChildCommentResDto(Comment comment) {
         this.id = comment.getId();
         this.writer = comment.getWriter();
         this.Content = comment.getContent();
+        this.isChild = comment.isChild();
     }
 }
